@@ -1,0 +1,470 @@
+/* CHARLES LIOC — V4.3 CYBERPUNK GRAPHICS // PART 1
+   Home + global atmosphere only.
+   Artwork is decorative. Existing content, original app icons and locked logo stay intact. */
+
+:root{
+  --cp1-cyan:#00efff;
+  --cp1-blue:#1678ff;
+  --cp1-violet:#8b5cff;
+  --cp1-magenta:#ff2bd6;
+  --cp1-green:#48ff9b;
+  --cp1-dark:#03060b;
+}
+
+/* ---------- Global cyberpunk edge language ---------- */
+.cp1-global-layer{
+  position:fixed;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  overflow:hidden;
+}
+.cp1-edge-rail{
+  position:absolute;
+  top:14%;
+  bottom:12%;
+  width:1px;
+  opacity:.32;
+  background:linear-gradient(180deg,transparent,var(--cp1-cyan) 18%,rgba(139,92,255,.55) 55%,var(--cp1-magenta) 82%,transparent);
+}
+.cp1-edge-rail.left{left:14px}
+.cp1-edge-rail.right{right:14px}
+.cp1-edge-rail::before,
+.cp1-edge-rail::after{
+  content:"";
+  position:absolute;
+  width:24px;
+  height:1px;
+  background:currentColor;
+  box-shadow:0 0 14px currentColor;
+}
+.cp1-edge-rail.left::before{left:0;top:23%;color:var(--cp1-cyan)}
+.cp1-edge-rail.left::after{left:0;bottom:31%;color:var(--cp1-magenta)}
+.cp1-edge-rail.right::before{right:0;top:38%;color:var(--cp1-magenta)}
+.cp1-edge-rail.right::after{right:0;bottom:18%;color:var(--cp1-cyan)}
+
+.cp1-corner{
+  position:absolute;
+  width:108px;
+  height:74px;
+  opacity:.22;
+}
+.cp1-corner::before,
+.cp1-corner::after{
+  content:"";
+  position:absolute;
+  background:linear-gradient(90deg,var(--cp1-cyan),var(--cp1-violet),var(--cp1-magenta));
+  box-shadow:0 0 16px rgba(0,239,255,.12);
+}
+.cp1-corner::before{height:1px;width:100%}
+.cp1-corner::after{width:1px;height:100%}
+.cp1-corner.tr{top:16px;right:28px}
+.cp1-corner.tr::before{top:0;right:0}
+.cp1-corner.tr::after{top:0;right:0}
+.cp1-corner.bl{left:28px;bottom:22px;rotate:180deg}
+.cp1-corner.bl::before{top:0;right:0}
+.cp1-corner.bl::after{top:0;right:0}
+
+.cp1-global-pulse{
+  position:absolute;
+  top:0;
+  left:-28%;
+  width:28%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,rgba(0,239,255,.65),rgba(255,43,214,.7),transparent);
+  filter:blur(.2px);
+  opacity:.42;
+  animation:cp1GlobalPulse 13s linear infinite;
+}
+@keyframes cp1GlobalPulse{
+  0%{translate:0 0;opacity:0}
+  8%{opacity:.42}
+  46%{translate:360vw 0;opacity:.42}
+  55%,100%{translate:360vw 0;opacity:0}
+}
+
+/* ---------- Home hero becomes a cyberpunk scene ---------- */
+.clarity-home .clarity-hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:min(860px,calc(100vh - 70px));
+}
+.clarity-home .clarity-hero>.hero-copy,
+.clarity-home .clarity-hero>.hero-core,
+.clarity-home .clarity-hero>.scroll-hint{
+  position:relative;
+  z-index:4;
+}
+.cp1-hero-art{
+  position:absolute;
+  inset:-2px;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.cp1-hero-city{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(90deg,rgba(3,6,11,.94) 0%,rgba(3,6,11,.74) 36%,rgba(3,6,11,.28) 66%,rgba(3,6,11,.12) 100%),
+    linear-gradient(180deg,rgba(3,6,11,.48) 0%,rgba(3,6,11,.2) 42%,rgba(3,6,11,.08) 64%,rgba(3,6,11,.76) 100%),
+    url("/assets/cyberpunk/home-horizon.webp");
+  background-size:cover;
+  background-position:center 61%;
+  filter:saturate(1.08) contrast(1.04);
+  opacity:.72;
+  transform:scale(1.018);
+  animation:cp1CityDrift 22s ease-in-out infinite alternate;
+}
+@keyframes cp1CityDrift{
+  from{transform:scale(1.018) translate3d(-5px,0,0)}
+  to{transform:scale(1.045) translate3d(7px,-4px,0)}
+}
+.cp1-hero-city::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 70% 60%,rgba(255,43,214,.10),transparent 27%),
+    radial-gradient(circle at 48% 62%,rgba(0,239,255,.12),transparent 23%),
+    linear-gradient(180deg,transparent 60%,rgba(0,0,0,.66));
+}
+.cp1-grid-horizon{
+  position:absolute;
+  left:-10%;
+  right:-10%;
+  bottom:-6%;
+  height:48%;
+  opacity:.26;
+  transform-origin:center bottom;
+  transform:perspective(520px) rotateX(64deg);
+  background:
+    linear-gradient(rgba(0,239,255,.22) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,92,255,.25) 1px,transparent 1px);
+  background-size:58px 42px;
+  mask-image:linear-gradient(to top,#000 10%,rgba(0,0,0,.86) 45%,transparent 100%);
+  animation:cp1GridDrive 7s linear infinite;
+}
+@keyframes cp1GridDrive{
+  to{background-position:0 42px,58px 0}
+}
+.cp1-horizon-beam{
+  position:absolute;
+  left:13%;
+  right:6%;
+  bottom:29%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--cp1-cyan),#fff 48%,var(--cp1-magenta),transparent);
+  opacity:.52;
+  filter:blur(.1px);
+  box-shadow:0 0 14px rgba(0,239,255,.28),0 0 28px rgba(255,43,214,.16);
+  animation:cp1BeamBreath 4.8s ease-in-out infinite;
+}
+@keyframes cp1BeamBreath{50%{opacity:.9;filter:brightness(1.25)}}
+.cp1-hud-orbit{
+  position:absolute;
+  width:min(43vw,680px);
+  aspect-ratio:1;
+  right:-8%;
+  top:2%;
+  border-radius:50%;
+  border:1px solid rgba(0,239,255,.13);
+  background:
+    repeating-radial-gradient(circle,transparent 0 44px,rgba(139,92,255,.05) 45px 46px,transparent 47px 81px),
+    conic-gradient(from 0deg,transparent 0 12%,rgba(0,239,255,.08) 12.5% 13%,transparent 13.5% 33%,rgba(255,43,214,.09) 33.5% 34.5%,transparent 35%);
+  opacity:.72;
+  animation:cp1Orbit 34s linear infinite;
+}
+.cp1-hud-orbit::before{
+  content:"";
+  position:absolute;
+  inset:16%;
+  border-radius:50%;
+  border:1px dashed rgba(255,43,214,.14);
+}
+.cp1-hud-orbit::after{
+  content:"";
+  position:absolute;
+  width:8px;height:8px;
+  left:12%;top:32%;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 8px var(--cp1-cyan),0 0 26px var(--cp1-cyan);
+}
+@keyframes cp1Orbit{to{rotate:360deg}}
+
+.cp1-scan{
+  position:absolute;
+  left:0;right:0;
+  top:-8%;
+  height:9%;
+  opacity:.12;
+  background:linear-gradient(180deg,transparent,rgba(0,239,255,.15),rgba(255,255,255,.20),transparent);
+  animation:cp1Scan 9s ease-in-out infinite;
+}
+@keyframes cp1Scan{
+  0%,16%{translate:0 0;opacity:0}
+  25%{opacity:.12}
+  72%{translate:0 1030%;opacity:.09}
+  84%,100%{translate:0 1030%;opacity:0}
+}
+
+/* Keep hero text exceptionally readable over the art. */
+.clarity-home .hero-copy{
+  text-shadow:0 2px 22px rgba(0,0,0,.72);
+}
+.clarity-home .hero-copy::before{
+  content:"";
+  position:absolute;
+  inset:-36px -40px -30px -6vw;
+  z-index:-1;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 38% 44%,rgba(3,6,11,.76),rgba(3,6,11,.40) 55%,transparent 75%);
+}
+.clarity-home .clarity-status{
+  backdrop-filter:blur(8px);
+}
+.clarity-home .clarity-primary,
+.clarity-home .clarity-secondary-strong{
+  backdrop-filter:blur(10px);
+}
+
+/* ---------- Cyber art interlude ---------- */
+.cp1-art-break{
+  width:min(1500px,calc(100% - 48px));
+  margin:18px auto 82px;
+  position:relative;
+  min-height:360px;
+  overflow:hidden;
+  border:1px solid rgba(109,156,215,.22);
+  background:#05080e;
+  isolation:isolate;
+}
+.cp1-art-break::before,
+.cp1-art-break::after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  pointer-events:none;
+}
+.cp1-art-break::before{
+  inset:0;
+  border:1px solid transparent;
+  background:
+    linear-gradient(90deg,var(--cp1-cyan),transparent 22%,transparent 77%,var(--cp1-magenta)) top/100% 1px no-repeat,
+    linear-gradient(180deg,var(--cp1-cyan),transparent 38%) left/1px 100% no-repeat,
+    linear-gradient(180deg,var(--cp1-magenta),transparent 38%) right/1px 100% no-repeat;
+  opacity:.58;
+}
+.cp1-art-break::after{
+  top:0;left:-24%;
+  width:24%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,239,255,.08),rgba(255,255,255,.11),rgba(255,43,214,.08),transparent);
+  transform:skewX(-14deg);
+  animation:cp1ArtSweep 9s ease-in-out infinite;
+}
+@keyframes cp1ArtSweep{
+  0%,15%{left:-30%;opacity:0}
+  24%{opacity:1}
+  68%{left:112%;opacity:.8}
+  76%,100%{left:112%;opacity:0}
+}
+.cp1-art-break img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 54%;
+  opacity:.74;
+  filter:saturate(1.08) contrast(1.06);
+  transform:scale(1.01);
+  transition:transform .8s cubic-bezier(.2,.75,.25,1),filter .8s ease;
+}
+.cp1-art-break:hover img{transform:scale(1.035);filter:saturate(1.18) contrast(1.08)}
+.cp1-art-shade{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    linear-gradient(90deg,rgba(3,6,11,.88),rgba(3,6,11,.32) 45%,rgba(3,6,11,.18) 68%,rgba(3,6,11,.66)),
+    linear-gradient(180deg,rgba(3,6,11,.18),transparent 52%,rgba(3,6,11,.76));
+}
+.cp1-art-caption{
+  position:absolute;
+  z-index:2;
+  left:clamp(22px,5vw,76px);
+  bottom:clamp(24px,5vw,64px);
+  max-width:720px;
+}
+.cp1-art-caption span{
+  display:block;
+  color:var(--cp1-green);
+  font:800 clamp(12px,.88vw,14px)/1.4 "Space Mono",ui-monospace,monospace;
+  letter-spacing:.10em;
+}
+.cp1-art-caption strong{
+  display:block;
+  margin-top:12px;
+  color:#f3f8ff;
+  font-size:clamp(35px,5vw,78px);
+  line-height:.88;
+  letter-spacing:-.055em;
+  text-shadow:0 10px 32px rgba(0,0,0,.5);
+}
+.cp1-art-caption strong em{
+  display:block;
+  font-style:normal;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(229,241,255,.8);
+}
+.cp1-art-caption p{
+  margin:17px 0 0;
+  max-width:590px;
+  color:#a9b8ca;
+  font-size:clamp(15px,1.05vw,18px)!important;
+  line-height:1.55;
+}
+.cp1-art-mark{
+  position:absolute;
+  z-index:2;
+  right:clamp(18px,4vw,58px);
+  top:clamp(18px,4vw,48px);
+  width:76px;height:76px;
+  border:1px solid rgba(0,239,255,.34);
+  rotate:45deg;
+  display:grid;
+  place-items:center;
+  box-shadow:0 0 36px rgba(0,239,255,.06);
+}
+.cp1-art-mark::before{
+  content:"";
+  width:28px;height:28px;
+  border:1px solid rgba(255,43,214,.65);
+  box-shadow:0 0 20px rgba(255,43,214,.14);
+}
+.cp1-art-mark::after{
+  content:"";
+  position:absolute;
+  inset:15px;
+  border-radius:50%;
+  border:1px dashed rgba(139,92,255,.52);
+  animation:cp1ArtOrbit 10s linear infinite;
+}
+@keyframes cp1ArtOrbit{to{rotate:-360deg}}
+
+/* ---------- Holographic frames for existing content ---------- */
+.clarity-home .clarity-service-grid,
+.clarity-home .web-cta-preview,
+.clarity-home .v4-proof-rack,
+.clarity-home .live-home-grid{
+  position:relative;
+}
+.clarity-home .clarity-service-grid::before,
+.clarity-home .web-cta-preview::before,
+.clarity-home .v4-proof-rack::before,
+.clarity-home .live-home-grid::before{
+  content:"";
+  position:absolute;
+  z-index:5;
+  pointer-events:none;
+  inset:-1px;
+  background:
+    linear-gradient(90deg,var(--cp1-cyan),transparent 13%) top left/28% 1px no-repeat,
+    linear-gradient(180deg,var(--cp1-cyan),transparent 13%) top left/1px 34% no-repeat,
+    linear-gradient(270deg,var(--cp1-magenta),transparent 13%) bottom right/28% 1px no-repeat,
+    linear-gradient(0deg,var(--cp1-magenta),transparent 13%) bottom right/1px 34% no-repeat;
+  opacity:.45;
+}
+
+/* Buttons receive a restrained neon scan rather than more floating UI. */
+.clarity-home a.primary-btn,
+.clarity-home a.secondary-btn,
+.v423-menu-button{
+  overflow:hidden;
+}
+.clarity-home a.primary-btn::before,
+.clarity-home a.secondary-btn::before,
+.v423-menu-button::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-2px;
+  translate:-120% 0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.20) 48%,rgba(0,239,255,.10) 54%,transparent 70%);
+  transition:translate .58s cubic-bezier(.2,.8,.25,1);
+}
+.clarity-home a.primary-btn:hover::before,
+.clarity-home a.secondary-btn:hover::before,
+.v423-menu-button:hover::before{translate:120% 0}
+
+/* ---------- Slide panel gets a piece of the same world ---------- */
+.v423-panel{
+  background:
+    linear-gradient(180deg,rgba(4,8,14,.975) 0%,rgba(3,7,13,.96) 56%,rgba(3,7,13,.985) 100%),
+    url("/assets/cyberpunk/system-hudscape.webp") center bottom/auto 48% no-repeat!important;
+}
+.v423-panel::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:43%;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(3,7,13,.98),rgba(3,7,13,.38) 38%,rgba(3,7,13,.76)),
+    url("/assets/cyberpunk/system-hudscape.webp") center bottom/cover no-repeat;
+  opacity:.22;
+  mask-image:linear-gradient(to bottom,transparent,#000 35%,#000);
+}
+.v423-panel>*{position:relative;z-index:2}
+.v423-menu-button{
+  box-shadow:0 0 0 1px rgba(0,239,255,.04),0 0 28px rgba(0,239,255,.045);
+}
+
+/* ---------- Responsive / accessibility ---------- */
+@media(max-width:900px){
+  .cp1-edge-rail{opacity:.16}
+  .cp1-corner{opacity:.13}
+  .clarity-home .clarity-hero{min-height:auto}
+  .cp1-hero-city{
+    background-image:
+      linear-gradient(180deg,rgba(3,6,11,.58),rgba(3,6,11,.48) 45%,rgba(3,6,11,.80)),
+      url("/assets/cyberpunk/home-horizon.webp");
+    background-position:61% 64%;
+    opacity:.54;
+  }
+  .cp1-hud-orbit{width:86vw;right:-45%;top:8%;opacity:.38}
+  .cp1-grid-horizon{height:34%;bottom:-2%;opacity:.18}
+  .cp1-horizon-beam{bottom:18%;opacity:.32}
+  .cp1-art-break{
+    width:min(100% - 24px,1500px);
+    min-height:420px;
+    margin-bottom:54px;
+  }
+  .cp1-art-break img{object-position:58% center}
+  .cp1-art-shade{
+    background:linear-gradient(180deg,rgba(3,6,11,.33),rgba(3,6,11,.58) 48%,rgba(3,6,11,.90));
+  }
+  .cp1-art-caption{left:22px;right:22px;bottom:26px}
+  .cp1-art-mark{width:54px;height:54px;right:20px;top:20px}
+}
+@media(max-width:560px){
+  .cp1-edge-rail{display:none}
+  .cp1-corner{width:66px;height:46px}
+  .cp1-art-break{min-height:390px}
+  .cp1-art-caption strong{font-size:39px}
+  .cp1-art-caption p{font-size:15px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .cp1-global-pulse,
+  .cp1-hero-city,
+  .cp1-grid-horizon,
+  .cp1-horizon-beam,
+  .cp1-hud-orbit,
+  .cp1-scan,
+  .cp1-art-break::after,
+  .cp1-art-mark::after{
+    animation:none!important;
+  }
+}

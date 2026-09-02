@@ -116,6 +116,29 @@
   <link rel="stylesheet" href="/experience.css?v=6" />
   <script src="/experience.js?v=6" defer></script>
   <link rel="stylesheet" href="/v4.css?v=6">
+  <style>
+    .v4-contact-actions .contact-email{
+      border:1px solid rgba(0,239,255,.36)!important;
+      color:#dffcff!important;
+      background:rgba(0,239,255,.055)!important;
+    }
+    .v4-contact-actions .contact-phone{
+      border:1px solid rgba(72,255,155,.42)!important;
+      color:#cffff0!important;
+      background:rgba(72,255,155,.065)!important;
+    }
+    .v4-contact-actions .contact-facebook{
+      border:1px solid rgba(68,143,255,.52)!important;
+      color:#dceaff!important;
+      background:rgba(68,143,255,.075)!important;
+    }
+    .v4-contact-actions .contact-email:hover,
+    .v4-contact-actions .contact-phone:hover,
+    .v4-contact-actions .contact-facebook:hover{
+      transform:translateY(-3px);
+      filter:brightness(1.15);
+    }
+  </style>
   <script src="/v4.js?v=5" defer></script>
 </head>
 <body>
@@ -165,7 +188,9 @@
           </div>
           <div class="v4-contact-actions">
             <a href="../website-studio/">START A FREE WEBSITE REQUEST →</a>
-            <a href="mailto:icharles.development@gmail.com?subject=Project%20Inquiry">EMAIL ME DIRECTLY ↗</a>
+            <a class="contact-email" href="mailto:icharles.development@gmail.com?subject=Project%20Inquiry">EMAIL ME DIRECTLY ↗</a>
+            <a class="contact-phone" href="tel:+639916154479">CALL +63 991 615 4479 ↗</a>
+            <a class="contact-facebook" href="https://www.facebook.com/doubleone.seven.117" target="_blank" rel="noopener noreferrer">FACEBOOK PROFILE ↗</a>
           </div>
           <div class="contact-status">
             <i></i>
@@ -186,6 +211,14 @@
             <div class="line">
               <small>EMAIL</small>
               <strong><a href="mailto:icharles.development@gmail.com?subject=Website%20Project%20Inquiry">icharles.development@gmail.com</a></strong>
+            </div>
+            <div class="line">
+              <small>PHONE</small>
+              <strong><a href="tel:+639916154479">+63 991 615 4479</a></strong>
+            </div>
+            <div class="line">
+              <small>FACEBOOK</small>
+              <strong><a href="https://www.facebook.com/doubleone.seven.117" target="_blank" rel="noopener noreferrer">OPEN FACEBOOK PROFILE →</a></strong>
             </div>
             <div class="line">
               <small>WEBSITE STUDIO</small>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05060a">
+  <meta name="author" content="Charles Lioc">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="description" content="About Charles Lioc — developer, builder and problem solver.">
+  <title>About — Charles Lioc</title>
+  <link rel="icon" href="../assets/charles-lioc-logo-locked.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../subpages.css">
+  <style>
+    .about-layout{
+      padding:68px 0 110px;
+      display:grid;
+      grid-template-columns:minmax(0,.85fr) minmax(360px,1.15fr);
+      gap:70px;
+      align-items:start;
+    }
+    .identity-panel{
+      border:1px solid var(--line);
+      background:rgba(5,9,16,.52);
+      min-height:620px;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      overflow:hidden;
+      position:sticky;
+      top:110px;
+    }
+    .identity-top{
+      min-height:44px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 14px;
+      color:#66748a;
+      font:400 7px "Space Mono",monospace;
+      letter-spacing:.08em;
+    }
+    .identity-core{
+      display:grid;
+      place-items:center;
+      position:relative;
+      min-height:390px;
+    }
+    .identity-core::before,.identity-core::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      border:1px dashed rgba(0,239,255,.16);
+    }
+    .identity-core::before{width:60%;aspect-ratio:1}
+    .identity-core::after{width:78%;aspect-ratio:1;border-color:rgba(255,43,214,.12)}
+    .identity-core img{
+      width:min(390px,72%);
+      aspect-ratio:1;
+      object-fit:contain;
+      position:relative;
+      z-index:2;
+      filter:drop-shadow(0 0 22px rgba(0,239,255,.14));
+    }
+    .identity-bottom{
+      border-top:1px solid var(--line);
+      padding:24px;
+    }
+    .identity-bottom small,.identity-bottom strong{display:block}
+    .identity-bottom small{
+      color:var(--cyan);
+      font:400 7px "Space Mono",monospace;
+      letter-spacing:.1em;
+    }
+    .identity-bottom strong{
+      margin-top:8px;
+      font-size:18px;
+    }
+    .story section{
+      border-top:1px solid var(--line);
+      padding:30px 0 36px;
+    }
+    .story section:first-child{border-top:0;padding-top:0}
+    .story span{
+      color:var(--cyan);
+      font:400 7px "Space Mono",monospace;
+      letter-spacing:.1em;
+    }
+    .story h2{
+      margin:13px 0 15px;
+      font-size:clamp(30px,4vw,54px);
+      line-height:.95;
+      letter-spacing:-.04em;
+    }
+    .story p{
+      color:#8e99ad;
+      line-height:1.75;
+      font-size:14px;
+      max-width:760px;
+    }
+    .pill-row{
+      margin-top:20px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+    }
+    .pill-row i{
+      font-style:normal;
+      padding:7px 9px;
+      border:1px solid rgba(126,158,203,.16);
+      color:#7d899e;
+      font:400 6px "Space Mono",monospace;
+    }
+    .principles{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:20px;
+    }
+    .principle{
+      min-height:180px;
+      border:1px solid var(--line);
+      padding:20px;
+      background:rgba(5,9,16,.42);
+    }
+    .principle b{color:var(--pink);font:400 8px "Space Mono",monospace}
+    .principle strong{display:block;margin-top:16px;font-size:15px}
+    .principle p{font-size:11px;line-height:1.6}
+    @media(max-width:900px){
+      .about-layout{grid-template-columns:1fr}
+      .identity-panel{position:relative;top:auto;min-height:520px}
+      .principles{grid-template-columns:1fr}
+    }
+  </style>
+  <link rel="manifest" href="../site.webmanifest">
+  <!-- Add canonical URL after the final domain is chosen. -->
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <a class="brand" href="../">
+        <img src="../assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo">
+        <div><strong>CHARLES LIOC</strong><small>ABOUT</small></div>
+      </a>
+      <nav>
+        <a href="../">HOME</a>
+        <a href="../projects/">PROJECTS</a>
+        <a href="../lab/">LAB</a>
+        <a href="../portfolio/">PORTFOLIO</a>
+        <a href="../contact/">CONTACT</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="kicker">ABOUT // IDENTITY</span>
+        <h1>I LIKE TO KNOW<br><span>HOW THINGS WORK.</span></h1>
+        <p class="lead">
+          I’m a developer and hands-on builder. Software is the strongest documented
+          part of my work today, but the same mindset carries into mechanical work,
+          fabrication and creative projects.
+        </p>
+      </section>
+
+      <section class="about-layout">
+        <aside class="identity-panel">
+          <div class="identity-top">
+            <span>PROFILE // CL</span>
+            <span>ACTIVE BUILDER</span>
+          </div>
+          <div class="identity-core" aria-hidden="true">
+            <img src="../assets/charles-lioc-logo-locked.svg" alt="">
+          </div>
+          <div class="identity-bottom">
+            <small>CHARLES LIOC</small>
+            <strong>DEVELOPER · BUILDER · PROBLEM SOLVER</strong>
+          </div>
+        </aside>
+
+        <div class="story">
+          <section>
+            <span>01 // WHAT I DO</span>
+            <h2>I BUILD PRACTICAL SYSTEMS.</h2>
+            <p>
+              I’m most interested in problems where the existing process feels clumsy,
+              unreliable or incomplete. I like understanding the whole workflow and
+              then building something that removes unnecessary friction.
+            </p>
+            <div class="pill-row">
+              <i>SOFTWARE SYSTEMS</i>
+              <i>PRODUCT THINKING</i>
+              <i>WORKFLOW DESIGN</i>
+              <i>ANDROID + WEB</i>
+              <i>LOCAL + CLOUD DATA</i>
+            </div>
+          </section>
+
+          <section>
+            <span>02 // HOW I THINK</span>
+            <h2>UNDERSTAND FIRST.<br>BUILD SECOND.</h2>
+            <p>
+              Whether the thing is software or mechanical, I prefer to understand how
+              the parts interact before changing them. That makes it easier to solve
+              the real problem instead of only treating the visible symptom.
+            </p>
+          </section>
+
+          <section>
+            <span>03 // WORK STYLE</span>
+            <h2>MAKE IT REAL EARLY.</h2>
+            <p>
+              I would rather build a working version, test it and improve it than spend
+              too long polishing an idea that has never been used. Real feedback exposes
+              weaknesses much faster than theory.
+            </p>
+            <div class="principles">
+              <div class="principle">
+                <b>01</b>
+                <strong>OBSERVE</strong>
+                <p>Find the actual problem and the friction around it.</p>
+              </div>
+              <div class="principle">
+                <b>02</b>
+                <strong>BUILD</strong>
+                <p>Create something real enough to test and use.</p>
+              </div>
+              <div class="principle">
+                <b>03</b>
+                <strong>IMPROVE</strong>
+                <p>Refine the weak points instead of adding unnecessary complexity.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <span>04 // CURRENT DIRECTION</span>
+            <h2>SOFTWARE FIRST.<br>MORE TO DOCUMENT.</h2>
+            <p>
+              The portfolio currently shows software most strongly because those projects
+              are already documented. Mechanical, fabrication and creative work will be
+              added as real photos and process material are prepared.
+            </p>
+            <div class="action">
+              <a href="../portfolio/">VIEW PROFESSIONAL PORTFOLIO</a>
+              <b>↗</b>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© CHARLES LIOC</span>
+      <span>ABOUT // PROFILE</span>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Internal website build notes
+/README.md
+/DEPLOYMENT.md
+/QA_REPORT.md
+/portfolio/README.md
+/portfolio/DEPLOYMENT.md
+/portfolio/QA_REPORT.md
+
+# Local / generated artifacts
+*.zip
+Thumbs.db
+.DS_Store
+/publish-github-pages.ps1
+/GITHUB_PAGES.txt

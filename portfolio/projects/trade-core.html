@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05060a">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta name="description" content="TRADE CORE case study by Charles Lioc.">
+  <title>TRADE CORE — Charles Lioc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root{--bg:#05060a;--text:#f6f8ff;--muted:#9099ae;--line:rgba(148,173,213,.18);--cyan:#00efff;--pink:#ff2bd6;--violet:#8a5cff}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 75% 18%,rgba(138,92,255,.14),transparent 25rem),#05060a;color:var(--text);font-family:Inter,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}.wrap{width:min(calc(100% - 48px),1280px);margin:auto}
+    header{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;font:700 12px "Space Mono",monospace;letter-spacing:.12em}.brand img{width:40px;height:40px;object-fit:contain}
+    header nav{display:flex;gap:24px;font:400 10px "Space Mono",monospace;color:#99a4b8}
+    .hero{padding:100px 0 74px;border-bottom:1px solid var(--line)}
+    .kicker,.label{font:400 9px "Space Mono",monospace;letter-spacing:.12em;color:var(--cyan)}
+    h1{font-size:clamp(64px,10vw,150px);line-height:.8;letter-spacing:-.07em;margin:22px 0 30px}
+    .lead{max-width:800px;font-size:clamp(16px,2vw,22px);line-height:1.55;color:#a0aabd}
+    .facts{margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .fact{padding:20px 18px 20px 0;border-right:1px solid var(--line)}.fact+.fact{padding-left:18px}.fact:last-child{border-right:0}
+    .fact small,.fact strong{display:block}.fact small{font:400 8px "Space Mono",monospace;color:#66738a}.fact strong{margin-top:8px;font-size:13px}
+    .visual{margin:70px 0;border:1px solid var(--line);min-height:420px;display:grid;place-items:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#070d17,#09060f)}
+    .visual:before{content:"";position:absolute;width:450px;height:450px;border:1px dashed rgba(0,239,255,.18);border-radius:50%;animation:spin 22s linear infinite}
+    .visual:after{content:"";position:absolute;width:620px;height:620px;border:1px dashed rgba(255,43,214,.12);border-radius:50%;animation:spin 32s linear infinite reverse}
+    .visual-mark{font:700 clamp(42px,9vw,120px) "Space Mono",monospace;letter-spacing:-.08em;position:relative;z-index:2;color:transparent;-webkit-text-stroke:1px rgba(238,244,255,.8);text-shadow:12px 0 40px rgba(0,239,255,.14),-12px 0 40px rgba(255,43,214,.13)}
+    .body-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:70px;padding:20px 0 100px}
+    .body-grid h2{font-size:clamp(32px,5vw,64px);line-height:.95;letter-spacing:-.04em;margin:15px 0}
+    .copy p{color:#939db1;line-height:1.75;font-size:15px}.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:25px}.tag{border:1px solid var(--line);padding:8px 10px;color:#7f8ca4;font:400 8px "Space Mono",monospace}
+    .next{border-top:1px solid var(--line);padding:38px 0 70px;display:flex;justify-content:space-between;gap:20px;font:400 9px "Space Mono",monospace;color:#758198}
+    @keyframes spin{to{transform:rotate(360deg)}}@media(max-width:760px){.wrap{width:min(calc(100% - 28px),1280px)}header{height:70px}.brand span{display:none}.facts{grid-template-columns:1fr 1fr}.fact:nth-child(2){border-right:0}.fact:nth-child(-n+2){border-bottom:1px solid var(--line)}.body-grid{grid-template-columns:1fr;gap:20px}.visual{min-height:330px}.next{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+  </style>
+
+</head>
+<body>
+  <a href="#case-main" style="position:absolute;left:-9999px;top:auto">Skip to content</a>
+  <div id="case-progress" aria-hidden="true" style="position:fixed;left:0;top:0;height:2px;width:0;z-index:99;background:linear-gradient(90deg,#00efff,#8a5cff,#ff2bd6)"></div>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="../index.html">
+        <img src="../assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo">
+        <span>CHARLES LIOC</span>
+      </a>
+      <nav>
+        <a href="../index.html#work">WORK</a>
+        <a href="../../index.html">MAIN SITE</a>
+      </nav>
+    </header>
+
+    <main id="case-main">
+      <section class="hero">
+        <span class="kicker">CASE STUDY // 01</span>
+        <h1>TRADE CORE</h1>
+        <p class="lead">A complete business operations system built to unify transactions, inventory, purchasing, fulfillment, finance and owner intelligence.</p>
+
+        <div class="facts">
+          <div class="fact"><small>DISCIPLINE</small><strong>SOFTWARE & SYSTEMS</strong></div>
+          <div class="fact"><small>ROLE</small><strong>PRODUCT / DEVELOPMENT</strong></div>
+          <div class="fact"><small>PLATFORM</small><strong>ANDROID + WEB</strong></div>
+          <div class="fact"><small>STATUS</small><strong>PRODUCTION BASELINE</strong></div>
+        </div>
+      </section>
+
+      <div class="visual" aria-label="TRADE CORE visual placeholder for future real product media">
+        <div class="visual-mark">TRADE//CORE</div>
+      </div>
+
+      <section class="body-grid">
+        <div>
+          <span class="label">THE PROBLEM</span>
+          <h2>WHY IT<br>EXISTS.</h2>
+        </div>
+        <div class="copy">
+          <p>Store operations become fragile when sales, inventory, purchasing, fulfillment and reporting live in separate workflows. Trade Core was designed as one operational core instead of a collection of disconnected tools.</p>
+          <p>The product grew around transaction-first store workflows, local-first reliability, role-specific interfaces, controlled cloud synchronization, thermal printing, backup/restore and owner-facing intelligence.</p>
+          <div class="tag-row"><span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Drift</span><span class="tag">Android</span><span class="tag">Web</span><span class="tag">POS</span><span class="tag">Inventory</span></div>
+        </div>
+      </section>
+
+      <div class="next">
+        <a href="../index.html#work">← SELECTED WORK</a>
+        <a href="compadres-hardware.html">COMPADRES HARDWARE →</a>
+      </div>
+    </main>
+  </div>
+<script>
+    (() => {
+      const bar = document.getElementById("case-progress");
+      const update = () => {
+        const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+        bar.style.width = `${Math.max(0, Math.min(1, scrollY / max)) * 100}%`;
+      };
+      update();
+      addEventListener("scroll", update, { passive: true });
+      addEventListener("resize", update, { passive: true });
+    })();
+  </script>
+</body>
+</html>

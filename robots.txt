@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Add a Sitemap line only after the final public domain is chosen.

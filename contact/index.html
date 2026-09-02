@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05060a">
+  <meta name="author" content="Charles Lioc">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="description" content="Contact Charles Lioc.">
+  <title>Contact — Charles Lioc</title>
+  <link rel="icon" href="../assets/charles-lioc-logo-locked.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../subpages.css">
+  <style>
+    .contact-layout{
+      padding:72px 0 120px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(390px,.9fr);
+      gap:80px;
+      align-items:start;
+    }
+    .contact-copy h2{
+      margin:16px 0 22px;
+      font-size:clamp(42px,6vw,84px);
+      line-height:.88;
+      letter-spacing:-.055em;
+    }
+    .contact-copy h2 span{
+      color:transparent;
+      -webkit-text-stroke:1px rgba(230,239,255,.78);
+    }
+    .contact-copy p{
+      max-width:650px;
+      color:#8f9aaf;
+      line-height:1.75;
+      font-size:14px;
+    }
+    .contact-note{
+      margin-top:30px;
+      padding:16px 17px;
+      border-left:1px solid rgba(255,43,214,.42);
+      background:linear-gradient(90deg,rgba(255,43,214,.04),transparent);
+      color:#79869b;
+      font:400 8px/1.7 "Space Mono",monospace;
+    }
+    .terminal{
+      border:1px solid var(--line);
+      background:rgba(5,9,16,.56);
+      overflow:hidden;
+    }
+    .terminal-top,.terminal-foot{
+      min-height:44px;
+      padding:0 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      color:#66738a;
+      font:400 7px "Space Mono",monospace;
+      letter-spacing:.08em;
+    }
+    .terminal-top{border-bottom:1px solid var(--line)}
+    .terminal-foot{border-top:1px solid var(--line)}
+    .terminal-top b{color:var(--cyan);font-weight:400}
+    .terminal-body{padding:8px 24px}
+    .line{
+      min-height:88px;
+      border-bottom:1px solid rgba(126,158,203,.12);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+    .line:last-child{border-bottom:0}
+    .line small{
+      color:#637087;
+      font:400 7px "Space Mono",monospace;
+    }
+    .line strong{
+      color:#a0aabd;
+      text-align:right;
+      font:700 9px "Space Mono",monospace;
+    }
+    .pending{
+      color:#ffc04d!important;
+    }
+    .contact-status{
+      margin-top:28px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:#768298;
+      font:400 8px "Space Mono",monospace;
+    }
+    .contact-status i{
+      width:7px;height:7px;border-radius:50%;
+      background:#ffc04d;
+      box-shadow:0 0 10px rgba(255,192,77,.35);
+    }
+    @media(max-width:900px){
+      .contact-layout{grid-template-columns:1fr}
+    }
+    @media(max-width:560px){
+      .line{
+        flex-direction:column;
+        align-items:flex-start;
+        justify-content:center;
+        gap:8px;
+      }
+      .line strong{text-align:left}
+    }
+  </style>
+  <link rel="manifest" href="../site.webmanifest">
+  <!-- Add canonical URL after the final domain is chosen. -->
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <a class="brand" href="../">
+        <img src="../assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo">
+        <div><strong>CHARLES LIOC</strong><small>CONTACT</small></div>
+      </a>
+      <nav>
+        <a href="../">HOME</a>
+        <a href="../projects/">PROJECTS</a>
+        <a href="../lab/">LAB</a>
+        <a href="../about/">ABOUT</a>
+        <a href="../portfolio/">PORTFOLIO</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="kicker">CONTACT // CONNECTION</span>
+        <h1>HAVE SOMETHING<br><span>WORTH BUILDING?</span></h1>
+        <p class="lead">
+          This page is ready for your real email, professional profiles and resume
+          when you decide what should be public.
+        </p>
+      </section>
+
+      <section class="contact-layout">
+        <div class="contact-copy">
+          <span class="kicker">OPEN CHANNEL</span>
+          <h2>KEEP IT<br><span>SIMPLE.</span></h2>
+          <p>
+            The goal is to make contacting you easy without exposing information you
+            do not want public. We will connect only the channels you deliberately choose.
+          </p>
+          <div class="contact-note">
+            No fake email address, social profile, phone number or downloadable resume
+            has been inserted. Those will be connected before public launch.
+          </div>
+          <div class="contact-status">
+            <i></i>
+            <span>PUBLIC EMAIL CONNECTED</span>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-top">
+            <span>CONTACT_NODE</span>
+            <b>CL://PUBLIC</b>
+          </div>
+          <div class="terminal-body">
+            <div class="line">
+              <small>EMAIL</small>
+              <strong><a href="mailto:icharles.development@gmail.com">icharles.development@gmail.com</a></strong>
+            </div>
+            <div class="line">
+              <small>GITHUB</small>
+              <strong class="pending">NOT CONNECTED</strong>
+            </div>
+            <div class="line">
+              <small>LINKEDIN / PROFESSIONAL</small>
+              <strong class="pending">NOT CONNECTED</strong>
+            </div>
+            <div class="line">
+              <small>RESUME / CV</small>
+              <strong class="pending">NOT CONNECTED</strong>
+            </div>
+          </div>
+          <div class="terminal-foot">
+            <span>PUBLIC CONTACT CONFIGURATION</span>
+            <span>PENDING</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© CHARLES LIOC</span>
+      <span>CONTACT // SAFE DEFAULT</span>
+    </footer>
+  </div>
+</body>
+</html>

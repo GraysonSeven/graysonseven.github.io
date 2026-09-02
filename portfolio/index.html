@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#05060a" />
+  <meta name="description" content="Charles Lioc — developer, builder and problem solver. Explore software systems, engineering work and creative projects." />
+  <meta name="author" content="Charles Lioc" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Charles Lioc — Developer · Builder · Problem Solver" />
+  <meta property="og:description" content="Software systems, engineering work and creative projects built around real problems." />
+  <meta property="og:image" content="assets/charles-lioc-logo-locked.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Charles Lioc — Developer · Builder · Problem Solver" />
+  <meta name="twitter:description" content="Software systems, engineering work and creative projects built around real problems." />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="site.webmanifest" />
+  <title>Charles Lioc — Developer · Builder · Problem Solver</title>
+  <!-- Add a canonical URL here after the final domain is chosen. -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="page-transition" aria-hidden="true">
+    <span></span><span></span>
+  </div>
+  <div class="scroll-progress" aria-hidden="true"><i id="scroll-progress-bar"></i></div>
+  <div class="noise" aria-hidden="true"></div>
+  <canvas id="cyber-grid" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="Charles Lioc home">
+      <img
+        src="assets/charles-lioc-logo-locked.svg"
+        alt="Charles Lioc logo"
+        class="brand-logo"
+      />
+      <span class="brand-wordmark">CHARLES LIOC</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="#work">WORK</a>
+      <a href="#domains">DISCIPLINES</a>
+      <a href="#about">ABOUT</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+
+    <div class="header-status" aria-label="Portfolio status">
+      <i></i><span>SYSTEM ONLINE</span>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" id="home" data-nav-section>
+      <div class="hero-scanline" aria-hidden="true"></div>
+
+      <div class="hero-copy">
+        <div class="eyebrow reveal">
+          <span>DEVELOPER</span>
+          <b>•</b>
+          <span>BUILDER</span>
+          <b>•</b>
+          <span>PROBLEM SOLVER</span>
+        </div>
+
+        <h1 class="reveal">
+          I BUILD<br />
+          <span>WHAT SHOULD EXIST.</span>
+        </h1>
+
+        <p class="hero-intro reveal">
+          Software, systems, machines and ideas — designed to solve real problems,
+          work in the real world, and keep getting better.
+        </p>
+
+        <div class="hero-actions reveal">
+          <a class="btn btn-primary" href="#work">
+            <span>EXPLORE MY WORK</span>
+            <strong>↗</strong>
+          </a>
+          <a class="btn btn-ghost" href="#about">
+            <span>ABOUT ME</span>
+            <strong>→</strong>
+          </a>
+        </div>
+
+        <div class="hero-meta reveal" aria-label="Portfolio categories">
+          <div>
+            <small>01</small>
+            <span>SOFTWARE & SYSTEMS</span>
+          </div>
+          <div>
+            <small>02</small>
+            <span>BUILDS & ENGINEERING</span>
+          </div>
+          <div>
+            <small>03</small>
+            <span>CREATIVE PROJECTS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="orbital-ring ring-a"></div>
+        <div class="orbital-ring ring-b"></div>
+        <div class="orbital-ring ring-c"></div>
+
+        <div class="logo-stage" id="logo-stage">
+          <div class="logo-halo"></div>
+          <img
+            src="assets/charles-lioc-logo-locked.svg"
+            class="hero-logo"
+            alt=""
+          />
+        </div>
+
+        <div class="hud hud-top">
+          <span>IDENTITY CORE</span>
+          <b>CL//001</b>
+        </div>
+        <div class="hud hud-side">
+          <span>BUILD</span>
+          <span>IMPROVE</span>
+          <span>CREATE</span>
+        </div>
+        <div class="hud hud-bottom">
+          <span>FUTURE // IN PROGRESS</span>
+          <div class="pulse-line"><i></i></div>
+        </div>
+      </div>
+
+      <div class="scroll-mark" aria-hidden="true">
+        <span>SCROLL TO INITIALIZE</span>
+        <i></i>
+      </div>
+    </section>
+
+    <!-- Part 2 anchors are intentionally present so navigation already works. -->
+    <section class="work-section" id="work" data-nav-section>
+      <div class="section-head scroll-reveal">
+        <div>
+          <span class="section-index">02 // SELECTED WORK</span>
+          <h2>BUILT TO<br><span>DO REAL WORK.</span></h2>
+        </div>
+        <p>
+          A selection of software products and systems I designed and built around
+          real workflows, real constraints, and real use.
+        </p>
+      </div>
+
+      <div class="project-showcase" data-project-showcase>
+        <div class="project-stage scroll-reveal">
+          <div class="stage-chrome">
+            <div class="stage-topbar">
+              <div class="stage-dots"><i></i><i></i><i></i></div>
+              <span id="stage-label">PROJECT // 01</span>
+              <span class="stage-live"><i></i> LIVE PREVIEW</span>
+            </div>
+
+            <div class="project-screen" id="project-screen" aria-live="polite">
+              <div class="screen-grid"></div>
+
+              <div class="project-ui project-ui-trade active" data-preview="trade-core">
+                <div class="mock-sidebar">
+                  <div class="mock-logo">TC</div>
+                  <i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <div class="mock-app">
+                  <div class="mock-appbar">
+                    <div><small>STORE CORE</small><strong>OPERATIONS</strong></div>
+                    <span class="mock-status">ONLINE</span>
+                  </div>
+                  <div class="metric-row">
+                    <div><small>SALES TODAY</small><strong>₱48,620</strong><em>+12.8%</em></div>
+                    <div><small>ORDERS</small><strong>126</strong><em>LIVE</em></div>
+                    <div><small>LOW STOCK</small><strong>18</strong><em>CHECK</em></div>
+                  </div>
+                  <div class="trade-body">
+                    <div class="mock-chart">
+                      <span>SALES FLOW</span>
+                      <svg viewBox="0 0 500 170" aria-hidden="true">
+                        <defs>
+                          <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#00efff" stop-opacity=".38"/>
+                            <stop offset="100%" stop-color="#00efff" stop-opacity="0"/>
+                          </linearGradient>
+                        </defs>
+                        <path d="M0 130 C55 125 58 92 112 100 S174 126 222 70 S309 86 355 47 S431 56 500 24 L500 170 L0 170Z" fill="url(#chartFill)"/>
+                        <path d="M0 130 C55 125 58 92 112 100 S174 126 222 70 S309 86 355 47 S431 56 500 24" fill="none" stroke="#00efff" stroke-width="3"/>
+                      </svg>
+                    </div>
+                    <div class="stock-list">
+                      <span>STOCK ACTIVITY</span>
+                      <div><b>GI WIRE #16</b><small>+48</small></div>
+                      <div><b>PORTLAND CEMENT</b><small>-12</small></div>
+                      <div><b>PVC 1/2"</b><small>-8</small></div>
+                      <div><b>ROOFING NAIL</b><small>+120</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="project-ui project-ui-compadres" data-preview="compadres">
+                <div class="receipt-strip">
+                  <small>COMPADRES HARDWARE</small>
+                  <strong>CHECKOUT</strong>
+                  <div class="receipt-item"><span>Portland Cement</span><b>₱260.00</b></div>
+                  <div class="receipt-item"><span>GI Wire #16 × 2</span><b>₱180.00</b></div>
+                  <div class="receipt-item"><span>PVC Elbow × 4</span><b>₱72.00</b></div>
+                  <div class="receipt-total"><span>TOTAL</span><strong>₱512.00</strong></div>
+                </div>
+                <div class="pos-panel">
+                  <div class="pos-head"><span>POINT OF SALE</span><b>READY</b></div>
+                  <div class="search-sim">SCAN OR SEARCH PRODUCT <i></i></div>
+                  <div class="pos-grid">
+                    <div><small>AVAILABLE</small><strong>128</strong></div>
+                    <div><small>RESERVED</small><strong>12</strong></div>
+                    <div><small>ON HAND</small><strong>140</strong></div>
+                  </div>
+                  <div class="checkout-button">COMPLETE SALE <span>→</span></div>
+                </div>
+              </div>
+
+              <div class="project-ui project-ui-morse" data-preview="morsebound">
+                <div class="morse-orbit orbit-one"></div>
+                <div class="morse-orbit orbit-two"></div>
+                <div class="morse-console">
+                  <small>SIGNAL TRAINING</small>
+                  <strong>DECODE THE TRANSMISSION</strong>
+                  <div class="morse-code">••• &nbsp;— — —&nbsp; •••</div>
+                  <div class="morse-input">S O S <i></i></div>
+                  <div class="morse-meter"><span></span></div>
+                  <footer><span>ACCURACY 96%</span><span>STREAK 14</span></footer>
+                </div>
+              </div>
+
+              <div class="project-ui project-ui-ette" data-preview="ette">
+                <div class="planner-card">
+                  <header><small>TODAY</small><strong>FOCUS BOARD</strong><b>82%</b></header>
+                  <div class="planner-row done"><i></i><span>Morning workout</span><small>DONE</small></div>
+                  <div class="planner-row active"><i></i><span>Deep work session</span><small>NOW</small></div>
+                  <div class="planner-row"><i></i><span>Project review</span><small>14:30</small></div>
+                  <div class="planner-row"><i></i><span>Plan tomorrow</span><small>20:00</small></div>
+                  <div class="planner-progress"><span style="width:72%"></span></div>
+                </div>
+                <div class="rank-card">
+                  <small>SOLO RANK</small>
+                  <strong>LV. 27</strong>
+                  <span>+1,240 XP THIS WEEK</span>
+                </div>
+              </div>
+
+              <div class="screen-scan"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-selector scroll-reveal" role="tablist" aria-label="Featured projects">
+          <button class="project-tab active" type="button" role="tab" aria-selected="true"
+                  data-project="trade-core"
+                  data-number="01"
+                  data-title="TRADE CORE"
+                  data-kicker="BUSINESS OPERATIONS SYSTEM"
+                  data-description="A complete POS, inventory, purchasing, fulfillment, finance and owner-intelligence system built for real store operations."
+                  data-tags="Flutter|Firebase|Drift|Android|Web"
+                  data-link="projects/trade-core.html">
+            <span class="tab-number">01</span>
+            <span class="tab-copy"><strong>TRADE CORE</strong><small>BUSINESS OPERATIONS SYSTEM</small></span>
+            <span class="tab-arrow">↗</span>
+          </button>
+
+          <button class="project-tab" type="button" role="tab" aria-selected="false"
+                  data-project="compadres"
+                  data-number="02"
+                  data-title="COMPADRES HARDWARE"
+                  data-kicker="HARDWARE STORE SYSTEM"
+                  data-description="A hardware-store-specific implementation focused on sales, stock movement, receiving, fulfillment and reliable store-floor workflows."
+                  data-tags="POS|Inventory|Thermal Print|Cloud Sync|Android"
+                  data-link="projects/compadres-hardware.html">
+            <span class="tab-number">02</span>
+            <span class="tab-copy"><strong>COMPADRES HARDWARE</strong><small>STORE OPERATIONS</small></span>
+            <span class="tab-arrow">↗</span>
+          </button>
+
+          <button class="project-tab" type="button" role="tab" aria-selected="false"
+                  data-project="morsebound"
+                  data-number="03"
+                  data-title="MORSEBOUND"
+                  data-kicker="MORSE TRAINING APP"
+                  data-description="A focused learning product designed around practicing and improving Morse code through a dedicated web and Android experience."
+                  data-tags="Flutter|Web|Android|Learning UX"
+                  data-link="projects/morsebound.html">
+            <span class="tab-number">03</span>
+            <span class="tab-copy"><strong>MORSEBOUND</strong><small>LEARNING PRODUCT</small></span>
+            <span class="tab-arrow">↗</span>
+          </button>
+
+          <button class="project-tab" type="button" role="tab" aria-selected="false"
+                  data-project="ette"
+                  data-number="04"
+                  data-title="ETTE PLANNER"
+                  data-kicker="PERSONAL PRODUCTIVITY SYSTEM"
+                  data-description="A personal planning and accountability system combining recurring schedules, workouts, progress tracking and structured self-management."
+                  data-tags="Planner|Cloud Sync|Workout|Progress|Flutter"
+                  data-link="projects/ette-planner.html">
+            <span class="tab-number">04</span>
+            <span class="tab-copy"><strong>ETTE PLANNER</strong><small>PRODUCTIVITY SYSTEM</small></span>
+            <span class="tab-arrow">↗</span>
+          </button>
+        </div>
+
+        <div class="project-detail scroll-reveal" id="project-detail">
+          <div class="project-title-block">
+            <span id="project-kicker">BUSINESS OPERATIONS SYSTEM</span>
+            <h3 id="project-title">TRADE CORE</h3>
+          </div>
+
+          <div class="project-description-block">
+            <p id="project-description">
+              A complete POS, inventory, purchasing, fulfillment, finance and owner-intelligence
+              system built for real store operations.
+            </p>
+            <div class="project-tags" id="project-tags">
+              <span>Flutter</span><span>Firebase</span><span>Drift</span><span>Android</span><span>Web</span>
+            </div>
+          </div>
+
+          <a class="project-open" id="project-open" href="projects/trade-core.html">
+            <span>VIEW CASE STUDY</span>
+            <b>↗</b>
+          </a>
+        </div>
+      </div>
+
+      <div class="work-footer">
+        <span>04 FEATURED BUILDS</span>
+        <i></i>
+        <span>MORE PROJECTS WILL BE ADDED AS THEY'RE READY</span>
+      </div>
+    </section>
+
+    <section class="disciplines-section" id="domains" data-nav-section>
+      <div class="disciplines-head scroll-reveal">
+        <div>
+          <span class="section-index">03 // DISCIPLINES</span>
+          <h2>MORE THAN<br><span>ONE MEDIUM.</span></h2>
+        </div>
+        <p>
+          The tool changes. The mindset does not: understand the problem, figure out
+          how it works, build a solution, test it, and improve it.
+        </p>
+      </div>
+
+      <div class="discipline-console scroll-reveal" data-discipline-console>
+        <div class="discipline-tabs" role="tablist" aria-label="Portfolio disciplines">
+          <button class="discipline-tab active" type="button" role="tab" aria-selected="true"
+                  data-discipline="software">
+            <span class="discipline-num">01</span>
+            <span class="discipline-tab-copy">
+              <strong>SOFTWARE & SYSTEMS</strong>
+              <small>PRIMARY DISCIPLINE</small>
+            </span>
+            <span class="discipline-state">ACTIVE</span>
+          </button>
+
+          <button class="discipline-tab" type="button" role="tab" aria-selected="false"
+                  data-discipline="engineering">
+            <span class="discipline-num">02</span>
+            <span class="discipline-tab-copy">
+              <strong>BUILDS & ENGINEERING</strong>
+              <small>PHYSICAL PROBLEM SOLVING</small>
+            </span>
+            <span class="discipline-state">OPEN</span>
+          </button>
+
+          <button class="discipline-tab" type="button" role="tab" aria-selected="false"
+                  data-discipline="creative">
+            <span class="discipline-num">03</span>
+            <span class="discipline-tab-copy">
+              <strong>CREATIVE PROJECTS</strong>
+              <small>FORM + EXPERIMENTATION</small>
+            </span>
+            <span class="discipline-state">OPEN</span>
+          </button>
+        </div>
+
+        <div class="discipline-display">
+          <article class="discipline-panel active" data-discipline-panel="software">
+            <div class="discipline-copy">
+              <span class="discipline-label">01 / SOFTWARE & SYSTEMS</span>
+              <h3>I DESIGN THE<br><span>WHOLE SYSTEM.</span></h3>
+              <p>
+                Not just screens. I work across product logic, workflows, local data,
+                cloud synchronization, release systems, reliability and the interface
+                people actually use.
+              </p>
+
+              <div class="discipline-facts">
+                <div>
+                  <small>DOCUMENTED BUILDS</small>
+                  <strong>04</strong>
+                </div>
+                <div>
+                  <small>FOCUS</small>
+                  <strong>REAL-WORLD WORKFLOWS</strong>
+                </div>
+              </div>
+
+              <div class="discipline-pills" aria-label="Software capabilities">
+                <span>Product Design</span>
+                <span>Flutter</span>
+                <span>Android + Web</span>
+                <span>Local-First Data</span>
+                <span>Cloud Sync</span>
+                <span>Release Engineering</span>
+              </div>
+
+              <a class="discipline-link" href="#work">
+                <span>VIEW FEATURED SOFTWARE</span><b>↗</b>
+              </a>
+            </div>
+
+            <div class="discipline-art software-art" aria-hidden="true">
+              <div class="sys-frame">
+                <div class="sys-top">
+                  <i></i><i></i><i></i>
+                  <span>SYSTEM ARCHITECTURE // LIVE</span>
+                </div>
+                <div class="sys-body">
+                  <div class="sys-node node-ui"><b>UI</b><small>INTERFACE</small></div>
+                  <div class="sys-node node-core"><b>CORE</b><small>LOGIC</small></div>
+                  <div class="sys-node node-data"><b>DATA</b><small>LOCAL</small></div>
+                  <div class="sys-node node-cloud"><b>SYNC</b><small>CLOUD</small></div>
+                  <svg viewBox="0 0 640 420" preserveAspectRatio="none">
+                    <path d="M134 112 C230 112 220 198 320 198" />
+                    <path d="M506 112 C410 112 420 198 320 198" />
+                    <path d="M320 198 C320 264 212 257 172 320" />
+                    <path d="M320 198 C320 264 428 257 468 320" />
+                  </svg>
+                  <div class="sys-pulse pulse-a"></div>
+                  <div class="sys-pulse pulse-b"></div>
+                </div>
+                <div class="sys-foot">
+                  <span>BUILD</span><i></i><span>TEST</span><i></i><span>SHIP</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="discipline-panel" data-discipline-panel="engineering">
+            <div class="discipline-copy">
+              <span class="discipline-label">02 / BUILDS & ENGINEERING</span>
+              <h3>I LIKE KNOWING<br><span>HOW THINGS WORK.</span></h3>
+              <p>
+                Mechanical work gives me the same kind of challenge as software:
+                diagnose the system, understand the interaction of the parts, repair
+                or modify what is wrong, then prove the result in the real world.
+              </p>
+
+              <div class="discipline-facts">
+                <div>
+                  <small>WORK TYPE</small>
+                  <strong>HANDS-ON</strong>
+                </div>
+                <div>
+                  <small>ARCHIVE</small>
+                  <strong>BEING DOCUMENTED</strong>
+                </div>
+              </div>
+
+              <div class="discipline-pills" aria-label="Engineering interests and work">
+                <span>Motorcycle Work</span>
+                <span>Diagnosis</span>
+                <span>Repair</span>
+                <span>Modification</span>
+                <span>Fabrication</span>
+              </div>
+
+              <div class="discipline-note">
+                Real build photos and process documentation will be added here as the
+                physical-work archive is prepared.
+              </div>
+            </div>
+
+            <div class="discipline-art engineering-art" aria-hidden="true">
+              <div class="mech-crosshair"></div>
+              <div class="gear gear-one"><i></i></div>
+              <div class="gear gear-two"><i></i></div>
+              <div class="piston">
+                <div class="piston-head"></div>
+                <div class="piston-pin"></div>
+                <div class="piston-rod"></div>
+              </div>
+              <div class="mech-readout readout-a"><small>DIAG</small><b>MECHANICAL</b></div>
+              <div class="mech-readout readout-b"><small>MODE</small><b>BUILD / REPAIR</b></div>
+              <div class="mech-axis axis-x"></div>
+              <div class="mech-axis axis-y"></div>
+            </div>
+          </article>
+
+          <article class="discipline-panel" data-discipline-panel="creative">
+            <div class="discipline-copy">
+              <span class="discipline-label">03 / CREATIVE PROJECTS</span>
+              <h3>FUNCTION CAN<br><span>STILL HAVE CHARACTER.</span></h3>
+              <p>
+                I also like making things where form, materials and experimentation
+                matter as much as utility — from metal work and sculptural ideas to
+                physical concepts that do not fit neatly into one category.
+              </p>
+
+              <div class="discipline-facts">
+                <div>
+                  <small>DIRECTION</small>
+                  <strong>PHYSICAL + VISUAL</strong>
+                </div>
+                <div>
+                  <small>ARCHIVE</small>
+                  <strong>GROWING</strong>
+                </div>
+              </div>
+
+              <div class="discipline-pills" aria-label="Creative interests and work">
+                <span>Metal Art</span>
+                <span>Sculpture</span>
+                <span>Physical Concepts</span>
+                <span>Experimental Builds</span>
+              </div>
+
+              <div class="discipline-note">
+                This stays intentionally selective. Finished pieces and process shots
+                will appear here as they are photographed and prepared for the portfolio.
+              </div>
+            </div>
+
+            <div class="discipline-art creative-art" aria-hidden="true">
+              <div class="creative-orbit orbit-c1"></div>
+              <div class="creative-orbit orbit-c2"></div>
+              <div class="wire-cube">
+                <div class="cube-face face-front"></div>
+                <div class="cube-face face-back"></div>
+                <i class="edge e1"></i><i class="edge e2"></i><i class="edge e3"></i><i class="edge e4"></i>
+              </div>
+              <div class="creative-blade blade-one"></div>
+              <div class="creative-blade blade-two"></div>
+              <div class="creative-mark">FORM<br><span>+</span><br>FUNCTION</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="discipline-bottom">
+          <span>THREE DISCIPLINES</span>
+          <i></i>
+          <span>ONE BUILD MINDSET</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="about" data-nav-section>
+      <div class="about-head scroll-reveal">
+        <span class="section-index">04 // ABOUT</span>
+        <div class="about-title-row">
+          <h2>I LEARN BY<br><span>BUILDING THINGS.</span></h2>
+          <p>
+            I’m a developer and hands-on builder who likes understanding complete
+            systems — not just one isolated part of them. Software is my strongest
+            documented discipline today, but the same problem-solving mindset carries
+            into mechanical work, fabrication and creative projects.
+          </p>
+        </div>
+      </div>
+
+      <div class="identity-grid scroll-reveal">
+        <div class="identity-card identity-card-main">
+          <div class="identity-card-top">
+            <span>PROFILE // CL</span>
+            <i></i>
+            <span>ACTIVE BUILDER</span>
+          </div>
+
+          <div class="identity-mark-wrap" aria-hidden="true">
+            <div class="identity-ring ir-one"></div>
+            <div class="identity-ring ir-two"></div>
+            <img src="assets/charles-lioc-logo-locked.svg" alt="" class="identity-mark">
+          </div>
+
+          <div class="identity-card-copy">
+            <small>CHARLES LIOC</small>
+            <strong>DEVELOPER · BUILDER · PROBLEM SOLVER</strong>
+            <p>
+              I gravitate toward practical problems: workflows that waste time,
+              systems that are unreliable, machines that need to work better, and
+              ideas that are easier to understand once they exist as something real.
+            </p>
+          </div>
+        </div>
+
+        <div class="identity-side">
+          <article class="principle-card">
+            <span>01 / APPROACH</span>
+            <h3>UNDERSTAND THE SYSTEM.</h3>
+            <p>
+              Before changing anything, I want to know how the parts interact and
+              where the real constraint actually is.
+            </p>
+          </article>
+
+          <article class="principle-card">
+            <span>02 / BUILD</span>
+            <h3>MAKE IT REAL.</h3>
+            <p>
+              I prefer working prototypes and usable products over ideas that stay
+              theoretical for too long.
+            </p>
+          </article>
+
+          <article class="principle-card">
+            <span>03 / IMPROVE</span>
+            <h3>ITERATE FROM EVIDENCE.</h3>
+            <p>
+              Test it, find what fails or feels wrong, then improve the actual weak
+              point instead of adding noise.
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div class="capability-section scroll-reveal">
+        <div class="capability-intro">
+          <span class="section-index">CAPABILITY MAP</span>
+          <h3>WHAT I CAN<br><span>WORK ACROSS.</span></h3>
+          <p>
+            These are working areas, not percentage scores. The portfolio projects
+            above are the evidence for the software side; the physical-work archive
+            will expand as it is documented.
+          </p>
+        </div>
+
+        <div class="capability-map" aria-label="Capabilities">
+          <div class="capability-row capability-row-primary">
+            <div class="capability-index">01</div>
+            <div class="capability-name">
+              <strong>PRODUCT & SOFTWARE SYSTEMS</strong>
+              <small>PRIMARY / DOCUMENTED</small>
+            </div>
+            <div class="capability-items">
+              <span>Product Logic</span>
+              <span>Flutter</span>
+              <span>Android</span>
+              <span>Web</span>
+              <span>Local Data</span>
+              <span>Cloud Sync</span>
+              <span>Release Workflows</span>
+            </div>
+            <div class="capability-signal"><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+
+          <div class="capability-row">
+            <div class="capability-index">02</div>
+            <div class="capability-name">
+              <strong>UX & INTERFACE THINKING</strong>
+              <small>WORKFLOW-DRIVEN</small>
+            </div>
+            <div class="capability-items">
+              <span>Information Flow</span>
+              <span>Role-Based UX</span>
+              <span>Responsive UI</span>
+              <span>Interaction Design</span>
+            </div>
+            <div class="capability-signal"><i></i><i></i><i></i><i></i></div>
+          </div>
+
+          <div class="capability-row">
+            <div class="capability-index">03</div>
+            <div class="capability-name">
+              <strong>MECHANICAL & HANDS-ON WORK</strong>
+              <small>ARCHIVE GROWING</small>
+            </div>
+            <div class="capability-items">
+              <span>Diagnosis</span>
+              <span>Repair</span>
+              <span>Motorcycle Work</span>
+              <span>Modification</span>
+              <span>Fabrication</span>
+            </div>
+            <div class="capability-signal"><i></i><i></i><i></i></div>
+          </div>
+
+          <div class="capability-row">
+            <div class="capability-index">04</div>
+            <div class="capability-name">
+              <strong>CREATIVE MAKING</strong>
+              <small>SELECTIVE</small>
+            </div>
+            <div class="capability-items">
+              <span>Metal Art</span>
+              <span>Sculpture</span>
+              <span>Concept Building</span>
+              <span>Experimentation</span>
+            </div>
+            <div class="capability-signal"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-process scroll-reveal">
+        <div class="process-head">
+          <span class="section-index">HOW I BUILD</span>
+          <h3>FROM PROBLEM<br><span>TO WORKING SYSTEM.</span></h3>
+        </div>
+
+        <div class="process-track">
+          <article data-process-step>
+            <span>01</span>
+            <i></i>
+            <div>
+              <strong>OBSERVE</strong>
+              <p>Find the real problem and the friction around it.</p>
+            </div>
+          </article>
+
+          <article data-process-step>
+            <span>02</span>
+            <i></i>
+            <div>
+              <strong>MODEL</strong>
+              <p>Understand the system, constraints and workflow.</p>
+            </div>
+          </article>
+
+          <article data-process-step>
+            <span>03</span>
+            <i></i>
+            <div>
+              <strong>BUILD</strong>
+              <p>Create the smallest real version that can prove the idea.</p>
+            </div>
+          </article>
+
+          <article data-process-step>
+            <span>04</span>
+            <i></i>
+            <div>
+              <strong>TEST</strong>
+              <p>Use it, break it, validate the weak points.</p>
+            </div>
+          </article>
+
+          <article data-process-step>
+            <span>05</span>
+            <i></i>
+            <div>
+              <strong>IMPROVE</strong>
+              <p>Refine what matters and remove unnecessary friction.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact" data-nav-section>
+      <div class="contact-grid scroll-reveal">
+        <div class="contact-main">
+          <span class="section-index">05 // CONTACT</span>
+          <h2>HAVE SOMETHING<br><span>WORTH BUILDING?</span></h2>
+          <p>
+            I’m interested in practical software, systems, product ideas and unusual
+            problems that benefit from someone willing to understand the whole thing.
+          </p>
+
+          <div class="contact-status">
+            <i></i>
+            <span>PUBLIC EMAIL CONNECTED // OTHER CHANNELS PENDING</span>
+          </div>
+        </div>
+
+        <div class="contact-terminal">
+          <div class="terminal-top">
+            <span>CONTACT_NODE</span>
+            <b>CL://PORTFOLIO</b>
+          </div>
+
+          <div class="terminal-body">
+            <div class="terminal-line">
+              <small>STATUS</small>
+              <strong>READY FOR CONNECTION</strong>
+            </div>
+            <div class="terminal-line">
+              <small>EMAIL</small>
+              <strong><a href="mailto:icharles.development@gmail.com">icharles.development@gmail.com</a></strong>
+            </div>
+            <div class="terminal-line">
+              <small>PROFESSIONAL LINKS</small>
+              <strong>TO BE CONNECTED</strong>
+            </div>
+            <div class="terminal-line">
+              <small>RESUME / CV</small>
+              <strong>TO BE ADDED</strong>
+            </div>
+          </div>
+
+          <div class="terminal-foot">
+            <span>NO FAKE CONTACT DETAILS ADDED</span>
+            <i></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="final-signature scroll-reveal">
+        <div class="signature-logo-wrap">
+          <img src="assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo">
+        </div>
+        <div>
+          <small>CHARLES LIOC</small>
+          <strong>BUILD // IMPROVE // CREATE</strong>
+        </div>
+        <a href="#top" class="back-top">
+          <span>BACK TO TOP</span>
+          <b>↑</b>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span id="year"></span> CHARLES LIOC</span>
+    <span>BUILD // IMPROVE // CREATE</span>
+    <span class="footer-runtime">PORTFOLIO // V1.0</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

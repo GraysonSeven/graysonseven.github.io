@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#05060a" />
+  <meta name="description" content="Official website of Charles Lioc — developer, builder and problem solver." />
+  <meta name="author" content="Charles Lioc" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Charles Lioc — Official Website" />
+  <meta property="og:description" content="Software, systems, engineering, experiments and the portfolio of Charles Lioc." />
+  <meta property="og:image" content="assets/charles-lioc-logo-locked.svg" />
+  <link rel="icon" href="assets/charles-lioc-logo-locked.svg" type="image/svg+xml" />
+  <title>Charles Lioc — Official Website</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="site.webmanifest">
+  <!-- Add canonical URL after the final domain is chosen. -->
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="noise" aria-hidden="true"></div>
+  <canvas id="world-grid" aria-hidden="true"></canvas>
+  <div class="progress-line" aria-hidden="true"><i id="progress"></i></div>
+
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="Charles Lioc home">
+      <img src="assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo" />
+      <div>
+        <strong>CHARLES LIOC</strong>
+        <small>OFFICIAL WEBSITE</small>
+      </div>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#home">HOME</a>
+      <a href="projects/" class="route-link">PROJECTS</a>
+      <a href="lab/" class="route-link">LAB</a>
+      <a href="about/" class="route-link">ABOUT</a>
+      <a href="portfolio/" class="route-link">PORTFOLIO</a>
+      <a href="contact/" class="route-link">CONTACT</a>
+    </nav>
+
+    <div class="header-node">
+      <i></i>
+      <span>CL://ONLINE</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home" data-nav-section>
+      <div class="hero-copy">
+        <div class="hero-kicker enter">
+          <span>DEVELOPER</span><b>•</b>
+          <span>BUILDER</span><b>•</b>
+          <span>CREATOR</span>
+        </div>
+
+        <h1 class="enter">
+          ONE PLACE<br>
+          <span>FOR EVERYTHING I BUILD.</span>
+        </h1>
+
+        <p class="hero-lead enter">
+          This is my central website — software, systems, engineering work,
+          experiments, product ideas and the complete portfolio behind them.
+        </p>
+
+        <div class="hero-actions enter">
+          <a class="primary-btn route-link" href="portfolio/">
+            <span>ENTER PORTFOLIO</span>
+            <b>↗</b>
+          </a>
+          <a class="secondary-btn" href="#featured">
+            <span>EXPLORE FEATURED BUILDS</span>
+            <b>↓</b>
+          </a>
+        </div>
+
+        <div class="hero-paths enter">
+          <div>
+            <small>01</small>
+            <strong>SOFTWARE</strong>
+            <span>Systems + Products</span>
+          </div>
+          <div>
+            <small>02</small>
+            <strong>ENGINEERING</strong>
+            <span>Build + Repair</span>
+          </div>
+          <div>
+            <small>03</small>
+            <strong>CREATIVE</strong>
+            <span>Ideas + Experiments</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-core" aria-hidden="true">
+        <div class="core-ring ring-1"></div>
+        <div class="core-ring ring-2"></div>
+        <div class="core-ring ring-3"></div>
+        <div class="core-scan"></div>
+
+        <div class="core-logo" id="core-logo">
+          <div class="core-halo"></div>
+          <img src="assets/charles-lioc-logo-locked.svg" alt="" />
+        </div>
+
+        <div class="core-data data-a">
+          <small>IDENTITY</small>
+          <strong>CL//001</strong>
+        </div>
+        <div class="core-data data-b">
+          <small>MODE</small>
+          <strong>BUILD</strong>
+        </div>
+        <div class="core-data data-c">
+          <small>STATUS</small>
+          <strong>IN PROGRESS</strong>
+        </div>
+      </div>
+
+      <div class="scroll-hint">
+        <span>SCROLL TO EXPLORE</span><i></i>
+      </div>
+    </section>
+
+    <section class="featured-section scroll-reveal" id="featured" data-nav-section>
+      <div class="section-heading">
+        <div>
+          <span class="section-id">02 // FEATURED BUILDS</span>
+          <h2>REAL PROJECTS.<br><span>REAL SYSTEMS.</span></h2>
+        </div>
+        <p>
+          A few projects that best show how I approach practical problems.
+          The full case studies live inside the portfolio.
+        </p>
+      </div>
+
+      <div class="featured-grid">
+        <a class="featured-card featured-primary route-link" href="portfolio/projects/trade-core.html">
+          <div class="card-index">01</div>
+          <div class="card-visual trade-visual" aria-hidden="true">
+            <div class="trade-window">
+              <header><i></i><i></i><i></i><span>TRADE CORE</span></header>
+              <div class="trade-metrics">
+                <div><small>SALES</small><strong>LIVE</strong></div>
+                <div><small>STOCK</small><strong>SYNC</strong></div>
+                <div><small>OPS</small><strong>CORE</strong></div>
+              </div>
+              <div class="trade-chart">
+                <svg viewBox="0 0 600 180">
+                  <path d="M0 142 C65 138 91 93 146 108 S232 135 280 75 S372 98 421 55 S515 79 600 22" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="card-copy">
+            <small>BUSINESS OPERATIONS SYSTEM</small>
+            <h3>TRADE CORE</h3>
+            <p>POS, inventory, purchasing, fulfillment, finance and owner intelligence in one operational core.</p>
+            <span class="card-action">VIEW CASE STUDY <b>↗</b></span>
+          </div>
+        </a>
+
+        <a class="featured-card route-link" href="portfolio/projects/compadres-hardware.html">
+          <div class="card-index">02</div>
+          <div class="mini-art compadres-art" aria-hidden="true">
+            <div class="receipt">
+              <i></i><i></i><i></i>
+              <strong>₱512.00</strong>
+            </div>
+            <div class="pos-box">
+              <span>POS</span>
+              <b>READY</b>
+            </div>
+          </div>
+          <div class="card-copy">
+            <small>HARDWARE STORE SYSTEM</small>
+            <h3>COMPADRES HARDWARE</h3>
+            <p>A client-specific retail workflow built around daily hardware-store operations.</p>
+            <span class="card-action">VIEW CASE STUDY <b>↗</b></span>
+          </div>
+        </a>
+
+        <a class="featured-card route-link" href="portfolio/projects/morsebound.html">
+          <div class="card-index">03</div>
+          <div class="mini-art morse-art" aria-hidden="true">
+            <div class="signal-ring"></div>
+            <div class="morse-line">••• ——— •••</div>
+          </div>
+          <div class="card-copy">
+            <small>LEARNING PRODUCT</small>
+            <h3>MORSEBOUND</h3>
+            <p>A focused Morse-code learning experience for web and Android.</p>
+            <span class="card-action">VIEW CASE STUDY <b>↗</b></span>
+          </div>
+        </a>
+
+        <a class="featured-card route-link" href="portfolio/projects/ette-planner.html">
+          <div class="card-index">04</div>
+          <div class="mini-art ette-art" aria-hidden="true">
+            <div class="ette-ring"><span>82%</span></div>
+            <div class="ette-bars"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="card-copy">
+            <small>PRODUCTIVITY SYSTEM</small>
+            <h3>ETTE PLANNER</h3>
+            <p>Personal planning, recurring schedules, workout history and structured progress.</p>
+            <span class="card-action">VIEW CASE STUDY <b>↗</b></span>
+          </div>
+        </a>
+      </div>
+
+      <a class="portfolio-bridge route-link" href="portfolio/">
+        <div>
+          <small>FULL PORTFOLIO</small>
+          <strong>SEE THE COMPLETE BODY OF WORK</strong>
+        </div>
+        <b>↗</b>
+      </a>
+    </section>
+
+    <section class="site-purpose scroll-reveal" id="about-site" data-nav-section>
+      <div class="purpose-copy">
+        <span class="section-id">03 // THIS WEBSITE</span>
+        <h2>THE PORTFOLIO IS<br><span>ONLY ONE PART.</span></h2>
+        <p>
+          The portfolio is where finished work gets presented professionally.
+          The main site now also has a broader Projects directory and a Lab for
+          experiments or unfinished work, so not everything has to be forced into
+          a polished case study.
+        </p>
+      </div>
+
+      <div class="site-map">
+        <div class="site-node current">
+          <small>/</small>
+          <strong>HOME</strong>
+          <span>Identity + Featured Work</span>
+        </div>
+        <i></i>
+        <a class="site-node live route-link" href="projects/">
+          <small>/projects/</small>
+          <strong>PROJECTS</strong>
+          <span>Complete Project Directory</span>
+        </a>
+        <i></i>
+        <a class="site-node live route-link" href="lab/">
+          <small>/lab/</small>
+          <strong>LAB</strong>
+          <span>Experiments + Work in Progress</span>
+        </a>
+        <i></i>
+        <a class="site-node live route-link" href="portfolio/">
+          <small>/portfolio/</small>
+          <strong>PORTFOLIO</strong>
+          <span>Professional Case Studies</span>
+        </a>
+        <i></i>
+        <a class="site-node live route-link" href="about/">
+          <small>/about/</small>
+          <strong>ABOUT</strong>
+          <span>Identity + Build Philosophy</span>
+        </a>
+        <i></i>
+        <a class="site-node live route-link" href="contact/">
+          <small>/contact/</small>
+          <strong>CONTACT</strong>
+          <span>Public Connection Channels</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="closing scroll-reveal">
+      <div class="closing-logo">
+        <img src="assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo" />
+      </div>
+      <div class="closing-copy">
+        <small>CHARLES LIOC</small>
+        <h2>BUILD.<br>IMPROVE.<br><span>CREATE.</span></h2>
+      </div>
+      <a class="closing-link route-link" href="portfolio/">
+        <span>OPEN PORTFOLIO</span>
+        <b>↗</b>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> CHARLES LIOC</span>
+    <span>OFFICIAL WEBSITE // V0.1</span>
+  </footer>
+
+  <div class="page-transition" aria-hidden="true">
+    <span></span><span></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

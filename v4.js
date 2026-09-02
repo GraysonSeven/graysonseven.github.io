@@ -159,3 +159,145 @@
     });
   }
 })();
+
+// ---------- V4.2.3 SLIDE PANEL NAVIGATION ----------
+(() => {
+  const body = document.body;
+  if (!body || document.querySelector(".v423-panel")) return;
+
+  // Retire the old bottom-corner floating navigation controls.
+  document.querySelectorAll(
+    ".fx-command-trigger,.fx-command-palette,.fx-client-badge,.fx-try-badge,.v4-mobile-menu"
+  ).forEach(el => el.remove());
+
+  const menuButton = document.createElement("button");
+  menuButton.type = "button";
+  menuButton.className = "v423-menu-button";
+  menuButton.setAttribute("aria-label", "Open navigation panel");
+  menuButton.setAttribute("aria-expanded", "false");
+  menuButton.innerHTML = `
+    <span class="v423-menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+    <strong>MENU</strong>`;
+
+  const header = [...document.querySelectorAll("header")].find(h => !h.closest(".sample-site"));
+  const brand = header?.querySelector(":scope > .brand");
+  if (header && brand) {
+    let left = header.querySelector(":scope > .v423-header-left");
+    if (!left) {
+      left = document.createElement("div");
+      left.className = "v423-header-left";
+      header.insertBefore(left, brand);
+      left.append(brand);
+    }
+    left.prepend(menuButton);
+  } else {
+    menuButton.classList.add("v423-menu-button-fixed");
+    body.prepend(menuButton);
+  }
+
+  const overlay = document.createElement("button");
+  overlay.type = "button";
+  overlay.className = "v423-panel-overlay";
+  overlay.setAttribute("aria-label", "Close navigation panel");
+  overlay.tabIndex = -1;
+
+  const panel = document.createElement("aside");
+  panel.className = "v423-panel";
+  panel.setAttribute("aria-hidden", "true");
+  panel.setAttribute("aria-label", "Site navigation panel");
+  panel.innerHTML = `
+    <div class="v423-panel-head">
+      <a href="/" class="v423-panel-brand">
+        <img src="/assets/charles-lioc-og.png" alt="">
+        <span><strong>CHARLES LIOC</strong><small>BUILD // IMPROVE // CREATE</small></span>
+      </a>
+      <button type="button" class="v423-panel-close" aria-label="Close navigation panel">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <div class="v423-panel-intro">
+      <span>NAVIGATION // COMMAND PANEL</span>
+      <p>Everything important in one place.</p>
+    </div>
+
+    <nav class="v423-panel-nav" aria-label="Panel navigation">
+      <a href="/">
+        <span>01</span><div><strong>HOME</strong><small>What I build and how I work</small></div><b>→</b>
+      </a>
+      <a href="/try/">
+        <span>02</span><div><strong>MY APPS</strong><small>Open the real web applications</small></div><b>→</b>
+      </a>
+      <a href="/portfolio/">
+        <span>03</span><div><strong>WORK / PORTFOLIO</strong><small>Projects, systems and case studies</small></div><b>→</b>
+      </a>
+      <a href="/website-studio/" class="v423-panel-primary">
+        <span>04</span><div><strong>BUILD MY WEBSITE</strong><small>Start a free project request</small></div><b>→</b>
+      </a>
+      <a href="/about/">
+        <span>05</span><div><strong>ABOUT</strong><small>How I think, build and solve problems</small></div><b>→</b>
+      </a>
+      <a href="/contact/">
+        <span>06</span><div><strong>CONTACT</strong><small>Email, phone and Facebook</small></div><b>→</b>
+      </a>
+    </nav>
+
+    <div class="v423-panel-contact">
+      <span>DIRECT CONTACT</span>
+      <a href="mailto:icharles.development@gmail.com?subject=Project%20Inquiry">
+        <small>EMAIL</small><strong>icharles.development@gmail.com</strong>
+      </a>
+      <a href="tel:+639916154479">
+        <small>PHONE</small><strong>+63 991 615 4479</strong>
+      </a>
+      <a href="https://www.facebook.com/doubleone.seven.117" target="_blank" rel="noopener noreferrer">
+        <small>FACEBOOK</small><strong>OPEN PROFILE ↗</strong>
+      </a>
+    </div>
+
+    <div class="v423-panel-foot">
+      <span><i></i> WEBSITE CLIENTS // OPEN</span>
+      <kbd>CTRL K</kbd>
+    </div>`;
+
+  body.append(overlay, panel);
+
+  const closeButton = panel.querySelector(".v423-panel-close");
+  let lastFocused = null;
+
+  const setOpen = open => {
+    if (open) lastFocused = document.activeElement;
+    body.classList.toggle("v423-panel-open", open);
+    menuButton.setAttribute("aria-expanded", String(open));
+    menuButton.setAttribute("aria-label", open ? "Close navigation panel" : "Open navigation panel");
+    panel.setAttribute("aria-hidden", String(!open));
+    if (open) {
+      requestAnimationFrame(() => closeButton?.focus());
+    } else if (lastFocused && typeof lastFocused.focus === "function") {
+      lastFocused.focus();
+    }
+  };
+
+  menuButton.addEventListener("click", () => {
+    setOpen(!body.classList.contains("v423-panel-open"));
+  });
+  closeButton?.addEventListener("click", () => setOpen(false));
+  overlay.addEventListener("click", () => setOpen(false));
+  panel.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setOpen(false)));
+
+  // Ctrl/Cmd+K now opens this panel instead of the retired bottom-right Quick Nav.
+  addEventListener("keydown", event => {
+    const shortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k";
+    if (shortcut) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setOpen(!body.classList.contains("v423-panel-open"));
+      return;
+    }
+    if (event.key === "Escape" && body.classList.contains("v423-panel-open")) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setOpen(false);
+    }
+  }, true);
+})();

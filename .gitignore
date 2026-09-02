@@ -12,3 +12,5 @@ Thumbs.db
 .DS_Store
 /publish-github-pages.ps1
 /GITHUB_PAGES.txt
+
+/.wrangler/

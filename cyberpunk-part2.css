@@ -1,0 +1,334 @@
+/* CHARLES LIOC — V4.3 CYBERPUNK GRAPHICS // PART 2
+   Apps + Portfolio.
+   Uses small reusable transparent SVG artwork, not wallpapers. */
+
+:root{
+  --cp2-cyan:#00efff;
+  --cp2-violet:#8b5cff;
+  --cp2-magenta:#ff2bd6;
+  --cp2-green:#48ff9b;
+}
+
+/* ---------- Shared reusable cyber-art pieces ---------- */
+.cp2-art{
+  position:absolute;
+  pointer-events:none;
+  user-select:none;
+  z-index:1;
+}
+.cp2-radar{width:clamp(170px,24vw,360px);aspect-ratio:1;opacity:.28;animation:cp2Spin 31s linear infinite}
+.cp2-crystal{width:clamp(100px,13vw,190px);opacity:.55;filter:drop-shadow(0 0 22px rgba(139,92,255,.12));animation:cp2Float 6.8s ease-in-out infinite}
+.cp2-corner{width:min(40vw,520px);opacity:.28}
+.cp2-hex{width:clamp(130px,18vw,260px);opacity:.28;animation:cp2SpinReverse 38s linear infinite}
+.cp2-wave{width:min(62vw,900px);opacity:.26}
+.cp2-divider{
+  display:block;
+  width:min(1200px,92vw);
+  margin:24px auto;
+  opacity:.38;
+  pointer-events:none;
+}
+@keyframes cp2Spin{to{rotate:360deg}}
+@keyframes cp2SpinReverse{to{rotate:-360deg}}
+@keyframes cp2Float{50%{translate:0 -10px;filter:drop-shadow(0 0 28px rgba(0,239,255,.17))}}
+
+/* ---------- APP LIBRARY ---------- */
+.live-apps-page main{position:relative}
+.live-apps-page .live-app-hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.live-apps-page .live-app-hero>.try-hero-copy,
+.live-apps-page .live-app-hero>.live-orbit{position:relative;z-index:3}
+.live-apps-page .cp2-hero-radar{right:-4%;top:3%}
+.live-apps-page .cp2-hero-crystal{left:49%;bottom:5%;opacity:.42}
+.live-apps-page .cp2-hero-wave{left:22%;bottom:9%;opacity:.2}
+.live-apps-page .live-orbit{
+  border-radius:24px;
+}
+.live-apps-page .live-orbit::before{
+  content:"";
+  position:absolute;
+  inset:8%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,239,255,.07),transparent 62%);
+  filter:blur(10px);
+}
+.live-apps-page .live-orbit-app{
+  box-shadow:0 0 0 1px rgba(255,255,255,.02),0 12px 42px rgba(0,0,0,.34);
+}
+
+.live-app-library{
+  position:relative;
+}
+.live-app-library>.cp2-library-corner{
+  right:-4vw;
+  top:76px;
+  opacity:.22;
+}
+.live-app-library>.cp2-library-hex{
+  left:-7vw;
+  top:41%;
+  opacity:.18;
+}
+.live-app-card{
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate;
+}
+.live-app-card>*{position:relative;z-index:3}
+.live-app-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 42%,rgba(0,239,255,.06),transparent 31%),
+    radial-gradient(circle at 88% 72%,rgba(255,43,214,.045),transparent 29%);
+}
+.live-app-card::after{
+  content:"";
+  position:absolute;
+  left:-32%;
+  top:0;
+  width:28%;
+  height:100%;
+  z-index:1;
+  pointer-events:none;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.05),rgba(0,239,255,.08),transparent);
+  transform:skewX(-12deg);
+  opacity:0;
+}
+.live-app-card:hover::after{animation:cp2CardSweep 1.15s ease forwards}
+@keyframes cp2CardSweep{
+  0%{left:-32%;opacity:0}
+  18%{opacity:1}
+  100%{left:118%;opacity:0}
+}
+.cp2-app-pedestal{
+  position:absolute;
+  width:260px;
+  height:auto;
+  left:50%;
+  bottom:-83px;
+  translate:-50% 0;
+  z-index:0!important;
+  opacity:.45;
+  pointer-events:none;
+}
+.live-icon-stage{
+  position:relative;
+  isolation:isolate;
+}
+.live-icon-stage>img{position:relative;z-index:4}
+.live-icon-stage .cp2-radar-small{
+  position:absolute;
+  inset:-39%;
+  width:178%;
+  z-index:0;
+  opacity:.28;
+  animation:cp2Spin 26s linear infinite;
+  pointer-events:none;
+}
+.live-icon-stage .cp2-hex-small{
+  position:absolute;
+  width:145%;
+  left:-22%;
+  top:-21%;
+  z-index:1;
+  opacity:.14;
+  pointer-events:none;
+}
+.live-app-card.trade{--cp2-card:#00efff}
+.live-app-card.custom{--cp2-card:#8b5cff}
+.live-app-card.morse{--cp2-card:#ff2bd6}
+.live-app-card.ette{--cp2-card:#48ff9b}
+.live-app-card .live-app-facts{
+  background:linear-gradient(90deg,rgba(0,239,255,.018),transparent 38%,rgba(255,43,214,.02));
+}
+.live-open{
+  position:relative;
+  overflow:hidden;
+}
+.live-open::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.18) 48%,transparent 70%);
+  translate:-120% 0;
+  transition:translate .6s cubic-bezier(.2,.8,.25,1);
+}
+.live-open:hover::before{translate:120% 0}
+
+/* Small circuit ornament inside each card, safely behind content. */
+.cp2-card-circuit{
+  position:absolute!important;
+  width:330px;
+  right:-70px;
+  bottom:-20px;
+  opacity:.13;
+  z-index:1!important;
+  pointer-events:none;
+}
+
+/* ---------- PORTFOLIO ---------- */
+body:not(.clarity-home) .portfolio-launch-section,
+.project-showcase,
+.work-section{
+  position:relative;
+}
+.portfolio-launch-section{isolation:isolate}
+.cp2-portfolio-radar{right:-3vw;top:-35px;opacity:.18}
+.cp2-portfolio-crystal{left:-16px;bottom:-20px;opacity:.34}
+.portfolio-launch-grid{position:relative;z-index:2}
+.launch-card{
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate;
+}
+.launch-card>*{position:relative;z-index:3}
+.launch-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    linear-gradient(120deg,rgba(0,239,255,.025),transparent 40%,rgba(255,43,214,.025)),
+    radial-gradient(circle at 50% 14%,rgba(139,92,255,.05),transparent 42%);
+}
+.launch-card .cp2-launch-pedestal{
+  position:absolute;
+  width:215px;
+  left:50%;
+  top:72px;
+  translate:-50% 0;
+  z-index:1!important;
+  opacity:.34;
+  pointer-events:none;
+}
+.launch-art{position:relative;z-index:3!important}
+.launch-art::before{
+  content:"";
+  position:absolute;
+  inset:-38%;
+  z-index:-1;
+  background:url("/assets/cyberpunk/parts/radar-orbit.svg") center/contain no-repeat;
+  opacity:.18;
+  animation:cp2Spin 34s linear infinite;
+}
+.launch-card:hover .launch-art::before{opacity:.34}
+
+.project-stage{
+  isolation:isolate;
+}
+.cp2-stage-corner{
+  position:absolute;
+  right:-40px;
+  top:-45px;
+  width:430px;
+  opacity:.18;
+  z-index:0;
+  pointer-events:none;
+}
+.cp2-stage-hex{
+  position:absolute;
+  left:-80px;
+  bottom:-90px;
+  width:260px;
+  opacity:.13;
+  z-index:0;
+  pointer-events:none;
+}
+.project-stage>.stage-chrome{position:relative;z-index:2}
+.stage-chrome{
+  box-shadow:0 36px 90px rgba(0,0,0,.38),0 0 60px rgba(0,239,255,.025);
+}
+.stage-chrome::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,var(--cp2-cyan),transparent 10%) top left/28% 1px no-repeat,
+    linear-gradient(180deg,var(--cp2-cyan),transparent 12%) top left/1px 34% no-repeat,
+    linear-gradient(270deg,var(--cp2-magenta),transparent 10%) bottom right/28% 1px no-repeat,
+    linear-gradient(0deg,var(--cp2-magenta),transparent 12%) bottom right/1px 34% no-repeat;
+  opacity:.42;
+}
+.project-screen{position:relative;overflow:hidden}
+.project-screen::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;
+  top:-12%;
+  height:10%;
+  background:linear-gradient(180deg,transparent,rgba(0,239,255,.06),rgba(255,255,255,.08),transparent);
+  pointer-events:none;
+  animation:cp2ScreenScan 8.5s ease-in-out infinite;
+}
+@keyframes cp2ScreenScan{
+  0%,15%{translate:0 0;opacity:0}
+  25%{opacity:.6}
+  75%{translate:0 1100%;opacity:.4}
+  84%,100%{translate:0 1100%;opacity:0}
+}
+
+.project-tabs,
+.project-list,
+.project-nav{position:relative}
+.cp2-tab-wave{
+  display:block;
+  width:100%;
+  max-height:88px;
+  object-fit:fill;
+  opacity:.18;
+  pointer-events:none;
+  margin:2px 0 8px;
+}
+
+/* Case-study pages receive only small reusable ornaments, not big art scenes. */
+.cp2-case-ornaments{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:1;
+}
+.cp2-case-ornaments img:first-child{
+  position:absolute;
+  width:min(30vw,360px);
+  right:-5%;
+  top:10%;
+  opacity:.11;
+  animation:cp2Spin 38s linear infinite;
+}
+.cp2-case-ornaments img:last-child{
+  position:absolute;
+  width:min(38vw,460px);
+  left:-9%;
+  bottom:10%;
+  opacity:.09;
+}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .cp2-radar,.cp2-hex{opacity:.12!important}
+  .cp2-crystal{opacity:.24!important}
+  .cp2-corner{opacity:.12!important}
+  .cp2-wave{opacity:.12!important}
+  .cp2-app-pedestal{width:220px;bottom:-74px;opacity:.32}
+  .cp2-card-circuit{opacity:.08}
+  .cp2-stage-corner,.cp2-stage-hex{opacity:.08}
+}
+@media(max-width:560px){
+  .cp2-hero-crystal,.cp2-library-corner,.cp2-library-hex,.cp2-portfolio-crystal,.cp2-stage-corner,.cp2-stage-hex{display:none}
+  .cp2-radar-small{opacity:.16!important}
+  .launch-art::before{opacity:.1}
+  .cp2-divider{margin:10px auto;opacity:.2}
+}
+@media(prefers-reduced-motion:reduce){
+  .cp2-radar,.cp2-crystal,.cp2-hex,.cp2-radar-small,.launch-art::before,.project-screen::after{animation:none!important}
+  .live-app-card:hover::after{animation:none!important}
+}

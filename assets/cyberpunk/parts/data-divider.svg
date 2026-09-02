@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120">
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#00efff" stop-opacity="0"/><stop offset=".18" stop-color="#00efff"/><stop offset=".52" stop-color="#8b5cff"/><stop offset=".82" stop-color="#ff2bd6"/><stop offset="1" stop-color="#ff2bd6" stop-opacity="0"/></linearGradient>
+  <filter id="glow" x="-10%" y="-100%" width="120%" height="300%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<path d="M0 60h168l38-24h196l30 24h188l36-30h214l42 30h288" fill="none" stroke="url(#g)" stroke-width="2" opacity=".52" filter="url(#glow)"/>
+<path d="M0 80h250l22-12h310l28 12h190l20-14h380" fill="none" stroke="url(#g)" opacity=".18"/>
+<g fill="#fff" filter="url(#glow)"><circle cx="206" cy="36" r="3"/><circle cx="620" cy="60" r="3"/><circle cx="870" cy="30" r="3"/></g>
+<g fill="#00efff"><rect x="460" y="55" width="16" height="3"/><rect x="492" y="55" width="7" height="3"/></g>
+<g fill="#ff2bd6"><rect x="940" y="55" width="19" height="3"/><rect x="969" y="55" width="8" height="3"/></g>
+</svg>

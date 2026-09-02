@@ -8,7 +8,7 @@
   // One public information architecture everywhere.
   const navItems = [
     ["HOME", "/"],
-    ["TRY BUILDS", "/try/"],
+    ["TRY APPS", "/try/"],
     ["WORK", "/portfolio/"],
     ["WEBSITE STUDIO", "/website-studio/", "v4-nav-studio"],
     ["ABOUT", "/about/"],
@@ -61,7 +61,7 @@
   footer.innerHTML = `
     <div class="v4-footer-brand"><i></i><span>© ${new Date().getFullYear()} CHARLES LIOC · SOFTWARE · WEBSITES · SYSTEMS</span></div>
     <nav aria-label="Footer navigation">
-      <a href="/try/">TRY BUILDS</a><a href="/portfolio/">WORK</a><a href="/website-studio/">GET A WEBSITE</a><a href="/contact/">CONTACT</a><a href="/privacy/">PRIVACY</a>
+      <a href="/try/">TRY APPS</a><a href="/portfolio/">WORK</a><a href="/website-studio/">GET A WEBSITE</a><a href="/contact/">CONTACT</a><a href="/privacy/">PRIVACY</a>
     </nav>
     <div class="v4-footer-note">THIS WEBSITE WAS DESIGNED AND BUILT BY CHARLES LIOC. WEBSITE PROJECT REQUESTS ARE CURRENTLY OPEN.</div>`;
   const host = document.querySelector(".shell,.wrap") || body;
@@ -107,7 +107,7 @@
 
   // Active product graphics react subtly to pointer position.
   if (!reduceMotion && matchMedia("(hover:hover) and (pointer:fine)").matches) {
-    document.querySelectorAll(".v4-proof-rack,.showroom-visual,.demo-device,.web-cta-preview").forEach(el => {
+    document.querySelectorAll(".v4-proof-rack,.showroom-visual,.live-app-card,.web-cta-preview").forEach(el => {
       el.addEventListener("pointermove", e => {
         const r = el.getBoundingClientRect();
         const x = (e.clientX - (r.left + r.width / 2)) / r.width;
@@ -142,7 +142,7 @@
     const email = "icharles.development@gmail.com";
     commandList.innerHTML = `
       <a href="/"><span>01</span><span>HOME</span><em>WHAT I BUILD + CLIENT ENTRY</em></a>
-      <a href="/try/"><span>02</span><span>TRY MY BUILDS</span><em>INTERACTIVE MINI DEMOS</em></a>
+      <a href="/try/"><span>02</span><span>OPEN MY APPS</span><em>LIVE WEB BUILDS</em></a>
       <a href="/portfolio/"><span>03</span><span>WORK</span><em>PROJECTS + CASE STUDIES</em></a>
       <a href="/website-studio/"><span>04</span><span>WEBSITE STUDIO</span><em>FREE PROJECT REQUEST</em></a>
       <a href="/about/"><span>05</span><span>ABOUT</span><em>HOW I THINK + BUILD</em></a>

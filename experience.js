@@ -451,8 +451,8 @@
     const tryBadge = document.createElement("a");
     tryBadge.className = "fx-try-badge";
     tryBadge.href = "/try/";
-    tryBadge.setAttribute("aria-label", "Try interactive demos of Charles Lioc's builds");
-    tryBadge.innerHTML = `<span><small>INTERACTIVE SHOWROOM</small><strong>TRY MY BUILDS</strong></span><b>↗</b>`;
+    tryBadge.setAttribute("aria-label", "Open live web apps built by Charles Lioc");
+    tryBadge.innerHTML = `<span><small>LIVE WEB APPS</small><strong>OPEN MY APPS</strong></span><b>↗</b>`;
     body.append(tryBadge);
   }
 
@@ -480,7 +480,7 @@
   const base = location.origin;
   const navItems = [
     ["01", "HOME", `${base}/`, "START HERE"],
-    ["02", "TRY MY BUILDS", `${base}/try/`, "INTERACTIVE DEMOS // SAMPLE DATA"],
+    ["02", "OPEN MY APPS", `${base}/try/`, "LIVE WEB APPS // REAL BUILDS"],
     ["03", "PORTFOLIO", `${base}/portfolio/`, "PROJECT CASE STUDIES"],
     ["04", "WEBSITE STUDIO", `${base}/website-studio/`, "DESIGN YOUR SITE // FREE TO REQUEST"],
     ["05", "PROJECTS", `${base}/projects/`, "PROJECT DIRECTORY"],

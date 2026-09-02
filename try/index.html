@@ -4,166 +4,165 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#05060a">
-  <meta name="description" content="Try interactive mini demos of software and systems built by Charles Lioc.">
+  <meta name="description" content="Explore live web apps and software built by Charles Lioc, including Trade Core, Morsebound and ETTE Planner.">
   <meta name="author" content="Charles Lioc">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Try My Builds — Charles Lioc">
-  <meta property="og:description" content="Hands-on mini demos of Trade Core, a custom Trade Core business integration, Morsebound, ETTE Planner and the Website Studio.">
+  <meta property="og:title" content="Try My Apps — Charles Lioc">
+  <meta property="og:description" content="See what Charles Lioc built, then open the real web apps.">
   <meta property="og:image" content="https://icharles.pages.dev/assets/charles-lioc-og.png">
   <meta property="og:url" content="https://icharles.pages.dev/try/">
   <link rel="canonical" href="https://icharles.pages.dev/try/">
   <link rel="icon" href="/assets/charles-lioc-og.png" type="image/png">
-  <title>Try My Builds — Charles Lioc</title>
+  <title>Try My Apps — Charles Lioc</title>
   <link rel="stylesheet" href="../subpages.css">
-  <link rel="stylesheet" href="../experience.css?v=5">
-  <link rel="stylesheet" href="try.css?v=1">
-  <script src="../experience.js?v=5" defer></script>
-  <script src="try.js?v=1" defer></script>
-  <link rel="stylesheet" href="/v4.css?v=4">
-  <script src="/v4.js?v=4" defer></script>
+  <link rel="stylesheet" href="../experience.css?v=6">
+  <link rel="stylesheet" href="try.css?v=4">
+  <link rel="stylesheet" href="/v4.css?v=6">
+  <script src="../experience.js?v=6" defer></script>
+  <script src="/v4.js?v=5" defer></script>
 </head>
-<body class="try-body">
+<body class="try-body live-apps-page">
   <div class="shell try-shell">
     <header class="try-header">
       <a class="brand" href="../">
         <img src="../assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo">
-        <div><strong>CHARLES LIOC</strong><small>INTERACTIVE SHOWROOM</small></div>
+        <div><strong>CHARLES LIOC</strong><small>LIVE APP LIBRARY</small></div>
       </a>
-      <nav aria-label="Showroom navigation">
-        <a href="#trade-core">TRADE CORE</a>
-        <a href="#custom-business">CUSTOM BUILD</a>
-        <a href="#morsebound">MORSEBOUND</a>
-        <a href="#ette">ETTE</a>
+      <nav aria-label="Main navigation">
+        <a href="../">HOME</a>
+        <a href="../try/" aria-current="page">TRY APPS</a>
+        <a href="../portfolio/">WORK</a>
+        <a href="../website-studio/">WEBSITE STUDIO</a>
+        <a href="../about/">ABOUT</a>
+        <a href="../contact/">CONTACT</a>
       </nav>
       <a class="try-hire" href="../website-studio/">BUILD MY WEBSITE <b>→</b></a>
     </header>
 
     <main>
-      <section class="try-hero">
+      <section class="try-hero live-app-hero">
         <div class="try-hero-copy">
-          <span class="try-kicker"><i></i> INTERACTIVE SHOWROOM</span>
-          <h1>DON'T JUST READ<br><em>WHAT I BUILD.</em><br>TRY IT.</h1>
-          <p>These are small hands-on demos inspired by products and systems I've built. Click things, make a sample sale, move stock, hear Morse code, and complete a planner session.</p>
+          <span class="try-kicker"><i></i> LIVE WEB APPS</span>
+          <h1>SEE WHAT IT IS.<br><em>THEN OPEN IT.</em></h1>
+          <p>Read the short explanation, then open the real web build if you want to experience the app yourself.</p>
           <div class="try-hero-actions">
-            <a class="try-primary" href="#trade-core">START WITH TRADE CORE <b>↓</b></a>
-            <a class="try-secondary" href="../portfolio/">SEE FULL CASE STUDIES <b>→</b></a>
+            <a class="try-primary" href="#apps">EXPLORE THE APPS <b>↓</b></a>
+            <a class="try-secondary" href="../portfolio/">READ THE CASE STUDIES <b>→</b></a>
           </div>
-          <div class="demo-safety"><b>DEMO DATA ONLY</b><span>Nothing here changes a real store, account or production database.</span></div>
+          <div class="live-app-note"><b>REAL WEB BUILDS</b><span>Some apps may ask you to sign in. Client-specific production environments are not exposed publicly.</span></div>
         </div>
-        <div class="showroom-orbit" aria-hidden="true">
-          <div class="orbit-ring one"></div><div class="orbit-ring two"></div><div class="orbit-ring three"></div>
-          <img src="../assets/charles-lioc-logo-locked.svg" alt="">
-          <div class="orbit-chip chip-a"><small>POS</small><strong>TRADE CORE</strong></div>
-          <div class="orbit-chip chip-b"><small>LEARN</small><strong>MORSEBOUND</strong></div>
-          <div class="orbit-chip chip-c"><small>PLAN</small><strong>ETTE</strong></div>
-          <div class="orbit-chip chip-d"><small>CUSTOM</small><strong>BUSINESS APP</strong></div>
+
+        <div class="live-orbit" aria-hidden="true">
+          <div class="live-orbit-ring ring-a"></div>
+          <div class="live-orbit-ring ring-b"></div>
+          <div class="live-orbit-ring ring-c"></div>
+          <div class="live-orbit-core">
+            <img src="../assets/charles-lioc-logo-locked.svg" alt="">
+            <span>BUILD → SHIP → USE</span>
+          </div>
+          <div class="live-orbit-app app-a"><img src="/assets/apps/trade-core.png" alt=""><span>TRADE CORE</span></div>
+          <div class="live-orbit-app app-b"><img src="/assets/apps/morsebound.png" alt=""><span>MORSEBOUND</span></div>
+          <div class="live-orbit-app app-c"><img src="/assets/apps/ette-planner.png" alt=""><span>ETTE</span></div>
         </div>
       </section>
 
-      <section class="demo-section" id="trade-core">
-        <div class="demo-copy">
-          <span>01 // BUSINESS OPERATIONS</span>
-          <h2>TRADE CORE</h2>
-          <p>A transaction-first POS and inventory system. This mini demo lets you add products to a cart and complete a sample sale.</p>
-          <div class="demo-actions"><a href="../portfolio/projects/trade-core.html">CASE STUDY <b>→</b></a><button type="button" data-reset="trade">RESET DEMO</button></div>
+      <section class="live-app-library" id="apps">
+        <div class="live-library-head">
+          <div><span>MY SOFTWARE</span><h2>OPEN THE<br><em>REAL THING.</em></h2></div>
+          <p>Each card explains the product first. The bright button opens the actual web app in a new tab.</p>
         </div>
-        <div class="demo-device trade-demo">
-          <div class="demo-window-top"><span>TRADE CORE // POS DEMO</span><b>LOCAL DEMO</b></div>
-          <div class="trade-layout">
-            <div class="trade-products">
-              <div class="demo-section-label">TAP A PRODUCT</div>
-              <button type="button" class="product-button" data-name="Portland Cement" data-price="285"><span>PORTLAND CEMENT</span><small>₱285</small><b>ADD +</b></button>
-              <button type="button" class="product-button" data-name="PVC 1/2" data-price="68"><span>PVC 1/2"</span><small>₱68</small><b>ADD +</b></button>
-              <button type="button" class="product-button" data-name="GI Wire #16" data-price="95"><span>GI WIRE #16</span><small>₱95</small><b>ADD +</b></button>
-              <button type="button" class="product-button" data-name="Roofing Nails" data-price="120"><span>ROOFING NAILS</span><small>₱120</small><b>ADD +</b></button>
+
+        <article class="live-app-card trade" id="trade-core">
+          <div class="live-app-identity">
+            <div class="live-icon-stage">
+              <i></i><i></i>
+              <img src="/assets/apps/trade-core.png" alt="Trade Core app icon">
             </div>
-            <div class="trade-cart">
-              <div class="demo-section-label">CURRENT SALE</div>
-              <div id="trade-cart-items" class="cart-items"><div class="empty-cart">Add a product to begin.</div></div>
-              <div class="trade-total"><span>TOTAL</span><strong id="trade-total">₱0</strong></div>
-              <button type="button" class="demo-main-button" id="trade-checkout">COMPLETE DEMO SALE <b>→</b></button>
-              <div class="demo-result" id="trade-result" aria-live="polite"></div>
+            <div><small>01 // BUSINESS OPERATIONS</small><h3>TRADE CORE</h3><p>POS, inventory, purchasing, fulfillment, finance and owner intelligence in one operational system. It was built around real store workflows instead of disconnected tools.</p></div>
+          </div>
+          <div class="live-app-facts">
+            <span><small>PLATFORM</small><b>WEB + ANDROID</b></span>
+            <span><small>FOCUS</small><b>BUSINESS OPERATIONS</b></span>
+            <span><small>TYPE</small><b>REAL APPLICATION</b></span>
+          </div>
+          <div class="live-app-actions">
+            <a class="live-open" href="https://icharles-invsys.web.app/" target="_blank" rel="noopener"><span>OPEN TRADE CORE WEB APP</span><b>↗</b><small>Launch the real web build</small></a>
+            <a class="live-case" href="../portfolio/projects/trade-core.html">READ CASE STUDY →</a>
+          </div>
+        </article>
+
+        <article class="live-app-card custom" id="custom-business">
+          <div class="live-app-identity">
+            <div class="live-icon-stage custom-stage">
+              <i></i><i></i>
+              <img src="/assets/apps/trade-core.png" alt="Trade Core app icon">
+              <span>CUSTOM</span>
             </div>
+            <div><small>02 // CUSTOM BUSINESS INTEGRATION</small><h3>TRADE CORE // CUSTOM BUSINESS APP</h3><p>The Trade Core platform can be adapted around a specific business: its roles, receiving process, stock movement, checkout, reports and other workflows. Client environments stay private.</p></div>
           </div>
-        </div>
-      </section>
+          <div class="live-app-facts">
+            <span><small>BASE</small><b>TRADE CORE</b></span>
+            <span><small>FOCUS</small><b>BUSINESS-SPECIFIC WORKFLOW</b></span>
+            <span><small>PUBLIC ACCESS</small><b>CORE PLATFORM ONLY</b></span>
+          </div>
+          <div class="live-app-actions">
+            <a class="live-open" href="https://icharles-invsys.web.app/" target="_blank" rel="noopener"><span>EXPERIENCE THE CORE PLATFORM</span><b>↗</b><small>Custom client systems are not exposed</small></a>
+            <a class="live-case" href="../portfolio/projects/trade-core-custom-business.html">SEE HOW CUSTOM INTEGRATION WORKS →</a>
+          </div>
+        </article>
 
-      <section class="demo-section reverse" id="custom-business">
-        <div class="demo-copy">
-          <span>02 // CUSTOM BUSINESS INTEGRATION</span>
-          <h2>TRADE CORE // CUSTOM BUSINESS APP</h2>
-          <p>A client-specific Trade Core workflow adapted to a real business. Receive sample stock and watch inventory and the movement log update immediately.</p>
-          <div class="demo-actions"><a href="../portfolio/projects/trade-core-custom-business.html">CASE STUDY <b>→</b></a><button type="button" data-reset="compadres">RESET DEMO</button></div>
-        </div>
-        <div class="demo-device stock-demo">
-          <div class="demo-window-top"><span>TRADE CORE // CUSTOM RECEIVING DEMO</span><b>BUSINESS INTEGRATION</b></div>
-          <div class="stock-grid">
-            <article data-stock="cement"><small>SKU 001</small><strong>PORTLAND CEMENT</strong><div><span>ON HAND</span><b id="stock-cement">42</b></div><button type="button" data-receive="cement">RECEIVE +5</button></article>
-            <article data-stock="paint"><small>SKU 014</small><strong>LATEX PAINT 4L</strong><div><span>ON HAND</span><b id="stock-paint">18</b></div><button type="button" data-receive="paint">RECEIVE +5</button></article>
-            <article data-stock="nails"><small>SKU 032</small><strong>ROOFING NAILS</strong><div><span>ON HAND</span><b id="stock-nails">76</b></div><button type="button" data-receive="nails">RECEIVE +5</button></article>
-          </div>
-          <div class="movement-log">
-            <div class="demo-section-label">RECENT MOVEMENTS</div>
-            <div id="movement-list"><span><b>READY</b> Choose an item above to receive sample stock.</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="demo-section" id="morsebound">
-        <div class="demo-copy">
-          <span>03 // LEARNING PRODUCT</span>
-          <h2>MORSEBOUND</h2>
-          <p>A Morse training product for web and Android. Hear a real tone sequence and reveal the code after you listen.</p>
-          <div class="demo-actions"><a href="https://graysonseven.github.io/Morsebound/" target="_blank" rel="noopener">OPEN REAL WEB APP <b>↗</b></a><a href="../portfolio/projects/morsebound.html">CASE STUDY <b>→</b></a><button type="button" data-reset="morse">RESET DEMO</button></div>
-        </div>
-        <div class="demo-device morse-demo">
-          <div class="demo-window-top"><span>MORSEBOUND // MINI TRAINER</span><b>AUDIO DEMO</b></div>
-          <div class="morse-panel">
-            <div class="morse-target"><small>TRAINING SIGNAL</small><strong>SOS</strong><span>Listen first. Reveal the pattern when you're ready.</span></div>
-            <div class="morse-wave" id="morse-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            <div class="morse-buttons">
-              <button type="button" class="demo-main-button" id="morse-play">▶ PLAY SOS</button>
-              <button type="button" class="demo-secondary-button" id="morse-reveal">REVEAL CODE</button>
+        <article class="live-app-card morse" id="morsebound">
+          <div class="live-app-identity">
+            <div class="live-icon-stage">
+              <i></i><i></i>
+              <img src="/assets/apps/morsebound.png" alt="Morsebound app icon">
             </div>
-            <div id="morse-code" class="morse-code" aria-live="polite">• • • &nbsp; — — — &nbsp; • • •</div>
+            <div><small>03 // LEARNING PRODUCT</small><h3>MORSEBOUND</h3><p>A focused Morse training app for web and Android. It is built to turn dots and dashes into repeatable listening and practice sessions instead of passive reference material.</p></div>
           </div>
-        </div>
-      </section>
+          <div class="live-app-facts">
+            <span><small>PLATFORM</small><b>WEB + ANDROID</b></span>
+            <span><small>FOCUS</small><b>MORSE TRAINING</b></span>
+            <span><small>ACCESS</small><b>PUBLIC WEB APP</b></span>
+          </div>
+          <div class="live-app-actions">
+            <a class="live-open" href="https://graysonseven.github.io/Morsebound/" target="_blank" rel="noopener"><span>OPEN MORSEBOUND WEB APP</span><b>↗</b><small>Try the real trainer</small></a>
+            <a class="live-case" href="../portfolio/projects/morsebound.html">READ CASE STUDY →</a>
+          </div>
+        </article>
 
-      <section class="demo-section reverse" id="ette">
-        <div class="demo-copy">
-          <span>04 // PERSONAL PRODUCTIVITY</span>
-          <h2>ETTE PLANNER</h2>
-          <p>A personal planning and accountability system. Complete the demo tasks and watch the session progress update.</p>
-          <div class="demo-actions"><a href="../portfolio/projects/ette-planner.html">CASE STUDY <b>→</b></a><button type="button" data-reset="ette">RESET DEMO</button></div>
-        </div>
-        <div class="demo-device ette-demo">
-          <div class="demo-window-top"><span>ETTE // TODAY</span><b>DEMO SESSION</b></div>
-          <div class="ette-layout">
-            <div class="progress-orb" id="ette-orb"><strong id="ette-percent">0%</strong><span>COMPLETE</span></div>
-            <div class="task-list">
-              <label><input type="checkbox" class="ette-task"><span><b>PLAN THE DAY</b><small>Set the three most important outcomes.</small></span></label>
-              <label><input type="checkbox" class="ette-task"><span><b>FOCUS BLOCK</b><small>Finish one meaningful work session.</small></span></label>
-              <label><input type="checkbox" class="ette-task"><span><b>WORKOUT</b><small>Log today's training session.</small></span></label>
-              <label><input type="checkbox" class="ette-task"><span><b>REVIEW</b><small>Close the day and record progress.</small></span></label>
+        <article class="live-app-card ette" id="ette">
+          <div class="live-app-identity">
+            <div class="live-icon-stage">
+              <i></i><i></i>
+              <img src="/assets/apps/ette-planner.png" alt="ETTE Planner app icon">
             </div>
+            <div><small>04 // PERSONAL PRODUCTIVITY</small><h3>ETTE PLANNER</h3><p>A personal planning and accountability system combining recurring schedules, workouts, progress tracking and day-to-day self-management in one place.</p></div>
           </div>
-        </div>
+          <div class="live-app-facts">
+            <span><small>PLATFORM</small><b>WEB + ANDROID</b></span>
+            <span><small>FOCUS</small><b>PLANNING + PROGRESS</b></span>
+            <span><small>SYNC</small><b>CLOUD</b></span>
+          </div>
+          <div class="live-app-actions">
+            <a class="live-open" href="https://ette-planner-143288371627.web.app/" target="_blank" rel="noopener"><span>OPEN ETTE PLANNER WEB APP</span><b>↗</b><small>Launch the real web build</small></a>
+            <a class="live-case" href="../portfolio/projects/ette-planner.html">READ CASE STUDY →</a>
+          </div>
+        </article>
       </section>
 
-      <section class="studio-launch">
+      <section class="studio-launch live-studio-launch">
         <div>
-          <span>05 // LIVE CLIENT TOOL</span>
-          <h2>THE WEBSITE STUDIO<br><em>IS ALSO SOMETHING YOU CAN TRY.</em></h2>
-          <p>Choose a website type, design direction, colors and layout. The preview changes as you choose, then you can send me the complete request.</p>
+          <span>05 // CLIENT TOOL</span>
+          <h2>WANT YOUR OWN<br><em>WEBSITE?</em></h2>
+          <p>The Website Studio is an actual tool on this site. Tell me what you need, let me choose the design for you or customize it yourself, then send the request directly to me.</p>
         </div>
         <a class="try-primary" href="../website-studio/">OPEN WEBSITE STUDIO <b>↗</b></a>
       </section>
 
       <section class="try-final">
-        <span>LIKE THE WAY I BUILD?</span>
-        <h2>I CAN BUILD<br><em>SOMETHING FOR YOU.</em></h2>
+        <span>YOU HAVE SEEN WHAT I BUILD.</span>
+        <h2>NOW I CAN BUILD<br><em>SOMETHING FOR YOU.</em></h2>
         <div><a class="try-primary" href="../website-studio/">REQUEST A WEBSITE <b>→</b></a><a class="try-secondary" href="../contact/">CONTACT ME <b>→</b></a></div>
       </section>
     </main>

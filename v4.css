@@ -317,3 +317,67 @@ body.studio-assist-mode .wizard-step[data-step="3"]{display:none!important}
   .v4-hero-network{opacity:.45}.v4-hero-network svg{width:125vw;right:-42vw}
 }
 @media(prefers-reduced-motion:reduce){.v4-hero-network path,.v4-hero-network circle,.v4-kinetic-track,.clarity-home .clarity-hero h1 span,.try-hero h1 em,.studio-intro h1 em,.v4-proof-intro h2 em{animation:none!important}}
+
+
+/* ==========================================================
+   V4.1 — ORIGINAL APP IDENTITY
+   Uses the exact 512px icons from each app repository.
+   Custom business integration deliberately reuses Trade Core identity.
+   ========================================================== */
+.app-icon-chip,.showroom-app-icon,.work-app-icon,.v4-window-brand img,
+.launch-app-icon>img,.stage-app-icon,.tab-app-icon,.case-app-identity>img,
+.orbit-chip>img,.demo-title-row>img,.demo-icon-custom>img,.legacy-project-icon>img,
+.app-logo-box img,.custom-build-brand>img{
+  display:block;object-fit:contain;aspect-ratio:1;border-radius:22%;
+  box-shadow:0 14px 38px rgba(0,0,0,.35),0 0 32px rgba(0,239,255,.09);
+}
+.app-icon-chip{width:38px;height:38px;flex:0 0 38px;border-radius:11px!important}
+.core-app-chip>i{display:none!important}
+.core-app-chip{gap:11px!important}
+.core-app-chip .app-icon-chip{animation:v41IconFloat 4.8s ease-in-out infinite}
+.core-app-chip.app-morse .app-icon-chip{animation-delay:-1.4s}.core-app-chip.app-ette .app-icon-chip{animation-delay:-2.6s}
+
+.v4-window-brand{display:inline-flex!important;align-items:center;gap:9px}.v4-window-brand img{width:27px;height:27px;border-radius:8px!important}
+.v4-product-window:hover .v4-window-brand img{transform:translateY(-2px) rotate(-2deg);transition:.25s ease}
+
+.app-icon-visual{overflow:hidden}.showroom-app-icon{position:absolute;width:112px;height:112px;left:50%;top:47%;transform:translate(-50%,-50%);z-index:5;border-radius:28px!important;animation:v41ShowroomIcon 5.2s ease-in-out infinite;filter:saturate(1.06)}
+.showroom-card.morse .showroom-app-icon{animation-delay:-1.2s}.showroom-card.ette .showroom-app-icon{animation-delay:-2.1s}
+.showroom-card:hover .showroom-app-icon{animation-play-state:paused;transform:translate(-50%,-54%) scale(1.08) rotate(-2deg);transition:.35s cubic-bezier(.16,1,.3,1)}
+.custom-app-visual .showroom-app-icon{filter:saturate(.92)}
+.app-custom-badge{position:absolute;z-index:8;padding:6px 8px;border:1px solid rgba(72,255,155,.55);background:rgba(4,13,11,.9);color:#91ffc3;font:900 8px "Space Mono",monospace;letter-spacing:.07em;box-shadow:0 0 20px rgba(72,255,155,.12)}
+.custom-app-visual>.app-custom-badge{left:calc(50% + 28px);top:calc(47% + 31px)}
+
+.work-icon-wrap{position:relative;width:max-content;margin-bottom:15px}.work-app-icon{width:58px;height:58px;border-radius:15px!important}.work-badge{right:-28px;bottom:-5px;top:auto}.clarity-work-card:hover .work-app-icon{transform:translateY(-4px) rotate(-2deg) scale(1.04);transition:.28s ease}
+
+.launch-app-icon{display:grid!important;place-items:center!important;isolation:isolate;overflow:hidden}.launch-app-icon>img{width:104px!important;height:104px!important;position:relative;z-index:4;border-radius:25px!important;animation:v41ShowroomIcon 5.4s ease-in-out infinite}.launch-app-icon>i{position:absolute!important;border-radius:50%!important;width:160px!important;height:160px!important;border:1px solid rgba(0,239,255,.12)!important;background:none!important;animation:v41Orbit 9s linear infinite!important}.launch-app-icon>i:nth-of-type(2){width:205px!important;height:205px!important;border-color:rgba(139,92,255,.11)!important;animation-direction:reverse!important;animation-duration:13s!important}.launch-app-icon>i:nth-of-type(3){width:252px!important;height:252px!important;border-style:dashed!important;opacity:.6}.launch-app-icon.custom-app-icon>.app-custom-badge{right:18px;bottom:18px;top:auto}.launch-card:hover .launch-app-icon>img{transform:translateY(-5px) scale(1.07) rotate(-2deg);transition:.3s ease}
+
+.app-logo-box{overflow:hidden;padding:0!important}.app-logo-box img{width:100%;height:100%;border-radius:0!important}.custom-build-brand{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:11px;margin-bottom:15px}.custom-build-brand>img{width:42px;height:42px;border-radius:11px!important}.custom-build-brand .app-custom-badge{position:static}.custom-build-brand small,.custom-build-brand strong{display:block}.stage-app-icon{width:52px;height:52px;margin:0 0 14px;border-radius:14px!important}.planner-card>.stage-app-icon{position:absolute;right:18px;top:17px;width:42px;height:42px;z-index:4}.project-tab{grid-template-columns:auto auto minmax(0,1fr) auto!important}.tab-app-icon{width:34px;height:34px;border-radius:9px!important}.tab-icon-custom{position:relative;display:block}.tab-icon-custom i{position:absolute;right:-5px;bottom:-4px;width:15px;height:15px;border-radius:50%;display:grid;place-items:center;background:#48ff9b;color:#03110a;font:900 7px/1 "Space Mono",monospace;font-style:normal}.project-tab:hover .tab-app-icon,.project-tab.active .tab-app-icon{box-shadow:0 0 24px rgba(0,239,255,.17),0 12px 30px rgba(0,0,0,.3)}
+
+.app-case-visual{min-height:clamp(340px,46vw,620px)!important;display:grid!important;place-items:center!important;overflow:hidden!important;position:relative!important}.case-app-identity{position:relative;z-index:5;display:flex;align-items:center;gap:24px;padding:26px 30px;border:1px solid rgba(148,179,222,.18);background:rgba(5,9,16,.68);backdrop-filter:blur(16px);box-shadow:0 30px 90px rgba(0,0,0,.3)}.case-app-identity>img{width:clamp(92px,11vw,150px);height:clamp(92px,11vw,150px);border-radius:30px!important;animation:v41IconFloat 5.4s ease-in-out infinite}.case-app-identity>div{display:grid;gap:6px}.case-app-identity small{color:#00efff;font:800 9px "Space Mono",monospace;letter-spacing:.1em}.case-app-identity strong{font-size:clamp(24px,3vw,48px);letter-spacing:-.04em}.case-app-identity span{color:#8e9caf;font-size:13px}.case-custom-badge{right:22px;top:18px}.case-orbit-lines{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}.case-orbit-lines i{position:absolute;width:min(68vw,680px);aspect-ratio:1;border:1px solid rgba(0,239,255,.11);border-radius:50%;animation:v41Orbit 16s linear infinite}.case-orbit-lines i:nth-child(2){width:min(52vw,520px);border-color:rgba(139,92,255,.12);animation-direction:reverse;animation-duration:22s}.case-orbit-lines i:nth-child(3){width:min(82vw,820px);border-style:dashed;border-color:rgba(255,43,214,.08);animation-duration:29s}
+
+.orbit-chip{gap:9px!important}.orbit-chip>img{width:34px;height:34px;border-radius:9px!important;flex:none}.orbit-chip>div small,.orbit-chip>div strong{display:block}.orbit-chip>.app-custom-badge{position:static;margin-left:2px;padding:4px 5px;font-size:6px}
+.demo-title-row{display:flex;align-items:center;gap:17px;margin:4px 0 5px}.demo-title-row h2{margin:0!important}.demo-title-row>img,.demo-icon-custom>img{width:64px;height:64px;border-radius:17px!important;flex:none}.demo-icon-custom{position:relative;display:block;flex:none}.demo-icon-custom i{position:absolute;right:-13px;bottom:-7px;padding:4px 5px;background:#48ff9b;color:#03110a;font:900 6px "Space Mono",monospace;font-style:normal;letter-spacing:.04em}.demo-section:hover .demo-title-row>img,.demo-section:hover .demo-icon-custom>img{transform:rotate(-2deg) scale(1.05);transition:.3s ease}
+
+.legacy-project-icon{position:relative;width:max-content;margin:0 0 14px}.legacy-project-icon>img{width:55px;height:55px;border-radius:14px!important}.legacy-project-icon>.work-badge{right:-28px}
+
+@keyframes v41IconFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(1.5deg)}}
+@keyframes v41ShowroomIcon{0%,100%{transform:translate(-50%,-50%) rotate(-1deg)}50%{transform:translate(-50%,-55%) rotate(1.8deg)}}
+@keyframes v41Orbit{to{transform:rotate(360deg)}}
+
+@media(max-width:700px){
+  .showroom-app-icon{width:88px;height:88px;border-radius:22px!important}.work-app-icon{width:50px;height:50px}.case-app-identity{gap:15px;padding:18px;align-items:center}.case-app-identity>img{width:82px;height:82px;border-radius:22px!important}.case-app-identity strong{font-size:24px}.case-app-identity span{font-size:11px}.project-tab{grid-template-columns:auto auto 1fr!important}.project-tab .tab-arrow{display:none}.tab-app-icon{width:30px;height:30px}.demo-title-row{align-items:flex-start}.demo-title-row>img,.demo-icon-custom>img{width:50px;height:50px;border-radius:13px!important}.orbit-chip>img{width:28px;height:28px}
+}
+@media(prefers-reduced-motion:reduce){.app-icon-chip,.showroom-app-icon,.launch-app-icon>img,.case-app-identity>img,.case-orbit-lines i,.launch-app-icon>i{animation:none!important}}
+
+
+/* V4.2 — real app launchers, no simulated demos */
+.live-home-card{display:grid!important;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)!important;min-height:360px!important}
+.live-home-card .showroom-copy{padding-bottom:18px}
+.home-live-open{margin-top:auto;min-height:58px;padding:0 15px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(100deg,#00efff,#5bc8ff);color:#031015;text-decoration:none!important;font:950 10px "Space Mono",monospace;box-shadow:0 14px 34px rgba(0,239,255,.11);transition:.22s cubic-bezier(.16,1,.3,1)}
+.home-live-open:hover{transform:translateY(-3px);box-shadow:0 20px 45px rgba(0,239,255,.18)}
+.live-home-card::after{content:"REAL WEB APP ↗"!important;background:rgba(72,255,155,.09)!important;border-color:rgba(72,255,155,.23)!important;color:#baffd8!important}
+.live-home-card.custom-business::after{content:"CORE PLATFORM ↗"!important}
+.v4-window-brand img{animation:v42IconPulse 5s ease-in-out infinite}
+@keyframes v42IconPulse{0%,100%{transform:translateY(0) rotate(-1deg);filter:drop-shadow(0 0 0 rgba(0,239,255,0))}50%{transform:translateY(-3px) rotate(1deg);filter:drop-shadow(0 7px 12px rgba(0,239,255,.12))}}
+@media(max-width:760px){.live-home-card{grid-template-columns:1fr!important}}
+@media(prefers-reduced-motion:reduce){.v4-window-brand img{animation:none!important}}

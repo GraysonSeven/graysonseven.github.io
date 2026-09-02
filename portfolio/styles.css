@@ -1192,8 +1192,8 @@ a {
   font-family: "Space Mono", monospace;
 }
 
-/* Compadres */
-.project-ui-compadres {
+/* Custom business integration */
+.project-ui-custom-business {
   display: grid;
   grid-template-columns: .72fr 1.28fr;
   gap: clamp(18px, 4vw, 60px);
@@ -1823,7 +1823,7 @@ a {
     display: none;
   }
 
-  .project-ui-compadres {
+  .project-ui-custom-business {
     grid-template-columns: 1fr;
     padding: 6%;
   }

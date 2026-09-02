@@ -381,3 +381,153 @@ body.studio-assist-mode .wizard-step[data-step="3"]{display:none!important}
 @keyframes v42IconPulse{0%,100%{transform:translateY(0) rotate(-1deg);filter:drop-shadow(0 0 0 rgba(0,239,255,0))}50%{transform:translateY(-3px) rotate(1deg);filter:drop-shadow(0 7px 12px rgba(0,239,255,.12))}}
 @media(max-width:760px){.live-home-card{grid-template-columns:1fr!important}}
 @media(prefers-reduced-motion:reduce){.v4-window-brand img{animation:none!important}}
+/* ---------- V4.2.2 DESKTOP READABILITY ---------- */
+/* Preserve the compact phone layout. Raise only desktop microcopy and controls. */
+.fx-particle-field{display:none!important}
+
+@media (min-width: 980px){
+  .v4-unified-nav a{
+    font-size:13px!important;
+    min-height:44px!important;
+    letter-spacing:.06em!important;
+  }
+
+  .hero-kicker,
+  .eyebrow,
+  .kicker,
+  .section-id,
+  .section-index,
+  .label,
+  .try-kicker,
+  .studio-live,
+  .choice-title,
+  .demo-section-label{
+    font-size:13px!important;
+    line-height:1.45!important;
+  }
+
+  .primary-btn,
+  .secondary-btn,
+  .btn,
+  .studio-primary,
+  .studio-secondary,
+  .try-primary,
+  .try-secondary,
+  .try-hire,
+  .showroom-all,
+  .action a,
+  .studio-entry-strip>a,
+  .demo-actions a,
+  .demo-actions button,
+  button.wizard-next,
+  button.wizard-submit,
+  button.wizard-back,
+  .full-preview,
+  .recommend-button,
+  .v4-contact-actions a{
+    font-size:13px!important;
+    line-height:1.35!important;
+  }
+
+  .hero-paths strong,
+  .hero-paths span,
+  .hero-meta span,
+  .card-action,
+  .site-node span,
+  .fact strong,
+  .capability-name strong,
+  .process-track strong,
+  .terminal-line strong,
+  .final-signature strong{
+    font-size:14px!important;
+  }
+
+  .hero-paths small,
+  .hero-meta small,
+  .card-copy small,
+  .card small,
+  .site-node small,
+  .portfolio-bridge small,
+  .closing-copy small,
+  .status,
+  .fact small,
+  .tag,
+  .identity-card-copy small,
+  .principle-card>span,
+  .capability-index,
+  .capability-name small,
+  .process-track article>span,
+  .contact-status,
+  .back-top,
+  .next,
+  .meta span,
+  .pill-row i,
+  .principle b{
+    font-size:12px!important;
+    line-height:1.45!important;
+  }
+
+  .terminal-top,
+  .terminal-foot,
+  .identity-top,
+  .v4-window-top,
+  .v4-window-kicker,
+  .v4-proof-intro>div>span,
+  .v4-proof-bottom small,
+  .v4-proof-bottom b{
+    font-size:12px!important;
+    line-height:1.45!important;
+  }
+
+  .terminal .line small{
+    font-size:13px!important;
+    letter-spacing:.04em!important;
+  }
+
+  .terminal .line strong,
+  .terminal .line strong a{
+    font-size:14px!important;
+    line-height:1.45!important;
+  }
+
+  .v4-unified-footer{
+    font-size:12px!important;
+  }
+
+  .v4-unified-footer .v4-footer-note{
+    font-size:11px!important;
+    line-height:1.5!important;
+  }
+
+  .fx-client-badge small,
+  .fx-try-badge small,
+  .fx-command-trigger,
+  .fx-command-trigger span,
+  .fx-command-trigger b,
+  .fx-command-list a,
+  .fx-command-list button,
+  .fx-command-list span,
+  .fx-command-list em{
+    font-size:12px!important;
+  }
+
+  .fx-client-badge strong,
+  .fx-try-badge strong{
+    font-size:14px!important;
+  }
+
+  /* Contact table specifically: keep the technical style, but make it easy to scan. */
+  .contact-layout .terminal-body{
+    padding:10px 26px!important;
+  }
+
+  .contact-layout .line{
+    min-height:96px!important;
+  }
+
+  .contact-layout .terminal-top,
+  .contact-layout .terminal-foot{
+    min-height:48px!important;
+    font-size:12px!important;
+  }
+}

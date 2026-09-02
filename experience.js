@@ -5,6 +5,7 @@
   const body = document.body;
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const allowParticles = false;
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
   const qsa = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
@@ -47,7 +48,7 @@
   }
 
   // ---------- Particle network ----------
-  if (!reduceMotion) {
+  if (allowParticles && !reduceMotion) {
     const canvas = document.createElement("canvas");
     canvas.className = "fx-particle-field";
     canvas.setAttribute("aria-hidden", "true");

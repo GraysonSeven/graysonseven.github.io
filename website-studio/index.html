@@ -7,8 +7,8 @@
   <meta property="og:type" content="website"><meta property="og:title" content="Website Studio — Charles Lioc"><meta property="og:description" content="Choose what you need, see a live concept and send a free website request in a few guided steps."><meta property="og:image" content="https://icharles.pages.dev/assets/charles-lioc-og.png"><meta property="og:url" content="https://icharles.pages.dev/website-studio/">
   <link rel="canonical" href="https://icharles.pages.dev/website-studio/"><link rel="icon" href="../assets/charles-lioc-logo-locked.svg" type="image/svg+xml"><link rel="manifest" href="../site.webmanifest">
   <title>Website Studio — Charles Lioc</title>
-  <link rel="stylesheet" href="../subpages.css"><link rel="stylesheet" href="../experience.css?v=4"><link rel="stylesheet" href="studio.css?v=2">
-  <script src="../experience.js?v=4" defer></script><script src="studio.js?v=2" defer></script>
+  <link rel="stylesheet" href="../subpages.css"><link rel="stylesheet" href="../experience.css?v=5"><link rel="stylesheet" href="studio.css?v=3">
+  <script src="../experience.js?v=5" defer></script><script src="studio.js?v=3" defer></script>
 </head>
 <body class="studio-body">
   <div class="shell studio-shell">
@@ -50,12 +50,12 @@
               <section class="wizard-step active" data-step="1">
                 <div class="step-heading"><span>STEP 1</span><h2>WHAT KIND OF WEBSITE DO YOU NEED?</h2><p>Choose the closest one. If you're unsure, <button type="button" class="inline-help" data-choose="Business / Services">start with Business</button>.</p></div>
                 <div class="type-choice-grid">
-                  <label><input type="radio" name="Website_Type" value="Business / Services" checked><span class="type-icon">🏢</span><strong>BUSINESS WEBSITE</strong><small>Explain services and get inquiries.</small><em>Most common</em></label>
-                  <label><input type="radio" name="Website_Type" value="Portfolio"><span class="type-icon">◫</span><strong>PORTFOLIO</strong><small>Show your work, skills and identity.</small></label>
-                  <label><input type="radio" name="Website_Type" value="Landing Page"><span class="type-icon">↗</span><strong>LANDING PAGE</strong><small>Promote one offer, event or launch.</small></label>
-                  <label><input type="radio" name="Website_Type" value="Product / Showcase"><span class="type-icon">◉</span><strong>PRODUCT / APP</strong><small>Give a product a professional home.</small></label>
-                  <label><input type="radio" name="Website_Type" value="Restaurant / Local Business"><span class="type-icon">⌖</span><strong>LOCAL BUSINESS</strong><small>Location, hours, menu/services, contact.</small></label>
-                  <label><input type="radio" name="Website_Type" value="Redesign Existing Website"><span class="type-icon">↻</span><strong>REDESIGN</strong><small>Make an existing site clearer and current.</small></label>
+                  <label><input type="radio" name="Website_Type" value="Business / Services" checked><span class="type-icon">🏢</span><strong>BUSINESS WEBSITE</strong><small>Explain services and get inquiries.</small><span class="choice-action">CLICK TO CHOOSE</span><em>Most common</em></label>
+                  <label><input type="radio" name="Website_Type" value="Portfolio"><span class="type-icon">◫</span><strong>PORTFOLIO</strong><small>Show your work, skills and identity.</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                  <label><input type="radio" name="Website_Type" value="Landing Page"><span class="type-icon">↗</span><strong>LANDING PAGE</strong><small>Promote one offer, event or launch.</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                  <label><input type="radio" name="Website_Type" value="Product / Showcase"><span class="type-icon">◉</span><strong>PRODUCT / APP</strong><small>Give a product a professional home.</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                  <label><input type="radio" name="Website_Type" value="Restaurant / Local Business"><span class="type-icon">⌖</span><strong>LOCAL BUSINESS</strong><small>Location, hours, menu/services, contact.</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                  <label><input type="radio" name="Website_Type" value="Redesign Existing Website"><span class="type-icon">↻</span><strong>REDESIGN</strong><small>Make an existing site clearer and current.</small><span class="choice-action">CLICK TO CHOOSE</span></label>
                 </div>
               </section>
 
@@ -68,29 +68,66 @@
                   <label class="wide"><span>OPTIONAL MESSAGE OR TAGLINE</span><input id="tagline" name="Tagline" type="text" maxlength="140" placeholder="Example: Reliable service without the guesswork."></label>
                 </div>
               </section>
-
               <section class="wizard-step" data-step="3">
-                <div class="step-heading"><span>STEP 3</span><h2>WHICH LOOK FEELS RIGHT?</h2><p>Click a style and color. The sample on the right updates immediately.</p></div>
-                <div class="easy-choice-block"><div class="choice-title"><strong>1. PICK A STYLE</strong><button type="button" id="choose-for-me" class="recommend-button">CHOOSE FOR ME</button></div>
+                <div class="step-heading">
+                  <span>STEP 3</span>
+                  <h2>CHOOSE A DESIGN DIRECTION.</h2>
+                  <p>You are not locking the final website. Pick what feels closest, or ask me to create a custom direction for you.</p>
+                </div>
+
+                <div class="design-mode-grid">
+                  <label class="design-mode-card">
+                    <input type="radio" name="Design_Mode" value="Use selected design direction" checked>
+                    <span class="mode-icon">▦</span>
+                    <div><strong>START FROM A DESIGN DIRECTION</strong><small>Choose a style, layout and colors below. I refine it into your website.</small></div>
+                    <b>CHOOSE THIS</b>
+                  </label>
+                  <label class="design-mode-card custom-mode">
+                    <input type="radio" name="Design_Mode" value="Custom design by Charles">
+                    <span class="mode-icon">✦</span>
+                    <div><strong>CUSTOM DESIGN BY CHARLES</strong><small>Describe the feeling you want or give me a reference. I will design a different direction for you.</small><em>NO EXTRA DESIGN FEE</em></div>
+                    <b>CHOOSE THIS</b>
+                  </label>
+                </div>
+
+                <div class="custom-design-note" id="custom-design-note" hidden>
+                  <div><strong>YOUR CUSTOM DESIGN REQUEST</strong><span>The custom-design option itself does not add a design fee. Special functionality or a larger project can still affect the total project price.</span></div>
+                  <textarea id="custom-design-request" name="Custom_Design_Request" rows="3" maxlength="900" placeholder="Example: I want it to feel clean and premium, mostly black and cream, with product photos and smooth scrolling. Or paste the name/link of a website you like."></textarea>
+                </div>
+
+                <div class="easy-choice-block">
+                  <div class="choice-title"><strong>1. PICK THE OVERALL FEEL</strong><button type="button" id="choose-for-me" class="recommend-button">✨ CHOOSE FOR ME</button></div>
                   <div class="theme-choice-grid">
-                    <label><input type="radio" name="Theme" value="Futuristic Dark" checked data-theme="future"><span class="theme-thumb future"><i></i><b></b><em></em></span><strong>FUTURISTIC</strong><small>Dark, sharp, energetic</small></label>
-                    <label><input type="radio" name="Theme" value="Premium Dark" data-theme="premium"><span class="theme-thumb premium"><i></i><b></b><em></em></span><strong>PREMIUM</strong><small>Refined, dark, minimal</small></label>
-                    <label><input type="radio" name="Theme" value="Clean Light" data-theme="light"><span class="theme-thumb light"><i></i><b></b><em></em></span><strong>CLEAN</strong><small>Bright, clear, professional</small></label>
-                    <label><input type="radio" name="Theme" value="Bold Creative" data-theme="bold"><span class="theme-thumb bold"><i></i><b></b><em></em></span><strong>BOLD</strong><small>Graphic, expressive, loud</small></label>
-                    <label><input type="radio" name="Theme" value="Elegant" data-theme="elegant"><span class="theme-thumb elegant"><i></i><b></b><em></em></span><strong>ELEGANT</strong><small>Warm, editorial, calm</small></label>
-                    <label><input type="radio" name="Theme" value="Minimal" data-theme="minimal"><span class="theme-thumb minimal"><i></i><b></b><em></em></span><strong>MINIMAL</strong><small>Simple, useful, quiet</small></label>
+                    <label><input type="radio" name="Theme" value="Futuristic Dark" checked data-theme="future"><span class="theme-thumb future"><i></i><b></b><em></em></span><strong>FUTURISTIC</strong><small>Dark, sharp, energetic</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                    <label><input type="radio" name="Theme" value="Premium Dark" data-theme="premium"><span class="theme-thumb premium"><i></i><b></b><em></em></span><strong>PREMIUM</strong><small>Refined, dark, minimal</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                    <label><input type="radio" name="Theme" value="Clean Light" data-theme="light"><span class="theme-thumb light"><i></i><b></b><em></em></span><strong>CLEAN</strong><small>Bright, clear, professional</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                    <label><input type="radio" name="Theme" value="Bold Creative" data-theme="bold"><span class="theme-thumb bold"><i></i><b></b><em></em></span><strong>BOLD</strong><small>Graphic, expressive, loud</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                    <label><input type="radio" name="Theme" value="Elegant" data-theme="elegant"><span class="theme-thumb elegant"><i></i><b></b><em></em></span><strong>ELEGANT</strong><small>Warm, editorial, calm</small><span class="choice-action">CLICK TO CHOOSE</span></label>
+                    <label><input type="radio" name="Theme" value="Minimal" data-theme="minimal"><span class="theme-thumb minimal"><i></i><b></b><em></em></span><strong>MINIMAL</strong><small>Simple, useful, quiet</small><span class="choice-action">CLICK TO CHOOSE</span></label>
                   </div>
                 </div>
-                <div class="easy-choice-block"><div class="choice-title"><strong>2. PICK COLORS</strong><span>Choose a ready-made palette.</span></div>
+
+                <div class="easy-choice-block">
+                  <div class="choice-title"><strong>2. PICK A PAGE LAYOUT</strong><span>This changes how the first screen is arranged.</span></div>
+                  <div class="layout-choice-grid">
+                    <label><input type="radio" name="Layout_Style" value="Split Hero" checked data-layout="split"><span class="layout-thumb split"><i></i><b></b><em></em></span><strong>SPLIT</strong><small>Message + visual side by side</small><span class="choice-action">CHOOSE</span></label>
+                    <label><input type="radio" name="Layout_Style" value="Centered Hero" data-layout="center"><span class="layout-thumb center"><i></i><b></b><em></em></span><strong>CENTERED</strong><small>Big message, simple focus</small><span class="choice-action">CHOOSE</span></label>
+                    <label><input type="radio" name="Layout_Style" value="Editorial" data-layout="editorial"><span class="layout-thumb editorial"><i></i><b></b><em></em></span><strong>EDITORIAL</strong><small>Asymmetry and strong typography</small><span class="choice-action">CHOOSE</span></label>
+                    <label><input type="radio" name="Layout_Style" value="Showcase Cards" data-layout="showcase"><span class="layout-thumb showcase"><i></i><b></b><em></em></span><strong>SHOWCASE</strong><small>Visual cards front and center</small><span class="choice-action">CHOOSE</span></label>
+                  </div>
+                </div>
+
+                <div class="easy-choice-block"><div class="choice-title"><strong>3. PICK COLORS</strong><span>Choose a ready-made palette or fine-tune later.</span></div>
                   <div class="palette-choice-grid" id="palette-grid">
-                    <button type="button" class="palette-option active" data-name="Cyber Cyan" data-bg="#070A10" data-primary="#00F0FF" data-accent="#8B5CFF"><i style="--a:#070A10;--b:#00F0FF;--c:#8B5CFF"></i><span>CYBER</span></button>
-                    <button type="button" class="palette-option" data-name="Midnight Gold" data-bg="#0B0A08" data-primary="#E8C36A" data-accent="#C7904D"><i style="--a:#0B0A08;--b:#E8C36A;--c:#C7904D"></i><span>GOLD</span></button>
-                    <button type="button" class="palette-option" data-name="Ocean" data-bg="#061017" data-primary="#35C7FF" data-accent="#4BE0B5"><i style="--a:#061017;--b:#35C7FF;--c:#4BE0B5"></i><span>OCEAN</span></button>
-                    <button type="button" class="palette-option" data-name="Rose" data-bg="#130A10" data-primary="#FF5F9E" data-accent="#FF9A62"><i style="--a:#130A10;--b:#FF5F9E;--c:#FF9A62"></i><span>ROSE</span></button>
-                    <button type="button" class="palette-option" data-name="Forest" data-bg="#07110D" data-primary="#56E39F" data-accent="#C8E85B"><i style="--a:#07110D;--b:#56E39F;--c:#C8E85B"></i><span>FOREST</span></button>
-                    <button type="button" class="palette-option" data-name="Monochrome" data-bg="#090909" data-primary="#F2F2F2" data-accent="#9A9A9A"><i style="--a:#090909;--b:#F2F2F2;--c:#9A9A9A"></i><span>MONO</span></button>
+                    <button type="button" class="palette-option active" data-name="Cyber Cyan" data-bg="#070A10" data-primary="#00F0FF" data-accent="#8B5CFF"><i style="--a:#070A10;--b:#00F0FF;--c:#8B5CFF"></i><span>CYBER</span><b>SELECT</b></button>
+                    <button type="button" class="palette-option" data-name="Midnight Gold" data-bg="#0B0A08" data-primary="#E8C36A" data-accent="#C7904D"><i style="--a:#0B0A08;--b:#E8C36A;--c:#C7904D"></i><span>GOLD</span><b>SELECT</b></button>
+                    <button type="button" class="palette-option" data-name="Ocean" data-bg="#061017" data-primary="#35C7FF" data-accent="#4BE0B5"><i style="--a:#061017;--b:#35C7FF;--c:#4BE0B5"></i><span>OCEAN</span><b>SELECT</b></button>
+                    <button type="button" class="palette-option" data-name="Rose" data-bg="#130A10" data-primary="#FF5F9E" data-accent="#FF9A62"><i style="--a:#130A10;--b:#FF5F9E;--c:#FF9A62"></i><span>ROSE</span><b>SELECT</b></button>
+                    <button type="button" class="palette-option" data-name="Forest" data-bg="#07110D" data-primary="#56E39F" data-accent="#C8E85B"><i style="--a:#07110D;--b:#56E39F;--c:#C8E85B"></i><span>FOREST</span><b>SELECT</b></button>
+                    <button type="button" class="palette-option" data-name="Monochrome" data-bg="#090909" data-primary="#F2F2F2" data-accent="#9A9A9A"><i style="--a:#090909;--b:#F2F2F2;--c:#9A9A9A"></i><span>MONO</span><b>SELECT</b></button>
                   </div>
                 </div>
+
                 <details class="advanced-style"><summary>OPTIONAL: FINE-TUNE THE STYLE <span>Font, size, motion, corners, custom colors</span></summary><div class="advanced-style-body">
                   <div class="advanced-control"><strong>FONT FEEL</strong><div class="segmented"><label><input type="radio" name="Font_Style" value="Modern Sans" checked data-font="modern"><span>MODERN</span></label><label><input type="radio" name="Font_Style" value="Tech Mono" data-font="mono"><span>TECH</span></label><label><input type="radio" name="Font_Style" value="Editorial Serif" data-font="serif"><span>EDITORIAL</span></label><label><input type="radio" name="Font_Style" value="Friendly Rounded" data-font="friendly"><span>FRIENDLY</span></label></div></div>
                   <div class="advanced-pair"><div class="advanced-control"><strong>TEXT SIZE</strong><div class="segmented compact"><label><input type="radio" name="Text_Size" value="Balanced" checked data-size="balanced"><span>STANDARD</span></label><label><input type="radio" name="Text_Size" value="Large" data-size="large"><span>LARGE</span></label><label><input type="radio" name="Text_Size" value="Extra Large" data-size="xl"><span>XL</span></label></div></div><div class="advanced-control"><strong>MOTION</strong><div class="segmented compact"><label><input type="radio" name="Motion_Level" value="Calm" data-motion="calm"><span>CALM</span></label><label><input type="radio" name="Motion_Level" value="Dynamic" checked data-motion="dynamic"><span>DYNAMIC</span></label><label><input type="radio" name="Motion_Level" value="Immersive" data-motion="immersive"><span>IMMERSIVE</span></label></div></div></div>
@@ -122,13 +159,13 @@
 
             <aside class="preview-column" aria-label="Live website concept preview">
               <div class="preview-sticky">
-                <div class="preview-explainer"><div><i></i><strong>YOUR LIVE SAMPLE</strong></div><span>Changes as you choose options.</span></div>
+                <div class="preview-explainer"><div><i></i><strong>LIVE WEBSITE SAMPLE</strong></div><span>Click choices on the left — this preview changes instantly.</span></div>
                 <div class="preview-toolbar"><span>PREVIEW</span><div class="viewport-buttons"><button type="button" class="active" data-view="desktop">DESKTOP</button><button type="button" data-view="mobile">MOBILE</button></div></div>
                 <div class="preview-stage"><div class="sample-site" id="sample-site" data-theme="future" data-font="modern" data-size="balanced" data-radius="sharp" data-motion="dynamic">
                   <header class="sample-nav"><div class="sample-mark" id="sample-mark">Y</div><strong id="preview-brand">YOUR BRAND</strong><nav><span>ABOUT</span><span>SERVICES</span><span>CONTACT</span></nav><button>LET'S TALK</button></header>
                   <main class="sample-main"><div class="sample-eyebrow"><i></i><span id="preview-industry">YOUR BUSINESS // ONLINE</span></div><h3 id="preview-title">MAKE YOUR BUSINESS<br><em>EASY TO UNDERSTAND.</em></h3><p id="preview-tagline">Your message becomes clear, memorable and easy to act on.</p><div class="sample-actions"><button id="preview-cta">GET IN TOUCH</button><span>EXPLORE ↓</span></div><div class="sample-cards"><article><small>01</small><b>WHAT YOU DO</b><span>Clear value</span></article><article><small>02</small><b>WHY YOU</b><span>Build trust</span></article><article><small>03</small><b>NEXT STEP</b><span>Easy action</span></article></div></main><div class="sample-orb" aria-hidden="true"></div><div class="sample-grid-bg" aria-hidden="true"></div>
                 </div></div>
-                <div class="preview-readout"><div><small>STYLE</small><strong id="read-theme">FUTURISTIC DARK</strong></div><div><small>COLORS</small><strong id="read-palette">CYBER CYAN</strong></div><div><small>TYPE</small><strong id="read-type">BUSINESS</strong></div></div>
+                <div class="preview-readout"><div><small>STYLE</small><strong id="read-theme">FUTURISTIC DARK</strong></div><div><small>LAYOUT</small><strong id="read-layout">SPLIT HERO</strong></div><div><small>COLORS</small><strong id="read-palette">CYBER CYAN</strong></div><div><small>TYPE</small><strong id="read-type">BUSINESS</strong></div></div>
                 <button type="button" id="open-preview" class="full-preview">OPEN LARGER SAMPLE ↗</button>
                 <p>This is a quick direction preview, not the final website.</p>
               </div>

@@ -20,8 +20,8 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="canonical" href="https://icharles.pages.dev/portfolio/" />
   <meta property="og:url" content="https://icharles.pages.dev/portfolio/" />
-  <link rel="stylesheet" href="/experience.css?v=4" />
-  <script src="/experience.js?v=4" defer></script>
+  <link rel="stylesheet" href="/experience.css?v=5" />
+  <script src="/experience.js?v=5" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -47,10 +47,10 @@
     </button>
 
     <nav class="site-nav" aria-label="Main navigation">
-      <a href="#work">WORK</a>
-      <a href="#domains">DISCIPLINES</a>
+      <a href="../try/" class="portfolio-nav-try">TRY BUILDS</a>
+      <a href="#work">CASE STUDIES</a>
       <a href="#about">ABOUT</a>
-      <a href="#contact">CONTACT</a>
+      <a href="../website-studio/" class="portfolio-nav-hire">GET A WEBSITE</a>
     </nav>
 
     <div class="header-status" aria-label="Portfolio status">
@@ -72,12 +72,12 @@
         </div>
 
         <h1 class="reveal">
-          MY WORK.<br />
-          <span>WHAT I ACTUALLY BUILD.</span>
+          I BUILD IT.<br />
+          <span>YOU CAN TRY IT.</span>
         </h1>
 
         <p class="hero-intro reveal">
-          I design and build practical software, business systems and custom websites. This portfolio shows the projects, decisions and real problems behind the work.
+          Software, business systems and websites built around real problems. Start with an interactive demo, then open the case study if you want to understand the decisions behind it.
         </p>
         <p class="portfolio-clarity-note reveal"><strong>Looking for a website?</strong> Use the Website Studio to choose a direction visually and send me a free project request.</p>
 
@@ -87,30 +87,23 @@
           <span class="client-link">DESIGN YOUR WEBSITE <b>↗</b></span>
         </a>
 
-        <div class="hero-actions reveal">
-          <a class="btn btn-primary" href="#work">
-            <span>EXPLORE MY WORK</span>
+        <div class="hero-actions reveal portfolio-hero-actions">
+          <a class="btn btn-primary portfolio-try-btn" href="../try/">
+            <span>TRY MY BUILDS</span>
             <strong>↗</strong>
+            <small>HANDS-ON DEMOS</small>
           </a>
-          <a class="btn btn-ghost" href="#about">
-            <span>ABOUT ME</span>
-            <strong>→</strong>
+          <a class="btn btn-ghost portfolio-case-btn" href="#work">
+            <span>READ CASE STUDIES</span>
+            <strong>↓</strong>
+            <small>HOW THEY WERE BUILT</small>
           </a>
         </div>
 
-        <div class="hero-meta reveal" aria-label="Portfolio categories">
-          <div>
-            <small>01</small>
-            <span>SOFTWARE & SYSTEMS</span>
-          </div>
-          <div>
-            <small>02</small>
-            <span>BUILDS & ENGINEERING</span>
-          </div>
-          <div>
-            <small>03</small>
-            <span>CREATIVE PROJECTS</span>
-          </div>
+        <div class="hero-meta reveal" aria-label="Portfolio entry points">
+          <a href="../try/#trade-core"><small>01</small><span>TRY TRADE CORE</span></a>
+          <a href="../try/#morsebound"><small>02</small><span>TRY MORSEBOUND</span></a>
+          <a href="../website-studio/"><small>03</small><span>DESIGN A WEBSITE</span></a>
         </div>
       </div>
 
@@ -146,6 +139,19 @@
       <div class="scroll-mark" aria-hidden="true">
         <span>SCROLL TO INITIALIZE</span>
         <i></i>
+      </div>
+    </section>
+
+    <section class="portfolio-launch-section scroll-reveal" aria-labelledby="portfolio-launch-title">
+      <div class="portfolio-launch-head">
+        <div><span>START HERE</span><h2 id="portfolio-launch-title">TRY A BUILD<br><em>BEFORE YOU READ ABOUT IT.</em></h2></div>
+        <p>Small interactive demos use sample data, so visitors can understand the idea immediately without touching any production system.</p>
+      </div>
+      <div class="portfolio-launch-grid">
+        <a href="../try/#trade-core" class="launch-card launch-trade"><div class="launch-art"><i></i><i></i><i></i><span>₱12,480</span></div><div><small>POS + INVENTORY</small><strong>TRADE CORE</strong><b>TRY DEMO ↗</b></div></a>
+        <a href="../try/#compadres" class="launch-card launch-compadres"><div class="launch-art bars"><i></i><i></i><i></i><span>+5 STOCK</span></div><div><small>HARDWARE OPERATIONS</small><strong>COMPADRES</strong><b>TRY DEMO ↗</b></div></a>
+        <a href="../try/#morsebound" class="launch-card launch-morse"><div class="launch-art morse"><span>• • • — — — • • •</span><i></i></div><div><small>MORSE TRAINER</small><strong>MORSEBOUND</strong><b>TRY DEMO ↗</b></div></a>
+        <a href="../try/#ette" class="launch-card launch-ette"><div class="launch-art ring"><span>75%</span><i></i></div><div><small>PLANNER + PROGRESS</small><strong>ETTE PLANNER</strong><b>TRY DEMO ↗</b></div></a>
       </div>
     </section>
 

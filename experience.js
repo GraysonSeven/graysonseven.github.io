@@ -295,7 +295,7 @@
 
   // ---------- Magnetic controls ----------
   if (finePointer && !reduceMotion) {
-    qsa(".primary-btn,.secondary-btn,.btn,.portfolio-bridge,.closing-link,.back-top,.fx-command-trigger,.client-availability,.fx-client-badge").forEach(el => {
+    qsa(".primary-btn,.secondary-btn,.btn,.portfolio-bridge,.closing-link,.back-top,.fx-command-trigger,.client-availability,.fx-client-badge,.fx-try-badge").forEach(el => {
       el.addEventListener("pointermove", e => {
         const r = el.getBoundingClientRect();
         const x = (e.clientX - (r.left + r.width / 2)) / r.width;
@@ -446,6 +446,16 @@
     line?.append(copy);
   }
 
+  // ---------- Persistent primary actions ----------
+  if (!document.querySelector(".fx-try-badge") && !body.classList.contains("studio-body") && !body.classList.contains("try-body")) {
+    const tryBadge = document.createElement("a");
+    tryBadge.className = "fx-try-badge";
+    tryBadge.href = "/try/";
+    tryBadge.setAttribute("aria-label", "Try interactive demos of Charles Lioc's builds");
+    tryBadge.innerHTML = `<span><small>INTERACTIVE SHOWROOM</small><strong>TRY MY BUILDS</strong></span><b>↗</b>`;
+    body.append(tryBadge);
+  }
+
   // ---------- Website client availability badge ----------
   if (!document.querySelector(".fx-client-badge")) {
     const clientBadge = document.createElement("a");
@@ -469,13 +479,13 @@
   palette.setAttribute("aria-hidden", "true");
   const base = location.origin;
   const navItems = [
-    ["01", "HOME", `${base}/`, "IDENTITY + FEATURED WORK"],
-    ["02", "PROJECTS", `${base}/projects/`, "COMPLETE PROJECT DIRECTORY"],
-    ["03", "LAB", `${base}/lab/`, "EXPERIMENTS + WORK IN PROGRESS"],
-    ["04", "ABOUT", `${base}/about/`, "IDENTITY + BUILD PHILOSOPHY"],
-    ["05", "PORTFOLIO", `${base}/portfolio/`, "PROFESSIONAL CASE STUDIES"],
-    ["06", "WEBSITE STUDIO", `${base}/website-studio/`, "DESIGN YOUR SITE LIVE // FREE TO START"],
-    ["07", "WEBSITE SERVICES", `${base}/#websites`, "CUSTOM WEBSITES // CLIENTS OPEN"],
+    ["01", "HOME", `${base}/`, "START HERE"],
+    ["02", "TRY MY BUILDS", `${base}/try/`, "INTERACTIVE DEMOS // SAMPLE DATA"],
+    ["03", "PORTFOLIO", `${base}/portfolio/`, "PROJECT CASE STUDIES"],
+    ["04", "WEBSITE STUDIO", `${base}/website-studio/`, "DESIGN YOUR SITE // FREE TO REQUEST"],
+    ["05", "PROJECTS", `${base}/projects/`, "PROJECT DIRECTORY"],
+    ["06", "ABOUT", `${base}/about/`, "WHO I AM + HOW I BUILD"],
+    ["07", "LAB", `${base}/lab/`, "EXPERIMENTS + WORK IN PROGRESS"],
     ["08", "CONTACT", `${base}/contact/#website-projects`, "DIRECT CONTACT + PROJECT QUESTIONS"],
   ];
   palette.innerHTML = `

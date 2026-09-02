@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05060a">
+  <meta name="description" content="Try interactive mini demos of software and systems built by Charles Lioc.">
+  <meta name="author" content="Charles Lioc">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Try My Builds — Charles Lioc">
+  <meta property="og:description" content="Hands-on mini demos of Trade Core, Compadres Hardware, Morsebound, ETTE Planner and the Website Studio.">
+  <meta property="og:image" content="https://icharles.pages.dev/assets/charles-lioc-og.png">
+  <meta property="og:url" content="https://icharles.pages.dev/try/">
+  <link rel="canonical" href="https://icharles.pages.dev/try/">
+  <link rel="icon" href="../assets/charles-lioc-logo-locked.svg" type="image/svg+xml">
+  <title>Try My Builds — Charles Lioc</title>
+  <link rel="stylesheet" href="../subpages.css">
+  <link rel="stylesheet" href="../experience.css?v=5">
+  <link rel="stylesheet" href="try.css?v=1">
+  <script src="../experience.js?v=5" defer></script>
+  <script src="try.js?v=1" defer></script>
+</head>
+<body class="try-body">
+  <div class="shell try-shell">
+    <header class="try-header">
+      <a class="brand" href="../">
+        <img src="../assets/charles-lioc-logo-locked.svg" alt="Charles Lioc logo">
+        <div><strong>CHARLES LIOC</strong><small>INTERACTIVE SHOWROOM</small></div>
+      </a>
+      <nav aria-label="Showroom navigation">
+        <a href="#trade-core">TRADE CORE</a>
+        <a href="#compadres">COMPADRES</a>
+        <a href="#morsebound">MORSEBOUND</a>
+        <a href="#ette">ETTE</a>
+      </nav>
+      <a class="try-hire" href="../website-studio/">BUILD MY WEBSITE <b>→</b></a>
+    </header>
+
+    <main>
+      <section class="try-hero">
+        <div class="try-hero-copy">
+          <span class="try-kicker"><i></i> INTERACTIVE SHOWROOM</span>
+          <h1>DON'T JUST READ<br><em>WHAT I BUILD.</em><br>TRY IT.</h1>
+          <p>These are small hands-on demos inspired by products and systems I've built. Click things, make a sample sale, move stock, hear Morse code, and complete a planner session.</p>
+          <div class="try-hero-actions">
+            <a class="try-primary" href="#trade-core">START WITH TRADE CORE <b>↓</b></a>
+            <a class="try-secondary" href="../portfolio/">SEE FULL CASE STUDIES <b>→</b></a>
+          </div>
+          <div class="demo-safety"><b>DEMO DATA ONLY</b><span>Nothing here changes a real store, account or production database.</span></div>
+        </div>
+        <div class="showroom-orbit" aria-hidden="true">
+          <div class="orbit-ring one"></div><div class="orbit-ring two"></div><div class="orbit-ring three"></div>
+          <img src="../assets/charles-lioc-logo-locked.svg" alt="">
+          <div class="orbit-chip chip-a"><small>POS</small><strong>TRADE CORE</strong></div>
+          <div class="orbit-chip chip-b"><small>LEARN</small><strong>MORSEBOUND</strong></div>
+          <div class="orbit-chip chip-c"><small>PLAN</small><strong>ETTE</strong></div>
+          <div class="orbit-chip chip-d"><small>STOCK</small><strong>COMPADRES</strong></div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="trade-core">
+        <div class="demo-copy">
+          <span>01 // BUSINESS OPERATIONS</span>
+          <h2>TRADE CORE</h2>
+          <p>A transaction-first POS and inventory system. This mini demo lets you add products to a cart and complete a sample sale.</p>
+          <div class="demo-actions"><a href="../portfolio/projects/trade-core.html">CASE STUDY <b>→</b></a><button type="button" data-reset="trade">RESET DEMO</button></div>
+        </div>
+        <div class="demo-device trade-demo">
+          <div class="demo-window-top"><span>TRADE CORE // POS DEMO</span><b>LOCAL DEMO</b></div>
+          <div class="trade-layout">
+            <div class="trade-products">
+              <div class="demo-section-label">TAP A PRODUCT</div>
+              <button type="button" class="product-button" data-name="Portland Cement" data-price="285"><span>PORTLAND CEMENT</span><small>₱285</small><b>ADD +</b></button>
+              <button type="button" class="product-button" data-name="PVC 1/2" data-price="68"><span>PVC 1/2"</span><small>₱68</small><b>ADD +</b></button>
+              <button type="button" class="product-button" data-name="GI Wire #16" data-price="95"><span>GI WIRE #16</span><small>₱95</small><b>ADD +</b></button>
+              <button type="button" class="product-button" data-name="Roofing Nails" data-price="120"><span>ROOFING NAILS</span><small>₱120</small><b>ADD +</b></button>
+            </div>
+            <div class="trade-cart">
+              <div class="demo-section-label">CURRENT SALE</div>
+              <div id="trade-cart-items" class="cart-items"><div class="empty-cart">Add a product to begin.</div></div>
+              <div class="trade-total"><span>TOTAL</span><strong id="trade-total">₱0</strong></div>
+              <button type="button" class="demo-main-button" id="trade-checkout">COMPLETE DEMO SALE <b>→</b></button>
+              <div class="demo-result" id="trade-result" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section reverse" id="compadres">
+        <div class="demo-copy">
+          <span>02 // HARDWARE STORE OPERATIONS</span>
+          <h2>COMPADRES HARDWARE</h2>
+          <p>A hardware-store-specific workflow. Receive sample stock and watch inventory and the movement log update immediately.</p>
+          <div class="demo-actions"><a href="../portfolio/projects/compadres-hardware.html">CASE STUDY <b>→</b></a><button type="button" data-reset="compadres">RESET DEMO</button></div>
+        </div>
+        <div class="demo-device stock-demo">
+          <div class="demo-window-top"><span>COMPADRES // RECEIVING DEMO</span><b>STOCK MOVEMENT</b></div>
+          <div class="stock-grid">
+            <article data-stock="cement"><small>SKU 001</small><strong>PORTLAND CEMENT</strong><div><span>ON HAND</span><b id="stock-cement">42</b></div><button type="button" data-receive="cement">RECEIVE +5</button></article>
+            <article data-stock="paint"><small>SKU 014</small><strong>LATEX PAINT 4L</strong><div><span>ON HAND</span><b id="stock-paint">18</b></div><button type="button" data-receive="paint">RECEIVE +5</button></article>
+            <article data-stock="nails"><small>SKU 032</small><strong>ROOFING NAILS</strong><div><span>ON HAND</span><b id="stock-nails">76</b></div><button type="button" data-receive="nails">RECEIVE +5</button></article>
+          </div>
+          <div class="movement-log">
+            <div class="demo-section-label">RECENT MOVEMENTS</div>
+            <div id="movement-list"><span><b>READY</b> Choose an item above to receive sample stock.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="morsebound">
+        <div class="demo-copy">
+          <span>03 // LEARNING PRODUCT</span>
+          <h2>MORSEBOUND</h2>
+          <p>A Morse training product for web and Android. Hear a real tone sequence and reveal the code after you listen.</p>
+          <div class="demo-actions"><a href="../portfolio/projects/morsebound.html">CASE STUDY <b>→</b></a><button type="button" data-reset="morse">RESET DEMO</button></div>
+        </div>
+        <div class="demo-device morse-demo">
+          <div class="demo-window-top"><span>MORSEBOUND // MINI TRAINER</span><b>AUDIO DEMO</b></div>
+          <div class="morse-panel">
+            <div class="morse-target"><small>TRAINING SIGNAL</small><strong>SOS</strong><span>Listen first. Reveal the pattern when you're ready.</span></div>
+            <div class="morse-wave" id="morse-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="morse-buttons">
+              <button type="button" class="demo-main-button" id="morse-play">▶ PLAY SOS</button>
+              <button type="button" class="demo-secondary-button" id="morse-reveal">REVEAL CODE</button>
+            </div>
+            <div id="morse-code" class="morse-code" aria-live="polite">• • • &nbsp; — — — &nbsp; • • •</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section reverse" id="ette">
+        <div class="demo-copy">
+          <span>04 // PERSONAL PRODUCTIVITY</span>
+          <h2>ETTE PLANNER</h2>
+          <p>A personal planning and accountability system. Complete the demo tasks and watch the session progress update.</p>
+          <div class="demo-actions"><a href="../portfolio/projects/ette-planner.html">CASE STUDY <b>→</b></a><button type="button" data-reset="ette">RESET DEMO</button></div>
+        </div>
+        <div class="demo-device ette-demo">
+          <div class="demo-window-top"><span>ETTE // TODAY</span><b>DEMO SESSION</b></div>
+          <div class="ette-layout">
+            <div class="progress-orb" id="ette-orb"><strong id="ette-percent">0%</strong><span>COMPLETE</span></div>
+            <div class="task-list">
+              <label><input type="checkbox" class="ette-task"><span><b>PLAN THE DAY</b><small>Set the three most important outcomes.</small></span></label>
+              <label><input type="checkbox" class="ette-task"><span><b>FOCUS BLOCK</b><small>Finish one meaningful work session.</small></span></label>
+              <label><input type="checkbox" class="ette-task"><span><b>WORKOUT</b><small>Log today's training session.</small></span></label>
+              <label><input type="checkbox" class="ette-task"><span><b>REVIEW</b><small>Close the day and record progress.</small></span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="studio-launch">
+        <div>
+          <span>05 // LIVE CLIENT TOOL</span>
+          <h2>THE WEBSITE STUDIO<br><em>IS ALSO SOMETHING YOU CAN TRY.</em></h2>
+          <p>Choose a website type, design direction, colors and layout. The preview changes as you choose, then you can send me the complete request.</p>
+        </div>
+        <a class="try-primary" href="../website-studio/">OPEN WEBSITE STUDIO <b>↗</b></a>
+      </section>
+
+      <section class="try-final">
+        <span>LIKE THE WAY I BUILD?</span>
+        <h2>I CAN BUILD<br><em>SOMETHING FOR YOU.</em></h2>
+        <div><a class="try-primary" href="../website-studio/">REQUEST A WEBSITE <b>→</b></a><a class="try-secondary" href="../contact/">CONTACT ME <b>→</b></a></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

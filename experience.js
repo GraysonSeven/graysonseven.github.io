@@ -25,7 +25,7 @@
   const bootKey = "cl-immersive-boot-v3";
   let showBoot = false;
   try {
-    showBoot = !sessionStorage.getItem(bootKey) && !reduceMotion;
+    showBoot = !sessionStorage.getItem(bootKey) && !reduceMotion && !body.classList.contains("clarity-home") && !body.classList.contains("studio-body");
     if (showBoot) sessionStorage.setItem(bootKey, "1");
   } catch (_) {}
 

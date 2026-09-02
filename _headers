@@ -1,0 +1,24 @@
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/apps/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/cyberpunk/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+/assets/charles-lioc-logo-locked.svg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+/assets/charles-lioc-og.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+/*.css
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/*.js
+  Cache-Control: public, max-age=3600, must-revalidate

@@ -1,0 +1,4 @@
+Contact: mailto:icharles.development@gmail.com
+Canonical: https://icharles.pages.dev/.well-known/security.txt
+Expires: 2027-09-02T00:00:00Z
+Preferred-Languages: en

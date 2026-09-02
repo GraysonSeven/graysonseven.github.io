@@ -8,7 +8,7 @@
   "theme_color": "#05060a",
   "icons": [
     {
-      "src": "assets/favicon.svg",
+      "src": "/assets/charles-lioc-logo-locked.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

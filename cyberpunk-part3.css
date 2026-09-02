@@ -1,0 +1,428 @@
+/* CHARLES LIOC — V4.3 CYBERPUNK GRAPHICS // PART 3
+   Website Studio: holographic design console.
+   Reusable transparent vector art only — no wallpaper scenes. */
+
+:root{
+  --cp3-cyan:#00efff;
+  --cp3-violet:#8b5cff;
+  --cp3-magenta:#ff2bd6;
+  --cp3-green:#48ff9b;
+}
+
+/* ---------- Studio atmosphere ---------- */
+.studio-body main{position:relative}
+.studio-intro,
+.studio-mode-gate,
+.wizard-shell{
+  position:relative;
+  isolation:isolate;
+}
+.studio-intro>*,
+.studio-mode-gate>*,
+.wizard-shell>*{position:relative;z-index:3}
+
+.cp3-art{
+  position:absolute;
+  z-index:1;
+  pointer-events:none;
+  user-select:none;
+}
+.cp3-reactor{
+  width:clamp(180px,25vw,370px);
+  opacity:.20;
+  animation:cp3Spin 34s linear infinite;
+}
+.cp3-prism{
+  width:clamp(170px,24vw,380px);
+  opacity:.20;
+  animation:cp3Float 7s ease-in-out infinite;
+}
+.cp3-cube{
+  width:clamp(150px,20vw,300px);
+  opacity:.18;
+  animation:cp3SpinReverse 42s linear infinite;
+}
+.cp3-flow{
+  width:min(70vw,980px);
+  opacity:.16;
+}
+.cp3-reticle{
+  width:clamp(130px,17vw,250px);
+  opacity:.18;
+  animation:cp3Spin 28s linear infinite;
+}
+@keyframes cp3Spin{to{rotate:360deg}}
+@keyframes cp3SpinReverse{to{rotate:-360deg}}
+@keyframes cp3Float{50%{translate:0 -12px}}
+
+.studio-intro .cp3-intro-reactor{right:-5%;top:5%}
+.studio-intro .cp3-intro-flow{left:22%;bottom:1%}
+.studio-intro-map{
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 28px 80px rgba(0,0,0,.22),0 0 46px rgba(0,239,255,.025);
+}
+.studio-intro-map::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,var(--cp3-cyan),transparent 14%) top left/34% 1px no-repeat,
+    linear-gradient(180deg,var(--cp3-cyan),transparent 18%) top left/1px 45% no-repeat,
+    linear-gradient(270deg,var(--cp3-magenta),transparent 14%) bottom right/34% 1px no-repeat,
+    linear-gradient(0deg,var(--cp3-magenta),transparent 18%) bottom right/1px 45% no-repeat;
+  opacity:.44;
+}
+
+/* ---------- Mode gate ---------- */
+.studio-mode-gate{
+  overflow:hidden;
+}
+.studio-mode-gate .cp3-mode-prism{left:-5%;top:12%}
+.studio-mode-gate .cp3-mode-cube{right:-4%;bottom:8%}
+.studio-mode-options{position:relative;z-index:3}
+.studio-mode-option{
+  position:relative!important;
+  isolation:isolate;
+  overflow:hidden!important;
+  transform-style:preserve-3d;
+  transition:transform .26s ease,border-color .24s ease,box-shadow .24s ease!important;
+}
+.studio-mode-option>*{position:relative;z-index:3}
+.studio-mode-option::before{
+  content:"";
+  position:absolute;
+  inset:-35%;
+  z-index:0;
+  pointer-events:none;
+  background:url("/assets/cyberpunk/studio/design-reticle.svg") center/70% no-repeat;
+  opacity:.07;
+  animation:cp3Spin 40s linear infinite;
+}
+.studio-mode-option::after{
+  content:"";
+  position:absolute;
+  left:-34%;
+  top:0;
+  width:28%;
+  height:100%;
+  z-index:1;
+  pointer-events:none;
+  opacity:0;
+  transform:skewX(-14deg);
+  background:linear-gradient(110deg,transparent,rgba(255,255,255,.07),rgba(0,239,255,.10),transparent);
+}
+.studio-mode-option:hover::after{animation:cp3ModeSweep 1.1s ease forwards}
+.studio-mode-option:hover{
+  transform:translateY(-5px) perspective(800px) rotateX(1deg)!important;
+  box-shadow:0 28px 60px rgba(0,0,0,.22),0 0 34px rgba(0,239,255,.035)!important;
+}
+@keyframes cp3ModeSweep{
+  0%{left:-34%;opacity:0}
+  18%{opacity:1}
+  100%{left:120%;opacity:0}
+}
+.studio-sales-flow{
+  position:relative;
+  overflow:hidden;
+}
+.studio-sales-flow::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:50%;
+  height:1px;
+  z-index:0;
+  background:linear-gradient(90deg,transparent,var(--cp3-cyan),var(--cp3-violet),var(--cp3-magenta),transparent);
+  opacity:.12;
+}
+.studio-sales-flow>div{position:relative;z-index:2}
+
+/* ---------- Wizard becomes a design console ---------- */
+.wizard-shell{
+  box-shadow:0 44px 120px rgba(0,0,0,.32),0 0 75px rgba(0,239,255,.025)!important;
+  overflow:visible;
+}
+.wizard-shell>.cp3-wizard-frame{
+  position:absolute;
+  inset:-8px;
+  width:calc(100% + 16px);
+  height:calc(100% + 16px);
+  z-index:1;
+  object-fit:fill;
+  opacity:.28;
+  pointer-events:none;
+}
+.wizard-shell>.cp3-wizard-prism{
+  position:absolute;
+  width:260px;
+  right:-92px;
+  top:13%;
+  opacity:.10;
+  z-index:1;
+  pointer-events:none;
+}
+.wizard-topbar{
+  overflow:hidden;
+}
+.wizard-topbar::after{
+  content:"";
+  position:absolute;
+  left:-24%;
+  bottom:0;
+  width:24%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--cp3-cyan),#fff,var(--cp3-magenta),transparent);
+  animation:cp3TopPulse 7.5s linear infinite;
+  opacity:.55;
+}
+@keyframes cp3TopPulse{to{left:112%}}
+.cp3-console-state{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 9px;
+  border:1px solid rgba(72,255,155,.17);
+  background:rgba(72,255,155,.035);
+  color:#aaffce;
+  font:800 10px/1 "Space Mono",monospace;
+  letter-spacing:.06em;
+  white-space:nowrap;
+}
+.cp3-console-state i{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--cp3-green);
+  box-shadow:0 0 12px rgba(72,255,155,.65);
+}
+
+.wizard-step{
+  position:relative;
+}
+.wizard-step>.cp3-step-flow{
+  position:absolute;
+  right:-12%;
+  top:-28px;
+  width:58%;
+  opacity:.07;
+  pointer-events:none;
+}
+.step-heading{
+  position:relative;
+}
+.step-heading::after{
+  content:"";
+  display:block;
+  width:min(320px,56%);
+  height:1px;
+  margin-top:16px;
+  background:linear-gradient(90deg,var(--cp3-cyan),var(--cp3-violet),transparent);
+  opacity:.34;
+}
+
+/* Existing choice cards get holographic edge response. */
+.type-choice-grid label,
+.theme-choice-grid label,
+.design-mode-card,
+.layout-choice-grid label,
+.palette-option,
+.check-grid label span{
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease!important;
+}
+.type-choice-grid label:hover,
+.theme-choice-grid label:hover,
+.design-mode-card:hover,
+.layout-choice-grid label:hover,
+.palette-option:hover{
+  box-shadow:0 12px 30px rgba(0,0,0,.18),inset 0 0 26px rgba(0,239,255,.018);
+}
+.cp3-ping{
+  animation:cp3Ping .52s ease!important;
+}
+@keyframes cp3Ping{
+  0%{box-shadow:0 0 0 0 rgba(0,239,255,.0)}
+  35%{box-shadow:0 0 0 3px rgba(0,239,255,.16),0 0 26px rgba(0,239,255,.10)}
+  100%{box-shadow:0 0 0 0 rgba(0,239,255,0)}
+}
+
+/* ---------- Preview = holographic live design feed ---------- */
+.preview-column{
+  position:relative;
+  isolation:isolate;
+}
+.preview-sticky{
+  position:sticky;
+  isolation:isolate;
+}
+.preview-sticky>.cp3-preview-reactor{
+  position:absolute;
+  width:260px;
+  right:-98px;
+  top:72px;
+  opacity:.10;
+  z-index:0;
+  pointer-events:none;
+}
+.preview-sticky>.cp3-preview-cube{
+  position:absolute;
+  width:185px;
+  left:-72px;
+  bottom:50px;
+  opacity:.08;
+  z-index:0;
+  pointer-events:none;
+}
+.preview-sticky>*:not(.cp3-art){position:relative;z-index:2}
+.preview-stage{
+  position:relative!important;
+  isolation:isolate;
+  perspective:1100px;
+  overflow:hidden!important;
+}
+.preview-stage::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  z-index:4;
+  pointer-events:none;
+  background:url("/assets/cyberpunk/studio/bracket-frame.svg") center/100% 100% no-repeat;
+  opacity:.32;
+}
+.preview-stage::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;
+  top:-14%;
+  height:12%;
+  z-index:5;
+  pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(0,239,255,.06),rgba(255,255,255,.10),rgba(255,43,214,.04),transparent);
+  animation:cp3PreviewScan 7.8s ease-in-out infinite;
+}
+@keyframes cp3PreviewScan{
+  0%,16%{translate:0 0;opacity:0}
+  25%{opacity:.65}
+  75%{translate:0 1050%;opacity:.38}
+  85%,100%{translate:0 1050%;opacity:0}
+}
+.sample-site{
+  transform:
+    perspective(1000px)
+    rotateX(var(--cp3-rx,0deg))
+    rotateY(var(--cp3-ry,0deg));
+  transform-origin:center;
+  transition:transform .16s ease,width .25s ease,height .25s ease,background .25s ease!important;
+  box-shadow:0 20px 50px rgba(0,0,0,.25),0 0 45px color-mix(in srgb,var(--site-primary) 7%,transparent);
+}
+.cp3-preview-feed{
+  position:absolute;
+  left:26px;
+  top:22px;
+  z-index:7;
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 9px;
+  background:rgba(3,7,12,.78);
+  border:1px solid rgba(0,239,255,.18);
+  backdrop-filter:blur(8px);
+  color:#93a5bc;
+  font:800 9px/1 "Space Mono",monospace;
+  letter-spacing:.06em;
+}
+.cp3-preview-feed i{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--cp3-cyan);
+  box-shadow:0 0 12px rgba(0,239,255,.65);
+}
+.cp3-preview-coordinates{
+  position:absolute;
+  right:26px;
+  bottom:22px;
+  z-index:7;
+  pointer-events:none;
+  color:#73839a;
+  font:800 8px/1.2 "Space Mono",monospace;
+  letter-spacing:.05em;
+}
+.preview-toolbar{
+  position:relative;
+  overflow:hidden;
+}
+.preview-toolbar::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:1px;
+  background:linear-gradient(90deg,var(--cp3-cyan),transparent 45%,var(--cp3-magenta));
+  opacity:.34;
+}
+
+/* Palette buttons look more like a color console. */
+.palette-option{position:relative;overflow:hidden}
+.palette-option::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:1px;
+  background:linear-gradient(90deg,var(--a),var(--b),var(--c));
+  opacity:.35;
+}
+.palette-option.active::after{height:2px;opacity:.9}
+
+/* Buttons retain strong click affordance. */
+.studio-primary,
+.wizard-next,
+.wizard-submit,
+.full-preview,
+.recommend-button{
+  position:relative;
+  overflow:hidden;
+}
+.studio-primary::before,
+.wizard-next::before,
+.wizard-submit::before,
+.full-preview::before,
+.recommend-button::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  translate:-120% 0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.2) 48%,rgba(0,239,255,.10) 55%,transparent 70%);
+  transition:translate .58s cubic-bezier(.2,.8,.25,1);
+}
+.studio-primary:hover::before,
+.wizard-next:hover::before,
+.wizard-submit:hover::before,
+.full-preview:hover::before,
+.recommend-button:hover::before{translate:120% 0}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1100px){
+  .cp3-intro-reactor{opacity:.10!important}
+  .cp3-mode-prism,.cp3-mode-cube{opacity:.09!important}
+  .wizard-shell>.cp3-wizard-prism{display:none}
+  .preview-sticky>.cp3-preview-reactor,
+  .preview-sticky>.cp3-preview-cube{opacity:.05}
+}
+@media(max-width:760px){
+  .cp3-intro-reactor,
+  .cp3-intro-flow,
+  .cp3-mode-prism,
+  .cp3-mode-cube,
+  .preview-sticky>.cp3-preview-reactor,
+  .preview-sticky>.cp3-preview-cube,
+  .wizard-step>.cp3-step-flow{display:none}
+  .wizard-shell>.cp3-wizard-frame{opacity:.16}
+  .cp3-console-state{display:none}
+  .cp3-preview-feed{left:18px;top:15px;font-size:8px}
+  .cp3-preview-coordinates{right:18px;bottom:15px}
+  .studio-mode-option:hover{transform:translateY(-2px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .cp3-reactor,.cp3-prism,.cp3-cube,.cp3-reticle,
+  .studio-mode-option::before,.wizard-topbar::after,.preview-stage::after{
+    animation:none!important;
+  }
+  .sample-site{transform:none!important}
+}

@@ -7,8 +7,9 @@
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const site = $("#sample-site");
-  const total = 5;
   let step = 1;
+  let studioMode = null; // "assist" or "customize"
+  const stepOrder = () => studioMode === "assist" ? [1, 2, 4, 5] : [1, 2, 3, 4, 5];
 
   const state = {
     bg: "#070A10",
@@ -27,43 +28,39 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[m]));
 
-  const titles = [
-    "",
-    "1 OF 5 — WHAT DO YOU NEED?",
-    "2 OF 5 — TELL ME ABOUT IT",
-    "3 OF 5 — CHOOSE THE DESIGN",
-    "4 OF 5 — CHOOSE WHAT'S INCLUDED",
-    "5 OF 5 — REVIEW + SEND"
-  ];
+  const stepNames = {
+    1: "WHAT DO YOU NEED?",
+    2: "TELL ME ABOUT IT",
+    3: "CHOOSE THE DESIGN",
+    4: "WHAT'S INCLUDED?",
+    5: "REVIEW + SEND"
+  };
 
-  const nextLabels = [
-    "",
-    "NEXT: TELL ME ABOUT IT →",
-    "NEXT: CHOOSE THE DESIGN →",
-    "NEXT: CHOOSE CONTENT →",
-    "NEXT: REVIEW + SEND →",
-    ""
-  ];
-
-  const hints = [
-    "",
-    "Click one card. You can change it later.",
-    "Only the website name is required.",
-    "Pick a direction or request a custom design at no extra design fee.",
-    "A sensible starter set is already selected.",
-    "Review your details, then send the free request."
-  ];
+  const hints = {
+    1: "Click one card. You can change it later.",
+    2: "Only the website name is required.",
+    3: "Pick a direction, use Choose for me, or request a custom design at no extra design fee.",
+    4: "A sensible starter set is already selected. Keeping it is completely fine.",
+    5: "Review your details, then send the free request."
+  };
 
   function showStep(next, doScroll = true) {
-    step = Math.max(1, Math.min(total, next));
+    const order = stepOrder();
+    if (!order.includes(next)) next = order[0];
+    step = next;
+    const index = order.indexOf(step);
+    const nextStep = order[index + 1];
+    const backStep = order[index - 1];
     $$(".wizard-step").forEach(x => x.classList.toggle("active", Number(x.dataset.step) === step));
-    $("#progress-title").textContent = titles[step];
-    $("#progress-fill").style.width = `${step / total * 100}%`;
-    $("#wizard-back").disabled = step === 1;
-    $("#wizard-next").hidden = step === total;
-    $("#wizard-submit").hidden = step !== total;
-    $("#wizard-next").textContent = nextLabels[step] || "NEXT →";
-    $("#wizard-hint").textContent = hints[step];
+    $("#progress-title").textContent = `${index + 1} OF ${order.length} — ${stepNames[step]}`;
+    $("#progress-fill").style.width = `${(index + 1) / order.length * 100}%`;
+    $("#wizard-back").disabled = index === 0;
+    $("#wizard-next").hidden = step === 5;
+    $("#wizard-submit").hidden = step !== 5;
+    $("#wizard-next").textContent = nextStep ? `NEXT: ${stepNames[nextStep]} →` : "NEXT →";
+    $("#wizard-hint").textContent = hints[step] || "Continue when ready.";
+    $("#wizard-back").dataset.targetStep = backStep || "";
+    $("#wizard-next").dataset.targetStep = nextStep || "";
     if (step === 5) updateVisibleSummary();
     try { history.replaceState(null, "", `#builder-step-${step}`); } catch (_) {}
     if (doScroll) {
@@ -75,6 +72,7 @@
   }
 
   function validateCurrent() {
+    if (!studioMode) return false;
     if (step === 2) {
       const name = $("#brand-name");
       if (!name.value.trim()) {
@@ -87,9 +85,14 @@
   }
 
   $("#wizard-next").addEventListener("click", () => {
-    if (validateCurrent()) showStep(step + 1);
+    if (!validateCurrent()) return;
+    const target = Number($("#wizard-next").dataset.targetStep);
+    if (target) showStep(target);
   });
-  $("#wizard-back").addEventListener("click", () => showStep(step - 1));
+  $("#wizard-back").addEventListener("click", () => {
+    const target = Number($("#wizard-back").dataset.targetStep);
+    if (target) showStep(target);
+  });
 
   const recommendations = {
     "Business / Services": {
@@ -154,6 +157,7 @@
     return [
       `Request ${requestId}`,
       `Type: ${selected("Website_Type")}`,
+      `Studio mode: ${studioMode === "assist" ? "Design it for me" : "Customize the design"}`,
       `Design mode: ${selected("Design_Mode")}`,
       `Theme: ${selected("Theme")}`,
       `Layout: ${selected("Layout_Style")}`,
@@ -172,7 +176,7 @@
     const type = selected("Website_Type").replace(" / Services", "");
     const custom = selected("Design_Mode") === "Custom design by Charles";
     $("#request-summary-visible").querySelector("strong").textContent =
-      `${type.toUpperCase()} · ${custom ? "CUSTOM DESIGN" : selected("Theme").toUpperCase()} · ${selected("Layout_Style").toUpperCase()}`;
+      `${type.toUpperCase()} · ${studioMode === "assist" ? "DESIGN BY CHARLES" : (custom ? "CUSTOM DESIGN" : selected("Theme").toUpperCase())} · ${selected("Layout_Style").toUpperCase()}`;
     const pages = vals("Pages[]");
     const features = vals("Features[]");
     $("#request-summary-visible").querySelector("p").textContent =
@@ -318,8 +322,43 @@
     else updatePreview();
   });
 
+  function bodyMode(selectedMode) {
+    document.body.classList.toggle("studio-v4-mode-selected", Boolean(selectedMode));
+    document.body.classList.toggle("studio-assist-mode", selectedMode === "assist");
+    $("#studio-mode-hidden").value = selectedMode === "assist" ? "Design it for me (recommended)" : selectedMode === "customize" ? "Customize the design" : "";
+    $("#studio-mode-label").textContent = selectedMode === "assist" ? "DESIGN IT FOR ME" : selectedMode === "customize" ? "CUSTOMIZE IT" : "NOT CHOSEN";
+  }
+
+  function setStudioMode(mode, doScroll = true) {
+    studioMode = mode;
+    bodyMode(mode);
+    if (mode === "assist") {
+      const customRadio = $('input[name="Design_Mode"][value="Custom design by Charles"]');
+      if (customRadio) customRadio.checked = true;
+    } else {
+      const normalRadio = $('input[name="Design_Mode"][value="Use selected design direction"]');
+      if (normalRadio) normalRadio.checked = true;
+    }
+    designModeChanged();
+    applyRecommendation();
+    showStep(1, doScroll);
+  }
+
+  $$("[data-studio-mode]").forEach(button => button.addEventListener("click", () => {
+    setStudioMode(button.dataset.studioMode, true);
+  }));
+
+  $("#change-studio-mode")?.addEventListener("click", () => {
+    studioMode = null;
+    bodyMode(false);
+    document.getElementById("start-mode")?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"
+    });
+  });
+
   function snapshot() {
     return {
+      studioMode,
       brand: $("#brand-name").value,
       industry: $("#industry").value,
       tagline: $("#tagline").value,
@@ -387,12 +426,20 @@
     $("#color-primary").value = state.primary;
     $("#color-accent").value = state.accent;
     $("#custom-design-note").hidden = true;
+    studioMode = null;
+    bodyMode(false);
     applyRecommendation();
     showStep(1, false);
+    document.getElementById("start-mode")?.scrollIntoView({ behavior: "smooth", block: "start" });
     try { localStorage.removeItem("icharles-website-studio-draft-v3"); } catch (_) {}
   });
 
   form.addEventListener("submit", e => {
+    if (!studioMode) {
+      e.preventDefault();
+      document.getElementById("start-mode")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     updateSummary();
     if (!form.checkValidity()) {
       e.preventDefault();
@@ -408,5 +455,6 @@
   applyRecommendation();
   designModeChanged();
   updatePreview();
+  bodyMode(false);
   showStep(1, false);
 })();

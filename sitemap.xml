@@ -4,16 +4,7 @@
     <loc>https://icharles.pages.dev/</loc>
   </url>
   <url>
-    <loc>https://icharles.pages.dev/projects/</loc>
-  </url>
-  <url>
-    <loc>https://icharles.pages.dev/lab/</loc>
-  </url>
-  <url>
-    <loc>https://icharles.pages.dev/about/</loc>
-  </url>
-  <url>
-    <loc>https://icharles.pages.dev/contact/</loc>
+    <loc>https://icharles.pages.dev/try/</loc>
   </url>
   <url>
     <loc>https://icharles.pages.dev/portfolio/</loc>
@@ -31,9 +22,15 @@
     <loc>https://icharles.pages.dev/portfolio/projects/ette-planner.html</loc>
   </url>
   <url>
-    <loc>https://icharles.pages.dev/try/</loc>
+    <loc>https://icharles.pages.dev/website-studio/</loc>
   </url>
   <url>
-    <loc>https://icharles.pages.dev/website-studio/</loc>
+    <loc>https://icharles.pages.dev/about/</loc>
+  </url>
+  <url>
+    <loc>https://icharles.pages.dev/contact/</loc>
+  </url>
+  <url>
+    <loc>https://icharles.pages.dev/privacy/</loc>
   </url>
 </urlset>

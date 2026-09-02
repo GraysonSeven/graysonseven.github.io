@@ -5,10 +5,12 @@
   <meta name="author" content="Charles Lioc"><meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="description" content="Build a simple visual website brief with Charles Lioc. Choose what you need, pick a look, preview it live and send a free request.">
   <meta property="og:type" content="website"><meta property="og:title" content="Website Studio — Charles Lioc"><meta property="og:description" content="Choose what you need, see a live concept and send a free website request in a few guided steps."><meta property="og:image" content="https://icharles.pages.dev/assets/charles-lioc-og.png"><meta property="og:url" content="https://icharles.pages.dev/website-studio/">
-  <link rel="canonical" href="https://icharles.pages.dev/website-studio/"><link rel="icon" href="../assets/charles-lioc-logo-locked.svg" type="image/svg+xml"><link rel="manifest" href="../site.webmanifest">
+  <link rel="canonical" href="https://icharles.pages.dev/website-studio/"><link rel="icon" href="/assets/charles-lioc-og.png" type="image/png"><link rel="manifest" href="../site.webmanifest">
   <title>Website Studio — Charles Lioc</title>
   <link rel="stylesheet" href="../subpages.css"><link rel="stylesheet" href="../experience.css?v=5"><link rel="stylesheet" href="studio.css?v=3">
   <script src="../experience.js?v=5" defer></script><script src="studio.js?v=3" defer></script>
+  <link rel="stylesheet" href="/v4.css?v=4">
+  <script src="/v4.js?v=4" defer></script>
 </head>
 <body class="studio-body">
   <div class="shell studio-shell">
@@ -23,27 +25,59 @@
         <div class="studio-intro-copy">
           <span class="studio-live"><i></i> WEBSITE CLIENTS ARE OPEN</span>
           <h1>SHOW ME WHAT<br><em>YOU WANT.</em></h1>
-          <p>You don't need to understand web design. Answer a few simple questions, click the styles you like, and watch the sample change. Sending the request is free.</p>
-          <div class="intro-actions"><a href="#builder" class="studio-primary">START — ABOUT 3 MINUTES <b>↓</b></a><a href="#simple-process" class="studio-secondary">SEE HOW IT WORKS</a></div>
+          <p>You don't need to understand web design. Start the easy way and let me choose the design, or customize the look yourself. You can watch a live sample change before sending anything. The request is free.</p>
+          <div class="intro-actions"><a href="#start-mode" class="studio-primary">START — PICK THE EASY WAY <b>↓</b></a><a href="#simple-process" class="studio-secondary">SEE HOW IT WORKS</a></div>
         </div>
         <div class="studio-intro-map" id="simple-process">
           <article><b>1</b><div><strong>TELL ME WHAT YOU NEED</strong><span>Business site, portfolio, landing page, redesign and more.</span></div></article>
-          <article><b>2</b><div><strong>PICK WHAT LOOKS GOOD</strong><span>No design vocabulary. Just click the options you prefer.</span></div></article>
+          <article><b>2</b><div><strong>LET ME DESIGN IT — OR CUSTOMIZE</strong><span>Choose the easy path or control the visual direction yourself.</span></div></article>
           <article><b>3</b><div><strong>SEND THE FREE REQUEST</strong><span>I receive your choices and reply directly.</span></div></article>
           <small>NO ACCOUNT · NO PAYMENT · NO COMMITMENT TO BUY</small>
         </div>
+      </section>
+
+      <section class="studio-mode-gate" id="start-mode" aria-labelledby="studio-mode-title">
+        <div class="studio-mode-head">
+          <span>START HERE // TWO EASY OPTIONS</span>
+          <h2 id="studio-mode-title">HOW MUCH DO YOU WANT<br>TO THINK ABOUT THE DESIGN?</h2>
+          <p>You do not need to know themes, fonts or layouts. I can choose the direction for you, or you can customize it yourself. Either option can still result in a custom design.</p>
+        </div>
+        <div class="studio-mode-options">
+          <button type="button" class="studio-mode-option recommended" data-studio-mode="assist">
+            <span class="mode-badge">★ RECOMMENDED · EASIEST</span>
+            <strong>DESIGN IT FOR ME.</strong>
+            <p>Tell me what the website is for and what your business does. I choose a suitable visual direction and sensible starter pages. You can still change the content before sending.</p>
+            <b class="free-design">CUSTOM DESIGN DIRECTION · NO EXTRA DESIGN FEE</b>
+            <span>USE THE EASY MODE →</span>
+          </button>
+          <button type="button" class="studio-mode-option" data-studio-mode="customize">
+            <span class="mode-badge">FULL VISUAL CONTROL</span>
+            <strong>I WANT TO CUSTOMIZE IT.</strong>
+            <p>Choose the theme, page layout, color palette, font feel, text size and motion. The live sample changes as you click.</p>
+            <b class="free-design">CUSTOM DESIGN REQUEST IS STILL AVAILABLE · NO EXTRA DESIGN FEE</b>
+            <span>OPEN THE DESIGN CHOICES →</span>
+          </button>
+        </div>
+        <div class="studio-sales-flow" aria-label="What happens after a website request">
+          <div><b>01</b><strong>FREE REQUEST</strong><span>Tell me what you need. No account or payment.</span></div>
+          <div><b>02</b><strong>I REVIEW</strong><span>I check the scope and reply directly.</span></div>
+          <div><b>03</b><strong>PRIVATE PREVIEW</strong><span>If we proceed, you see the real working direction.</span></div>
+          <div><b>04</b><strong>AGREE PRICE</strong><span>Scope and price are clear before payment.</span></div>
+          <div><b>05</b><strong>PAY + LAUNCH</strong><span>After approval and payment, I release the finished site.</span></div>
+        </div>
+        <div class="studio-sales-flow-note"><b>YOU STAY IN CONTROL.</b> Sending a request does not commit you to buying a website.</div>
       </section>
 
       <section class="wizard-shell" id="builder">
         <div class="wizard-topbar">
           <div><span>YOUR WEBSITE REQUEST</span><strong id="progress-title">1 OF 5 — WHAT DO YOU NEED?</strong></div>
           <div class="wizard-progress" aria-label="Website request progress"><i id="progress-fill"></i></div>
-          <button type="button" id="reset-studio" class="text-button">RESET</button>
+          <div class="studio-mode-status"><span>MODE:</span><b id="studio-mode-label">NOT CHOSEN</b><button type="button" class="v4-change-mode" id="change-studio-mode">CHANGE</button></div><button type="button" id="reset-studio" class="text-button">RESET</button>
         </div>
 
         <form id="website-request-form" class="website-wizard" action="https://formsubmit.co/icharles.development@gmail.com" method="POST">
           <input type="hidden" name="_subject" value="NEW WEBSITE REQUEST — iCharles Website Studio"><input type="hidden" name="_template" value="table"><input type="hidden" name="_next" id="form-next" value="https://icharles.pages.dev/website-request-sent/"><input type="hidden" name="_url" value="https://icharles.pages.dev/website-studio/"><input type="hidden" name="_autoresponse" value="Thanks for sending your website request to Charles Lioc. Charles will review your choices and reply directly. Sending this request is free and does not commit you to a purchase."><input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off">
-          <input type="hidden" name="Request_ID" id="request-id"><input type="hidden" name="Design_Summary" id="design-summary"><input type="hidden" name="Palette" id="palette-name" value="Cyber Cyan"><input type="hidden" name="Primary_Color" id="primary-color-hidden" value="#00F0FF"><input type="hidden" name="Accent_Color" id="accent-color-hidden" value="#8B5CFF"><input type="hidden" name="Background_Color" id="background-color-hidden" value="#070A10">
+          <input type="hidden" name="Studio_Mode" id="studio-mode-hidden" value=""><input type="hidden" name="Request_ID" id="request-id"><input type="hidden" name="Design_Summary" id="design-summary"><input type="hidden" name="Palette" id="palette-name" value="Cyber Cyan"><input type="hidden" name="Primary_Color" id="primary-color-hidden" value="#00F0FF"><input type="hidden" name="Accent_Color" id="accent-color-hidden" value="#8B5CFF"><input type="hidden" name="Background_Color" id="background-color-hidden" value="#070A10">
 
           <div class="wizard-main">
             <div class="wizard-steps">
@@ -72,7 +106,7 @@
                 <div class="step-heading">
                   <span>STEP 3</span>
                   <h2>CHOOSE A DESIGN DIRECTION.</h2>
-                  <p>You are not locking the final website. Pick what feels closest, or ask me to create a custom direction for you.</p>
+                  <p>You are not locking the final website. Pick what feels closest, use “Choose for me,” or request a custom direction at no extra design fee.</p>
                 </div>
 
                 <div class="design-mode-grid">
@@ -136,7 +170,7 @@
               </section>
 
               <section class="wizard-step" data-step="4">
-                <div class="step-heading"><span>STEP 4</span><h2>WHAT SHOULD THE WEBSITE INCLUDE?</h2><p>I've already selected a sensible starter set. Change anything you want.</p></div>
+                <div class="step-heading"><span>STEP 4</span><h2>WHAT SHOULD THE WEBSITE INCLUDE?</h2><p>I've already selected a sensible starter set. If you chose “Design it for me,” you can simply keep these recommendations and continue.</p></div>
                 <div class="recommended-note"><i>✓</i><div><strong>STARTER SET SELECTED</strong><span id="recommendation-text">Home, Services and Contact are a good start for most business websites.</span></div></div>
                 <div class="include-block"><strong>PAGES / SECTIONS</strong><div class="check-grid" id="pages-grid">
                   <label><input type="checkbox" name="Pages[]" value="Home" checked><span>HOME<small>First impression</small></span></label><label><input type="checkbox" name="Pages[]" value="About"><span>ABOUT<small>Your story</small></span></label><label><input type="checkbox" name="Pages[]" value="Services" checked><span>SERVICES<small>What you offer</small></span></label><label><input type="checkbox" name="Pages[]" value="Portfolio / Work"><span>WORK<small>Projects or results</small></span></label><label><input type="checkbox" name="Pages[]" value="Gallery"><span>GALLERY<small>Photos or visuals</small></span></label><label><input type="checkbox" name="Pages[]" value="Testimonials"><span>REVIEWS<small>Social proof</small></span></label><label><input type="checkbox" name="Pages[]" value="FAQ"><span>FAQ<small>Common questions</small></span></label><label><input type="checkbox" name="Pages[]" value="Contact" checked><span>CONTACT<small>Easy next step</small></span></label>
@@ -154,6 +188,7 @@
                   <input type="hidden" name="Existing_Website" value=""><input type="hidden" name="Inspiration_URL" value=""><input type="hidden" name="Budget" value="">
                 </div>
                 <div class="no-payment"><strong>FREE TO REQUEST.</strong><span>I review the project first. If we both want to proceed, we agree on scope and price before payment.</span></div>
+                <div class="studio-v4-privacy">Your contact details and project information are used only to respond to your request and work on the project if you choose to proceed. <a href="../privacy/" target="_blank" rel="noopener">Read the simple privacy notice ↗</a></div>
               </section>
             </div>
 

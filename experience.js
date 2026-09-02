@@ -22,7 +22,7 @@
   body.append(pointerLight);
 
   // ---------- One short boot sequence per tab session ----------
-  const bootKey = "cl-immersive-boot-v1";
+  const bootKey = "cl-immersive-boot-v3";
   let showBoot = false;
   try {
     showBoot = !sessionStorage.getItem(bootKey) && !reduceMotion;
@@ -218,6 +218,9 @@
       <span>BUILD WHAT SHOULD EXIST</span><b>◆</b>
       <span>SOFTWARE + SYSTEMS</span><b>◆</b>
       <span>ANDROID + WEB</span><b>◆</b>
+      <span>WEBSITE CLIENTS OPEN</span><b>◆</b>
+      <span>DESIGN YOUR SITE LIVE</span><b>◆</b>
+      <span>CUSTOM WEBSITES + PORTFOLIOS</span><b>◆</b>
       <span>LOCAL-FIRST THINKING</span><b>◆</b>
       <span>REAL WORKFLOWS</span><b>◆</b>
       <span>BUILD // TEST // IMPROVE</span><b>◆</b>`;
@@ -256,7 +259,7 @@
   // ---------- Card spotlight + subtle 3D tilt ----------
   const cardSelectors = [
     ".featured-card", ".shell .card", ".project-tab", ".discipline-card", ".principle-card",
-    ".capability-row", ".contact-terminal", ".terminal", ".signal-card", ".capability-tile"
+    ".capability-row", ".contact-terminal", ".terminal", ".signal-card", ".capability-tile", ".client-service-card", ".client-project-cta"
   ].join(",");
   const cards = qsa(cardSelectors);
   cards.forEach(card => {
@@ -277,7 +280,7 @@
         const y = clamp((e.clientY - r.top) / r.height, 0, 1);
         card.style.setProperty("--fx-card-x", `${x * 100}%`);
         card.style.setProperty("--fx-card-y", `${y * 100}%`);
-        const maxTilt = card.matches(".featured-card,.shell .card,.signal-card,.capability-tile") ? 2.2 : 1.2;
+        const maxTilt = card.matches(".featured-card,.shell .card,.signal-card,.capability-tile,.client-service-card") ? 2.2 : 1.2;
         const ry = (x - .5) * maxTilt * 2;
         const rx = (.5 - y) * maxTilt * 2;
         card.style.transform = `perspective(1100px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`;
@@ -292,7 +295,7 @@
 
   // ---------- Magnetic controls ----------
   if (finePointer && !reduceMotion) {
-    qsa(".primary-btn,.secondary-btn,.btn,.portfolio-bridge,.closing-link,.back-top,.fx-command-trigger").forEach(el => {
+    qsa(".primary-btn,.secondary-btn,.btn,.portfolio-bridge,.closing-link,.back-top,.fx-command-trigger,.client-availability,.fx-client-badge").forEach(el => {
       el.addEventListener("pointermove", e => {
         const r = el.getBoundingClientRect();
         const x = (e.clientX - (r.left + r.width / 2)) / r.width;
@@ -306,7 +309,7 @@
   // ---------- Click pulse ----------
   if (!reduceMotion) {
     document.addEventListener("pointerdown", e => {
-      if (!e.target.closest("a,button,.card,.featured-card,.project-tab,.method-step")) return;
+      if (!e.target.closest("a,button,.card,.featured-card,.project-tab,.method-step,.client-service-card")) return;
       const ripple = document.createElement("i");
       ripple.className = "fx-ripple";
       ripple.style.left = `${e.clientX}px`;
@@ -443,6 +446,16 @@
     line?.append(copy);
   }
 
+  // ---------- Website client availability badge ----------
+  if (!document.querySelector(".fx-client-badge")) {
+    const clientBadge = document.createElement("a");
+    clientBadge.className = "fx-client-badge";
+    clientBadge.href = "/website-studio/";
+    clientBadge.setAttribute("aria-label", "Website clients open — design your website in the Website Studio");
+    clientBadge.innerHTML = `<i></i><span><small>WEBSITE STUDIO</small><strong>START HERE</strong></span><b>↗</b>`;
+    body.append(clientBadge);
+  }
+
   // ---------- Command palette ----------
   const trigger = document.createElement("button");
   trigger.type = "button";
@@ -461,14 +474,16 @@
     ["03", "LAB", `${base}/lab/`, "EXPERIMENTS + WORK IN PROGRESS"],
     ["04", "ABOUT", `${base}/about/`, "IDENTITY + BUILD PHILOSOPHY"],
     ["05", "PORTFOLIO", `${base}/portfolio/`, "PROFESSIONAL CASE STUDIES"],
-    ["06", "CONTACT", `${base}/contact/`, "PUBLIC CONNECTION CHANNEL"],
+    ["06", "WEBSITE STUDIO", `${base}/website-studio/`, "DESIGN YOUR SITE LIVE // FREE TO START"],
+    ["07", "WEBSITE SERVICES", `${base}/#websites`, "CUSTOM WEBSITES // CLIENTS OPEN"],
+    ["08", "CONTACT", `${base}/contact/#website-projects`, "DIRECT CONTACT + PROJECT QUESTIONS"],
   ];
   palette.innerHTML = `
     <div class="fx-command-box" role="dialog" aria-modal="true" aria-label="Quick navigation">
       <div class="fx-command-top"><span>CL://COMMAND CENTER</span><b>ONLINE</b></div>
       <div class="fx-command-list">
         ${navItems.map(([n,label,href,desc]) => `<a href="${href}"><span>${n}</span><span>${label}</span><em>${desc}</em></a>`).join("")}
-        <button type="button" data-copy-email><span>07</span><span>COPY EMAIL</span><em>ICHARLES.DEVELOPMENT@GMAIL.COM</em></button>
+        <button type="button" data-copy-email><span>09</span><span>COPY EMAIL</span><em>ICHARLES.DEVELOPMENT@GMAIL.COM</em></button>
       </div>
       <div class="fx-command-foot"><span>ENTER TO OPEN</span><span>ESC TO CLOSE</span></div>
     </div>`;

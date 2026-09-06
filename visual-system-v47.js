@@ -1,7 +1,7 @@
 (() => {
   "use strict";
-  if (document.documentElement.dataset.v461NavReady === "1") return;
-  document.documentElement.dataset.v461NavReady = "1";
+  if (document.documentElement.dataset.v47VisualReady === "1") return;
+  document.documentElement.dataset.v47VisualReady = "1";
 
   const clean = value => {
     const p = (value || "/").replace(/\/+$/, "");
@@ -25,7 +25,7 @@
     return currentPath === target || currentPath.startsWith(target + "/");
   };
 
-  const refresh = () => {
+  const synchronizeNavigation = () => {
     document.querySelectorAll(
       '.v4-unified-nav a[href], .v423-panel-nav a[href], .v4-unified-footer nav a[href]'
     ).forEach(link => {
@@ -37,7 +37,15 @@
     });
   };
 
-  refresh();
-  requestAnimationFrame(refresh);
-  setTimeout(refresh, 120);
+  synchronizeNavigation();
+  requestAnimationFrame(synchronizeNavigation);
+  setTimeout(synchronizeNavigation, 120);
+
+  // Make external app-launch buttons self-describing without changing their destinations.
+  document.querySelectorAll(".live-open[target='_blank'], .launch-card[target='_blank']").forEach(link => {
+    if (!link.getAttribute("aria-label")) {
+      const label = (link.textContent || "Open web app").replace(/\s+/g, " ").trim();
+      link.setAttribute("aria-label", `${label} — opens in a new tab`);
+    }
+  });
 })();

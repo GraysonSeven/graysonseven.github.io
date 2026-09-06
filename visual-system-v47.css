@@ -1,0 +1,609 @@
+/* iCHARLES V4.7 — COMPLETE VISUAL QA / FINAL POLISH LAYER
+   One authoritative visual layer replacing the temporary V4.6.1–V4.6.4 fixes.
+
+   Design rules:
+   1) Cyan is an accent, not a large background.
+   2) Important text must remain readable before decoration.
+   3) Only one current-page navigation state exists.
+   4) Header content may never overlap; horizontal nav yields to the slide panel.
+   5) Decorative HUD text can stay small, functional text cannot.
+*/
+
+:root{
+  --v47-bg:#05070b;
+  --v47-surface:#07101a;
+  --v47-surface-2:#0a1420;
+  --v47-surface-3:#0c1826;
+  --v47-text:#f5f9ff;
+  --v47-copy:#c3cfde;
+  --v47-muted:#a5b5c8;
+  --v47-faint:#8295ac;
+  --v47-cyan:#00d6e8;
+  --v47-cyan-soft:#91edf5;
+  --v47-violet:#8b5cff;
+  --v47-pink:#ff2bd6;
+  --v47-green:#68f7ae;
+  --v47-line:rgba(142,177,220,.28);
+  --v47-line-strong:rgba(0,214,232,.42);
+  --v47-shadow:0 18px 52px rgba(0,0,0,.28);
+}
+
+/* ---------- BASE READABILITY ---------- */
+html{background:var(--v47-bg)}
+body{
+  color:var(--v47-text)!important;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+body p{color:var(--v47-copy)}
+body p strong{color:#f7fbff}
+::selection{background:rgba(0,214,232,.28)!important;color:#fff!important}
+
+.hero-lead,
+.clarity-section-head>p,
+.clarity-service-card p,
+.clarity-work-card p,
+.showroom-copy p,
+.web-cta-copy>p,
+.v4-proof-intro p,
+.v4-proof-bottom p,
+.v45-value-head p,
+.v45-value-card p,
+.v45-section-head p,
+.v45-service-copy p,
+.v45-process p,
+.v45-evidence p,
+.v45-faq details p,
+.v45-start-card p,
+.v45-project-strip p,
+.try-hero p,
+.live-app-note span,
+.live-library-head p,
+.live-app-identity p,
+.portfolio-clarity-note,
+.portfolio-launch-head>p,
+.section-head>p,
+.disciplines-head>p,
+.discipline-copy p,
+.story p,
+.principle p,
+.contact-copy p,
+.contact-note,
+.v45-contact-path p,
+.studio-intro-copy>p,
+.studio-mode-head p,
+.studio-intro-map span,
+.step-heading p,
+.simple-fields small,
+.choice-title>span,
+.recommended-note span,
+.request-summary p,
+.no-payment span{
+  color:var(--v47-copy)!important;
+  opacity:1!important;
+}
+
+.clarity-status,
+.clarity-section-head>div>span,
+.clarity-pill,
+.v4-proof-intro>div>span,
+.v45-kicker,
+.try-kicker,
+.live-library-head>div>span,
+.live-app-identity small,
+.portfolio-launch-head>div>span,
+.section-index,
+.kicker,
+.studio-live,
+.step-heading>span{
+  color:var(--v47-cyan-soft)!important;
+  opacity:1!important;
+}
+
+/* Raise low-priority functional labels without flattening decorative HUD text. */
+.clarity-proof span,
+.v4-proof-bottom small,
+.v4-proof-bottom b,
+.live-app-facts small,
+.live-app-facts b,
+.live-app-note b,
+.v45-proof-line span,
+.v45-proof-line strong,
+.v45-get>strong,
+.v45-get li,
+.v45-process b,
+.v45-process strong,
+.v45-evidence small,
+.v45-evidence em,
+.v45-start-card span,
+.v45-project-strip small,
+.v45-project-strip strong,
+.simple-fields label>span,
+.advanced-style summary,
+.optional-features summary,
+.check-grid span,
+.request-summary span,
+.contact-services span,
+.terminal-top,
+.terminal-foot,
+.terminal-line small,
+.terminal-line strong{
+  opacity:1!important;
+}
+
+/* ---------- PANELS: DARKER BACKPLATES FOR TEXT ---------- */
+.clarity-proof a,
+.clarity-service-card,
+.clarity-work-card,
+.v4-product-window,
+.v4-proof-bottom article,
+.v45-value-card,
+.v45-service,
+.v45-evidence a,
+.v45-start-card,
+.v45-faq details,
+.live-app-card,
+.launch-card,
+.discipline-panel,
+.project-tab,
+.principle,
+.contact-terminal,
+.v45-contact-path,
+.studio-intro-map,
+.wizard-shell,
+.type-choice-grid label,
+.theme-choice-grid label,
+.advanced-style,
+.optional-features,
+.request-summary{
+  background-color:rgba(6,12,20,.88)!important;
+  border-color:var(--v47-line)!important;
+}
+
+/* ---------- PRIMARY CTA SYSTEM ----------
+   No large bright cyan/sky-blue fills anywhere.
+*/
+.primary-btn,
+.clarity-primary,
+.btn-primary,
+.portfolio-try-btn,
+.try-primary,
+.try-hire,
+.live-open,
+.studio-primary,
+button.wizard-next,
+button.wizard-submit,
+.full-preview,
+.v45-button.primary,
+input[type="submit"]{
+  background:
+    linear-gradient(135deg,
+      rgba(6,16,25,.98) 0%,
+      rgba(8,31,44,.98) 48%,
+      rgba(31,17,62,.98) 100%)!important;
+  border:1px solid var(--v47-line-strong)!important;
+  color:var(--v47-text)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    inset 0 0 0 1px rgba(255,255,255,.018),
+    var(--v47-shadow)!important;
+  filter:none!important;
+}
+
+.primary-btn span,
+.clarity-primary span,
+.btn-primary span,
+.portfolio-try-btn span,
+.try-primary span,
+.live-open span,
+.studio-primary span,
+button.wizard-next span,
+button.wizard-submit span,
+.full-preview span,
+.v45-button.primary span{
+  color:#f8fcff!important;
+  opacity:1!important;
+  -webkit-text-stroke:.16px rgba(0,0,0,.72);
+  text-shadow:0 1px 1px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.42)!important;
+}
+
+.primary-btn small,
+.clarity-primary small,
+.btn-primary small,
+.portfolio-try-btn small,
+.live-open small,
+.studio-primary small,
+.v45-button.primary small{
+  color:#b6dce7!important;
+  opacity:1!important;
+  -webkit-text-stroke:.12px rgba(0,0,0,.62);
+  text-shadow:0 1px 1px rgba(0,0,0,.9)!important;
+}
+
+.primary-btn b,
+.clarity-primary b,
+.btn-primary strong,
+.portfolio-try-btn strong,
+.try-primary b,
+.try-hire b,
+.live-open b,
+.studio-primary b,
+button.wizard-next b,
+button.wizard-submit b,
+.v45-button.primary b{
+  color:var(--v47-cyan-soft)!important;
+  opacity:1!important;
+  text-shadow:0 0 12px rgba(0,214,232,.22)!important;
+}
+
+.primary-btn:hover,
+.clarity-primary:hover,
+.btn-primary:hover,
+.portfolio-try-btn:hover,
+.try-primary:hover,
+.try-hire:hover,
+.live-open:hover,
+.studio-primary:hover,
+button.wizard-next:hover,
+button.wizard-submit:hover,
+.full-preview:hover,
+.v45-button.primary:hover,
+input[type="submit"]:hover{
+  background:
+    linear-gradient(135deg,
+      rgba(8,20,31,.99) 0%,
+      rgba(10,40,55,.99) 48%,
+      rgba(39,21,77,.99) 100%)!important;
+  border-color:rgba(0,214,232,.62)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 20px 52px rgba(0,0,0,.34),
+    0 0 28px rgba(0,214,232,.08)!important;
+  filter:none!important;
+}
+
+/* Secondary actions remain dark, with clear white text. */
+.secondary-btn,
+.clarity-secondary-strong,
+.btn-ghost,
+.try-secondary,
+.studio-secondary,
+.live-case,
+.v45-button:not(.primary),
+.v4-contact-actions a,
+.v45-project-strip a{
+  background:rgba(6,11,19,.88)!important;
+  border-color:rgba(142,177,220,.28)!important;
+  color:#edf6ff!important;
+}
+
+.secondary-btn span,
+.clarity-secondary-strong span,
+.btn-ghost span,
+.try-secondary,
+.studio-secondary,
+.live-case,
+.v45-button:not(.primary) span,
+.v4-contact-actions a,
+.v45-project-strip a{
+  color:#edf6ff!important;
+  opacity:1!important;
+}
+
+/* Portfolio launch tiles: make the bottom action look like a real button,
+   but keep it dark and high contrast. */
+.launch-card b{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  min-height:48px!important;
+  margin-top:auto!important;
+  padding:0 14px!important;
+  border:1px solid rgba(0,214,232,.32)!important;
+  background:linear-gradient(90deg,rgba(5,17,26,.96),rgba(17,18,42,.96))!important;
+  color:#f1fbff!important;
+  font-size:11.5px!important;
+  line-height:1.3!important;
+  letter-spacing:.035em!important;
+  -webkit-text-stroke:.14px rgba(0,0,0,.7);
+  text-shadow:0 1px 1px rgba(0,0,0,.95)!important;
+}
+
+/* Decorative mock buttons should not introduce giant sky-blue islands either. */
+.mini-button,
+.checkout-button{
+  background:rgba(6,20,29,.94)!important;
+  color:#f3fbff!important;
+  border:1px solid rgba(0,214,232,.34)!important;
+  text-shadow:0 1px 1px rgba(0,0,0,.9)!important;
+}
+
+/* ---------- HEADER: COLLISION-PROOF ---------- */
+.site-header,
+.try-header,
+.studio-header,
+.shell>header{
+  display:grid!important;
+  grid-template-columns:minmax(230px,280px) minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:24px!important;
+  min-width:0!important;
+}
+
+/* Retire older per-page toggles; the V4.2.3 MENU panel is canonical. */
+.site-header>.menu-toggle,
+.site-header>.nav-toggle,
+.try-header>.menu-toggle,
+.try-header>.nav-toggle,
+.studio-header>.menu-toggle,
+.studio-header>.nav-toggle,
+.shell>header>.menu-toggle,
+.shell>header>.nav-toggle,
+.v4-mobile-menu{
+  display:none!important;
+}
+
+.site-header>.v423-header-left,
+.try-header>.v423-header-left,
+.studio-header>.v423-header-left,
+.shell>header>.v423-header-left{
+  grid-column:1!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:14px!important;
+  min-width:0!important;
+  overflow:visible!important;
+}
+
+.v423-header-left .brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:11px!important;
+  width:auto!important;
+  max-width:none!important;
+  min-width:0!important;
+  overflow:visible!important;
+  justify-self:start!important;
+}
+
+.v423-header-left .brand img,
+.v423-header-left .brand-logo{
+  flex:0 0 48px!important;
+  width:48px!important;
+  height:48px!important;
+  object-fit:contain!important;
+}
+
+.v423-header-left .brand>div{
+  min-width:0!important;
+  width:auto!important;
+}
+
+.v423-header-left .brand strong,
+.v423-header-left .brand-wordmark{
+  display:block!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  font-size:13.5px!important;
+  line-height:1.05!important;
+  letter-spacing:.045em!important;
+}
+
+.v423-header-left .brand small{
+  display:none!important;
+}
+
+/* Low-value status chips are removed from the crowded top bar. */
+.site-header>.header-node,
+.site-header>.header-status,
+.try-header>.header-node,
+.try-header>.header-status,
+.try-header>.try-hire,
+.studio-header>.header-node,
+.studio-header>.header-status,
+.studio-header>.studio-header-help,
+.shell>header>.header-node,
+.shell>header>.header-status{
+  display:none!important;
+}
+
+.site-header>.v4-unified-nav,
+.try-header>.v4-unified-nav,
+.studio-header>.v4-unified-nav,
+.shell>header>.v4-unified-nav{
+  grid-column:2!important;
+  min-width:0!important;
+  justify-self:end!important;
+  justify-content:flex-end!important;
+  flex-wrap:nowrap!important;
+  overflow:visible!important;
+  gap:clamp(8px,1.15vw,20px)!important;
+}
+
+/* ---------- ONE CURRENT-PAGE NAV STATE ---------- */
+.v4-unified-nav a,
+.v4-unified-nav .v4-nav-studio,
+.v4-unified-nav .v45-nav-services{
+  min-height:44px!important;
+  padding:0 10px!important;
+  border:1px solid transparent!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#aebccd!important;
+  border-radius:0!important;
+  white-space:nowrap!important;
+}
+
+.v4-unified-nav a::after,
+.v4-unified-nav .v4-nav-studio::after,
+.v4-unified-nav .v45-nav-services::after{
+  display:none!important;
+}
+
+.v4-unified-nav a:hover,
+.v4-unified-nav a:focus-visible{
+  color:#f5faff!important;
+  background:rgba(142,177,220,.045)!important;
+  border-color:rgba(142,177,220,.18)!important;
+  transform:none!important;
+}
+
+.v4-unified-nav a[aria-current="page"]{
+  color:#f8fdff!important;
+  background:linear-gradient(90deg,rgba(0,214,232,.08),rgba(139,92,255,.055))!important;
+  border-color:rgba(0,214,232,.42)!important;
+  box-shadow:inset 3px 0 0 rgba(0,214,232,.72)!important;
+  transform:none!important;
+}
+
+.v4-unified-nav .v4-nav-studio:not([aria-current="page"]){
+  color:#b8c5d5!important;
+}
+
+/* Slide panel uses the same logic, with one left rail only on current page. */
+.v423-panel{
+  background:rgba(5,9,15,.985)!important;
+  border-right-color:rgba(0,214,232,.20)!important;
+}
+
+.v423-panel-nav a,
+.v423-panel-nav .v423-panel-primary,
+.v423-panel-nav .v45-panel-services{
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+
+.v423-panel-nav a strong{color:#e5edf7!important}
+.v423-panel-nav a small{color:#9fb0c3!important;opacity:1!important}
+
+.v423-panel-nav a[aria-current="page"]{
+  background:linear-gradient(90deg,rgba(0,214,232,.085),rgba(139,92,255,.035),transparent)!important;
+  border-color:rgba(0,214,232,.23)!important;
+  box-shadow:inset 3px 0 0 rgba(0,214,232,.72)!important;
+}
+
+.v423-panel-nav a[aria-current="page"] strong{color:#f7fdff!important}
+.v423-panel-nav a[aria-current="page"]>b{color:var(--v47-cyan-soft)!important}
+
+/* Footer current page is intentionally quiet. */
+.v4-unified-footer{
+  color:#a9b7c8!important;
+}
+.v4-unified-footer a{color:#aebccd!important}
+.v4-unified-footer a:hover{color:#f5fbff!important}
+.v4-unified-footer nav a[aria-current="page"]{
+  color:#eafcff!important;
+  text-decoration:none!important;
+}
+
+/* ---------- SERVICES: REMOVE DEFENSIVE VISUAL LANGUAGE ---------- */
+.v45-hero-proof::before{
+  content:"PROOF // VERIFIABLE WORK"!important;
+  color:#91a5bb!important;
+}
+
+/* ---------- FOCUS / CLICK CLARITY ---------- */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:2px solid var(--v47-cyan)!important;
+  outline-offset:3px!important;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+/* Seven top-nav items need real room. Below this width, the slide panel wins. */
+@media(max-width:1279px){
+  .site-header,
+  .try-header,
+  .studio-header,
+  .shell>header{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+
+  .site-header>.v4-unified-nav,
+  .try-header>.v4-unified-nav,
+  .studio-header>.v4-unified-nav,
+  .shell>header>.v4-unified-nav{
+    display:none!important;
+  }
+
+  .v423-header-left .brand strong,
+  .v423-header-left .brand-wordmark{
+    font-size:13px!important;
+  }
+}
+
+/* On genuinely wide screens, one short brand descriptor can return. */
+@media(min-width:1500px){
+  .v423-header-left .brand small{
+    display:block!important;
+    margin-top:3px!important;
+    color:#91a2b7!important;
+    font-size:10.5px!important;
+    line-height:1.25!important;
+    letter-spacing:.04em!important;
+    white-space:nowrap!important;
+  }
+}
+
+@media(max-width:720px){
+  .site-header,
+  .try-header,
+  .studio-header,
+  .shell>header{
+    min-height:72px!important;
+    height:auto!important;
+  }
+
+  .site-header>.v423-header-left,
+  .try-header>.v423-header-left,
+  .studio-header>.v423-header-left,
+  .shell>header>.v423-header-left{
+    gap:9px!important;
+  }
+
+  .v423-header-left .brand img,
+  .v423-header-left .brand-logo{
+    flex-basis:40px!important;
+    width:40px!important;
+    height:40px!important;
+  }
+
+  .v423-header-left .brand strong,
+  .v423-header-left .brand-wordmark{
+    font-size:12px!important;
+  }
+
+  .primary-btn,
+  .secondary-btn,
+  .btn,
+  .try-primary,
+  .try-secondary,
+  .live-open,
+  .live-case,
+  .studio-primary,
+  .studio-secondary,
+  .v45-button{
+    min-height:54px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .primary-btn,
+  .secondary-btn,
+  .btn,
+  .try-primary,
+  .try-secondary,
+  .live-open,
+  .live-case,
+  .v45-button,
+  .v4-unified-nav a{
+    transition:none!important;
+  }
+}

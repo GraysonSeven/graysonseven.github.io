@@ -237,29 +237,8 @@ for (const p of [
   }
 }
 
-if (!exists("nav-clarity-v461.css")) fail("V4.6.1 nav clarity CSS missing.");
-if (!exists("nav-clarity-v461.js")) fail("V4.6.1 nav clarity JavaScript missing.");
-
-for (const p of [
-  "index.html",
-  "services/index.html",
-  "try/index.html",
-  "portfolio/index.html",
-  "website-studio/index.html",
-  "about/index.html",
-  "contact/index.html"
-]) {
-  if (!exists(p)) continue;
-  const html = read(p);
-  if (!html.includes("/nav-clarity-v461.css?v=1")) {
-    fail(`V4.6.1 nav clarity stylesheet missing from ${p}`);
-  }
-  if (!html.includes("/nav-clarity-v461.js?v=1")) {
-    fail(`V4.6.1 nav clarity JavaScript missing from ${p}`);
-  }
-}
-
-if (!exists("header-overlap-v462.css")) fail("V4.6.2 header overlap CSS missing.");
+if (!exists("visual-system-v47.css")) fail("V4.7 visual system CSS missing.");
+if (!exists("visual-system-v47.js")) fail("V4.7 visual system JavaScript missing.");
 
 for (const p of [
   "index.html",
@@ -269,50 +248,16 @@ for (const p of [
   "website-studio/index.html",
   "about/index.html",
   "contact/index.html",
+  "privacy/index.html",
   "404.html"
 ]) {
   if (!exists(p)) continue;
   const html = read(p);
-  if (!html.includes("/header-overlap-v462.css?v=1")) {
-    fail(`V4.6.2 header overlap stylesheet missing from ${p}`);
+  if (!html.includes("/visual-system-v47.css?v=1")) {
+    fail(`V4.7 stylesheet missing from ${p}`);
   }
-}
-
-if (!exists("contrast-v463.css")) fail("V4.6.3 contrast CSS missing.");
-
-for (const p of [
-  "index.html",
-  "services/index.html",
-  "try/index.html",
-  "portfolio/index.html",
-  "website-studio/index.html",
-  "about/index.html",
-  "contact/index.html",
-  "404.html"
-]) {
-  if (!exists(p)) continue;
-  const html = read(p);
-  if (!html.includes("/contrast-v463.css?v=1")) {
-    fail(`V4.6.3 contrast stylesheet missing from ${p}`);
-  }
-}
-
-if (!exists("cta-rebalance-v464.css")) fail("V4.6.4 CTA color rebalance CSS missing.");
-
-for (const p of [
-  "index.html",
-  "services/index.html",
-  "try/index.html",
-  "portfolio/index.html",
-  "website-studio/index.html",
-  "about/index.html",
-  "contact/index.html",
-  "404.html"
-]) {
-  if (!exists(p)) continue;
-  const html = read(p);
-  if (!html.includes("/cta-rebalance-v464.css?v=1")) {
-    fail(`V4.6.4 CTA color rebalance stylesheet missing from ${p}`);
+  if (!html.includes("/visual-system-v47.js?v=1")) {
+    fail(`V4.7 JavaScript missing from ${p}`);
   }
 }
 if (failures.length) {

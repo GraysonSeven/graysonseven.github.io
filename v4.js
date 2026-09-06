@@ -10,6 +10,7 @@
     ["HOME", "/"],
     ["TRY APPS", "/try/"],
     ["WORK", "/portfolio/"],
+    ["SERVICES", "/services/"],
     ["WEBSITE STUDIO", "/website-studio/", "v4-nav-studio"],
     ["ABOUT", "/about/"],
     ["CONTACT", "/contact/"]
@@ -61,9 +62,9 @@
   footer.innerHTML = `
     <div class="v4-footer-brand"><i></i><span>© ${new Date().getFullYear()} CHARLES LIOC · SOFTWARE · WEBSITES · SYSTEMS</span></div>
     <nav aria-label="Footer navigation">
-      <a href="/try/">TRY APPS</a><a href="/portfolio/">WORK</a><a href="/website-studio/">GET A WEBSITE</a><a href="/contact/">CONTACT</a><a href="/privacy/">PRIVACY</a>
+      <a href="/try/">TRY APPS</a><a href="/portfolio/">WORK</a><a href="/services/">SERVICES</a><a href="/website-studio/">GET A WEBSITE</a><a href="/contact/">CONTACT</a><a href="/privacy/">PRIVACY</a>
     </nav>
-    <div class="v4-footer-note">THIS WEBSITE WAS DESIGNED AND BUILT BY CHARLES LIOC. WEBSITE PROJECT REQUESTS ARE CURRENTLY OPEN.</div>`;
+    <div class="v4-footer-note">THIS WEBSITE WAS DESIGNED AND BUILT BY CHARLES LIOC. PROJECT INQUIRIES ARE CURRENTLY OPEN.</div>`;
   const host = document.querySelector(".shell,.wrap") || body;
   host.append(footer);
 
@@ -231,14 +232,17 @@
       <a href="/portfolio/">
         <span>03</span><div><strong>WORK / PORTFOLIO</strong><small>Projects, systems and case studies</small></div><b>→</b>
       </a>
+      <a href="/services/">
+        <span>04</span><div><strong>SERVICES</strong><small>Websites, software and business systems</small></div><b>→</b>
+      </a>
       <a href="/website-studio/" class="v423-panel-primary">
-        <span>04</span><div><strong>BUILD MY WEBSITE</strong><small>Start a free project request</small></div><b>→</b>
+        <span>05</span><div><strong>BUILD MY WEBSITE</strong><small>Start a free project request</small></div><b>→</b>
       </a>
       <a href="/about/">
-        <span>05</span><div><strong>ABOUT</strong><small>How I think, build and solve problems</small></div><b>→</b>
+        <span>06</span><div><strong>ABOUT</strong><small>How I think, build and solve problems</small></div><b>→</b>
       </a>
       <a href="/contact/">
-        <span>06</span><div><strong>CONTACT</strong><small>Email, phone and Facebook</small></div><b>→</b>
+        <span>07</span><div><strong>CONTACT</strong><small>Email, phone and Facebook</small></div><b>→</b>
       </a>
     </nav>
 
@@ -256,7 +260,7 @@
     </div>
 
     <div class="v423-panel-foot">
-      <span><i></i> WEBSITE CLIENTS // OPEN</span>
+      <span><i></i> PROJECT INQUIRIES // OPEN</span>
       <kbd>CTRL K</kbd>
     </div>`;
 

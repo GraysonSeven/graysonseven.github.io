@@ -296,6 +296,25 @@ for (const p of [
     fail(`V4.6.3 contrast stylesheet missing from ${p}`);
   }
 }
+
+if (!exists("cta-rebalance-v464.css")) fail("V4.6.4 CTA color rebalance CSS missing.");
+
+for (const p of [
+  "index.html",
+  "services/index.html",
+  "try/index.html",
+  "portfolio/index.html",
+  "website-studio/index.html",
+  "about/index.html",
+  "contact/index.html",
+  "404.html"
+]) {
+  if (!exists(p)) continue;
+  const html = read(p);
+  if (!html.includes("/cta-rebalance-v464.css?v=1")) {
+    fail(`V4.6.4 CTA color rebalance stylesheet missing from ${p}`);
+  }
+}
 if (failures.length) {
   console.error("\nICHARLES SITE QA FAIL\n");
   for (const f of failures) console.error(`- ${f}`);

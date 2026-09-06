@@ -1,0 +1,144 @@
+/* iCHARLES V4.6.4 — CTA COLOR REBALANCE
+   Remove the bright sky-blue fill from primary CTAs.
+   Keep the cyberpunk feel, but make CTAs darker and easier to read. */
+
+/* Primary / filled CTA buttons: dark neon panel, not bright cyan. */
+.primary-btn,
+.clarity-primary,
+a.primary-btn,
+button.primary-btn,
+input[type="submit"],
+.v45-button.primary,
+.try-primary,
+.studio-primary,
+.wizard-next,
+.wizard-submit{
+  background:
+    linear-gradient(135deg,
+      rgba(5, 12, 20, 0.96) 0%,
+      rgba(7, 36, 52, 0.95) 42%,
+      rgba(32, 15, 70, 0.95) 100%) !important;
+  border:1px solid rgba(0,239,255,0.34)!important;
+  color:#f6fbff!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.035),
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 18px 44px rgba(0,0,0,.24)!important;
+  text-shadow:none!important;
+}
+
+/* Inner text for filled buttons */
+.primary-btn span,
+.clarity-primary span,
+a.primary-btn span,
+button.primary-btn span,
+.v45-button.primary span,
+.try-primary span,
+.studio-primary span,
+.wizard-next span,
+.wizard-submit span{
+  color:#f6fbff!important;
+  text-shadow:none!important;
+}
+
+.primary-btn b,
+.clarity-primary b,
+a.primary-btn b,
+button.primary-btn b,
+.v45-button.primary b,
+.try-primary b,
+.studio-primary b,
+.wizard-next b,
+.wizard-submit b{
+  color:#00efff!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+.primary-btn small,
+.clarity-primary small,
+a.primary-btn small,
+button.primary-btn small,
+.v45-button.primary small,
+.try-primary small,
+.studio-primary small,
+.wizard-next small,
+.wizard-submit small{
+  color:#92d9eb!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+/* Hover/focus should intensify edge glow, not brighten the whole fill. */
+.primary-btn:hover,
+.clarity-primary:hover,
+a.primary-btn:hover,
+button.primary-btn:hover,
+.v45-button.primary:hover,
+.try-primary:hover,
+.studio-primary:hover,
+.wizard-next:hover,
+.wizard-submit:hover{
+  background:
+    linear-gradient(135deg,
+      rgba(8, 16, 27, 0.98) 0%,
+      rgba(10, 45, 66, 0.97) 46%,
+      rgba(40, 19, 82, 0.97) 100%) !important;
+  border-color:rgba(0,239,255,0.54)!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.045),
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 0 0 1px rgba(0,239,255,0.10),
+    0 22px 50px rgba(0,0,0,.28)!important;
+  filter:none!important;
+}
+
+.primary-btn:focus-visible,
+.clarity-primary:focus-visible,
+a.primary-btn:focus-visible,
+button.primary-btn:focus-visible,
+.v45-button.primary:focus-visible,
+.try-primary:focus-visible,
+.studio-primary:focus-visible,
+.wizard-next:focus-visible,
+.wizard-submit:focus-visible{
+  outline:2px solid rgba(0,239,255,0.78)!important;
+  outline-offset:3px!important;
+}
+
+/* Some CTA blocks use generic first-action styling. Catch common containers too. */
+.hero-actions a:first-child,
+.cta-actions a:first-child,
+.action-row a:first-child,
+.button-row a:first-child{
+  background:
+    linear-gradient(135deg,
+      rgba(5, 12, 20, 0.96) 0%,
+      rgba(7, 36, 52, 0.95) 42%,
+      rgba(32, 15, 70, 0.95) 100%) !important;
+  border:1px solid rgba(0,239,255,0.34)!important;
+  color:#f6fbff!important;
+}
+
+/* Make sure the hero CTA specifically never falls back to sky-blue. */
+.clarity-hero .primary-btn,
+.hero .primary-btn,
+.clarity-cta .primary-btn{
+  background:
+    linear-gradient(135deg,
+      rgba(5, 12, 20, 0.96) 0%,
+      rgba(7, 36, 52, 0.95) 42%,
+      rgba(32, 15, 70, 0.95) 100%) !important;
+  color:#f6fbff!important;
+}
+
+/* The small caption under CTA must stay readable. */
+.hero-actions a small,
+.cta-actions a small,
+.action-row a small,
+.button-row a small{
+  color:#92d9eb!important;
+  opacity:1!important;
+}
+
+/* Do not alter the dark-outline secondary buttons here. */

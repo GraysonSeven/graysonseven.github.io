@@ -236,6 +236,28 @@ for (const p of [
     fail(`V4.6 readability stylesheet missing from ${p}`);
   }
 }
+
+if (!exists("nav-clarity-v461.css")) fail("V4.6.1 nav clarity CSS missing.");
+if (!exists("nav-clarity-v461.js")) fail("V4.6.1 nav clarity JavaScript missing.");
+
+for (const p of [
+  "index.html",
+  "services/index.html",
+  "try/index.html",
+  "portfolio/index.html",
+  "website-studio/index.html",
+  "about/index.html",
+  "contact/index.html"
+]) {
+  if (!exists(p)) continue;
+  const html = read(p);
+  if (!html.includes("/nav-clarity-v461.css?v=1")) {
+    fail(`V4.6.1 nav clarity stylesheet missing from ${p}`);
+  }
+  if (!html.includes("/nav-clarity-v461.js?v=1")) {
+    fail(`V4.6.1 nav clarity JavaScript missing from ${p}`);
+  }
+}
 if (failures.length) {
   console.error("\nICHARLES SITE QA FAIL\n");
   for (const f of failures) console.error(`- ${f}`);

@@ -1,0 +1,196 @@
+/* iCHARLES V4.6.2 — HEADER OVERLAP FIX
+   Fixes desktop header collisions between:
+   - menu button
+   - logo / wordmark
+   - top navigation
+   Strategy:
+   1) give the header a predictable grid
+   2) constrain the brand block
+   3) hide low-priority header microcopy on tighter desktop widths
+   4) collapse to slide-panel navigation earlier to avoid collisions */
+
+/* ---------- DESKTOP / LARGE TABLET ---------- */
+@media (min-width: 721px){
+
+  .site-header,
+  .v4-unified-header,
+  .try-header,
+  .studio-header{
+    display:grid!important;
+    grid-template-columns:auto minmax(150px,210px) minmax(0,1fr) auto!important;
+    align-items:center!important;
+    column-gap:18px!important;
+    row-gap:10px!important;
+  }
+
+  .site-header .brand,
+  .v4-unified-brand,
+  .brand{
+    min-width:0!important;
+    max-width:210px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:12px!important;
+    overflow:hidden!important;
+  }
+
+  .site-header .brand img,
+  .v4-unified-brand img,
+  .brand img{
+    flex:0 0 56px!important;
+    width:56px!important;
+    height:56px!important;
+  }
+
+  .site-header .brand > div,
+  .v4-unified-brand > div,
+  .brand > div,
+  .site-header .brand-copy,
+  .v4-unified-brand-copy{
+    min-width:0!important;
+    max-width:140px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:2px!important;
+  }
+
+  .site-header .brand strong,
+  .v4-unified-brand strong,
+  .brand strong,
+  .brand-wordmark{
+    display:block!important;
+    margin:0!important;
+    font-size:14px!important;
+    line-height:1.05!important;
+    letter-spacing:.04em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  /* Low-priority microcopy should never collide with nav. */
+  .site-header .brand small,
+  .v4-unified-brand small,
+  .brand small,
+  .header-status{
+    display:none!important;
+  }
+
+  .main-nav,
+  .v4-unified-nav{
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    flex-wrap:nowrap!important;
+    gap:clamp(10px,1.1vw,22px)!important;
+    overflow:hidden!important;
+  }
+
+  .main-nav a,
+  .v4-unified-nav a{
+    white-space:nowrap!important;
+    flex:0 0 auto!important;
+  }
+
+  .header-node,
+  .v4-unified-status{
+    justify-self:end!important;
+    white-space:nowrap!important;
+  }
+}
+
+/* ---------- MEDIUM DESKTOP ---------- */
+@media (min-width: 721px) and (max-width: 1360px){
+  .site-header,
+  .v4-unified-header,
+  .try-header,
+  .studio-header{
+    grid-template-columns:auto minmax(132px,180px) minmax(0,1fr) auto!important;
+    column-gap:14px!important;
+  }
+
+  .site-header .brand,
+  .v4-unified-brand,
+  .brand{
+    max-width:180px!important;
+  }
+
+  .site-header .brand > div,
+  .v4-unified-brand > div,
+  .brand > div,
+  .site-header .brand-copy,
+  .v4-unified-brand-copy{
+    max-width:110px!important;
+  }
+
+  .main-nav a,
+  .v4-unified-nav a{
+    font-size:13px!important;
+    letter-spacing:.03em!important;
+  }
+}
+
+/* ---------- COLLISION PREVENTION RANGE ----------
+   Once width gets tighter, the top nav should yield to the slide panel
+   instead of crashing into the brand block. */
+@media (min-width: 721px) and (max-width: 1180px){
+  .main-nav,
+  .v4-unified-nav{
+    display:none!important;
+  }
+
+  .header-node,
+  .v4-unified-status{
+    display:none!important;
+  }
+
+  .site-header,
+  .v4-unified-header,
+  .try-header,
+  .studio-header{
+    grid-template-columns:auto minmax(0,1fr)!important;
+  }
+
+  .site-header .brand,
+  .v4-unified-brand,
+  .brand{
+    justify-self:start!important;
+    max-width:min(72vw, 280px)!important;
+  }
+}
+
+/* ---------- ULTRA-WIDE ----------
+   On roomy desktops, restore one line of supporting brand microcopy. */
+@media (min-width: 1500px){
+  .site-header .brand small,
+  .v4-unified-brand small,
+  .brand small{
+    display:block!important;
+    font-size:11px!important;
+    line-height:1.2!important;
+    letter-spacing:.05em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .site-header .brand > div,
+  .v4-unified-brand > div,
+  .brand > div,
+  .site-header .brand-copy,
+  .v4-unified-brand-copy{
+    max-width:165px!important;
+  }
+}
+
+/* ---------- MOBILE ----------
+   Keep mobile behavior intact. */
+@media (max-width: 720px){
+  .site-header .brand small,
+  .v4-unified-brand small,
+  .brand small{
+    display:none!important;
+  }
+}

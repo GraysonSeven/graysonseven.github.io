@@ -14,6 +14,7 @@ const requiredPages = [
   "portfolio/projects/trade-core-custom-business.html",
   "portfolio/projects/morsebound.html",
   "portfolio/projects/ette-planner.html",
+  "services/index.html",
   "website-studio/index.html",
   "about/index.html",
   "contact/index.html",
@@ -201,6 +202,24 @@ note(`Checked ${htmlFiles.length} HTML files.`);
 note(`Checked ${jsFiles.length} JavaScript files.`);
 note("Checked internal href/src targets, SEO basics, JSON-LD, app URLs, protected branding, security headers and critical UX baselines.");
 
+
+if (exists("services/index.html")) {
+  const services = read("services/index.html");
+  for (const expected of [
+    "WHAT YOU GET",
+    "SCOPE + PRICE CLEAR BEFORE PAYMENT",
+    "/website-studio/",
+    "/contact/",
+    "https://icharles-invsys.web.app/",
+    "https://graysonseven.github.io/Morsebound/",
+    "https://ette-planner-143288371627.web.app/"
+  ]) {
+    if (!services.includes(expected)) fail(`V4.5 services page missing: ${expected}`);
+  }
+}
+
+if (!exists("conversion-v45.css")) fail("V4.5 conversion CSS missing.");
+if (!exists("conversion-v45.js")) fail("V4.5 conversion JavaScript missing.");
 if (failures.length) {
   console.error("\nICHARLES SITE QA FAIL\n");
   for (const f of failures) console.error(`- ${f}`);

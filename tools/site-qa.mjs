@@ -262,11 +262,24 @@ for (const p of [
 for (const [p, version] of [
   ["portfolio/projects/trade-core.html", "2.7.0+61"],
   ["portfolio/projects/morsebound.html", "1.2.0+15"],
-  ["portfolio/projects/ette-planner.html", "3.0.0+27"],
+  ["portfolio/projects/ette-planner.html", "4.6.0+47"],
 ]) {
   if (exists(p) && !read(p).includes(version)) fail(`Current work version missing from ${p}: ${version}`);
 }
 
+if (exists("portfolio/projects/ette-planner.html")) {
+  const ette = read("portfolio/projects/ette-planner.html");
+  for (const expected of [
+    "4.6.0+47",
+    "ETTE EXERCISE",
+    "exercise-v1.1.0-build2",
+    "ETTE WARD CARE",
+    "ward-care-v1.1.0-build2"
+  ]) {
+    if (!ette.includes(expected)) fail(`ETTE ecosystem baseline missing: ${expected}`);
+  }
+  if (ette.includes("3.0.0+27")) fail("Historical ETTE 3.0.0+27 baseline leaked into the current case study.");
+}
 if (exists("lab/index.html")) {
   const lab = read("lab/index.html");
   if (!lab.includes("IKO KNOW IT")) fail("Iko Know It current-development entry missing from Lab.");

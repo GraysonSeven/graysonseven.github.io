@@ -139,7 +139,7 @@
       filter:brightness(1.15);
     }
   </style>
-  <script src="/v4.js?v=6" defer></script>
+  <script src="/v4.js?v=7" defer></script>
   <link rel="stylesheet" href="/cyberpunk-part1.css?v=1">
   <script src="/cyberpunk-part1.js?v=1" defer></script>
   <link rel="stylesheet" href="/cyberpunk-part4.css?v=1">
@@ -168,8 +168,7 @@
 </script>
   <link rel="stylesheet" href="/conversion-v45.css?v=1">
   <script src="/conversion-v45.js?v=1" defer></script>
-  <link rel="stylesheet" href="/readability-v46.css?v=1">
-  <link rel="stylesheet" href="/visual-system-v47.css?v=1">
+  <link rel="stylesheet" href="/visual-system-v47.css?v=2">
   <script src="/visual-system-v47.js?v=1" defer></script>
 </head>
 <body>
@@ -180,11 +179,13 @@
         <div><strong>CHARLES LIOC</strong><small>CONTACT</small></div>
       </a>
       <nav>
-        <a href="../">HOME</a>
-        <a href="../projects/">PROJECTS</a>
-        <a href="../lab/">LAB</a>
-        <a href="../about/">ABOUT</a>
-        <a href="../portfolio/">PORTFOLIO</a>
+        <a href="/">HOME</a>
+        <a href="/try/">TRY APPS</a>
+        <a href="/portfolio/">WORK</a>
+        <a href="/services/">SERVICES</a>
+        <a href="/website-studio/">WEBSITE STUDIO</a>
+        <a href="/about/">ABOUT</a>
+        <a href="/contact/">CONTACT</a>
       </nav>
     </header>
 
@@ -194,7 +195,7 @@
         <h1>NEED SOMETHING<br><span>BUILT AROUND YOUR GOAL?</span></h1>
         <p class="lead">
           I build custom websites like my own — responsive, visually distinctive and designed around
-          what you actually need people to understand and do. I’m currently looking for website clients.
+          what you actually need people to understand and do. I’m currently accepting project inquiries.
         </p>
       </section>
 
@@ -217,6 +218,37 @@
             <article class="v45-contact-path"><small>WEBSITE</small><strong>USE THE GUIDED STUDIO</strong><p>Choose the easy design path or customize the direction yourself.</p><a href="../website-studio/">OPEN WEBSITE STUDIO →</a></article>
             <article class="v45-contact-path"><small>SOFTWARE / SYSTEM / UNSURE</small><strong>DESCRIBE THE PROBLEM</strong><p>Plain language is enough. Tell me what currently happens and what needs to work better.</p><a href="../services/">SEE SERVICES →</a></article>
           </div>
+          <form class="v48-project-form" action="https://formsubmit.co/icharles.development@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="NEW GENERAL PROJECT INQUIRY — iCharles">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://icharles.pages.dev/project-inquiry-sent/">
+            <input type="hidden" name="_url" value="https://icharles.pages.dev/contact/">
+            <input type="hidden" name="_autoresponse" value="Thanks for contacting Charles Lioc. Your project inquiry was received and Charles will review it and reply directly.">
+            <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+            <span>GENERAL PROJECT INQUIRY</span>
+            <h3>DESCRIBE WHAT YOU NEED.</h3>
+            <p>Use this for software, business systems, redesigns or anything that does not fit the Website Studio. Plain language is enough.</p>
+            <div class="v48-project-form-grid">
+              <label>YOUR NAME *<input type="text" name="Name" required maxlength="100" autocomplete="name"></label>
+              <label>EMAIL *<input type="email" name="Email" required maxlength="160" autocomplete="email"></label>
+              <label class="wide">PROJECT TYPE
+                <select name="Project_Type">
+                  <option>Software / app</option>
+                  <option>Business system</option>
+                  <option>Website / redesign</option>
+                  <option>Existing system improvement</option>
+                  <option>Not sure yet</option>
+                </select>
+              </label>
+              <label class="wide">WHAT NEEDS TO WORK BETTER? *
+                <textarea name="Project_Details" required maxlength="1800" placeholder="Tell me what happens now, what is frustrating, and what result you want."></textarea>
+              </label>
+            </div>
+            <div class="v48-form-actions">
+              <button type="submit">SEND PROJECT INQUIRY →</button>
+              <a href="/privacy/">PRIVACY NOTICE</a>
+            </div>
+          </form>
           <div class="contact-note">
             You do not need a complete plan. There is no payment just to send a request. If the project is a fit,
             I can prepare a private working preview; we agree the scope and price before payment and final release.

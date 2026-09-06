@@ -45,6 +45,9 @@ function walk(dir) {
 for (const p of requiredPages) {
   if (!exists(p)) fail(`Missing required page: ${p}`);
 }
+for (const p of ["projects/index.html", "lab/index.html", "website-request-sent/index.html", "project-inquiry-sent/index.html"]) {
+  if (!exists(p)) fail(`Missing support page: ${p}`);
+}
 
 const allFiles = walk(root);
 const htmlFiles = allFiles.filter(f => f.endsWith(".html"));
@@ -82,9 +85,7 @@ for (const file of htmlFiles) {
   let m;
   while ((m = attrRe.exec(html))) {
     const target = resolveLocal(file, m[2]);
-    if (target && !fs.existsSync(target)) {
-      fail(`Broken local reference in ${rel}: ${m[2]}`);
-    }
+    if (target && !fs.existsSync(target)) fail(`Broken local reference in ${rel}: ${m[2]}`);
   }
 }
 
@@ -120,7 +121,6 @@ for (const p of schemaPages) {
 
 const publicHtml = htmlFiles.map(f => fs.readFileSync(f, "utf8")).join("\n");
 if (/\bCOMPADRES\b/i.test(publicHtml)) fail("Forbidden client-specific Compadres branding found in public HTML.");
-
 if (exists("try/try.js")) fail("Old simulated demo JavaScript try/try.js still exists.");
 
 if (!exists("assets/apps/trade-core.png")) fail("Trade Core icon missing.");
@@ -146,6 +146,15 @@ if (exists("website-studio/index.html")) {
   if (!studio.includes("NO EXTRA DESIGN FEE")) {
     fail("Website Studio no-extra-design-fee wording missing.");
   }
+}
+
+if (exists("contact/index.html")) {
+  const contact = read("contact/index.html");
+  if (!contact.includes('class="v48-project-form"')) fail("General project inquiry form missing.");
+  if (!contact.includes("https://formsubmit.co/icharles.development@gmail.com")) {
+    fail("General project inquiry FormSubmit endpoint missing.");
+  }
+  if (!contact.includes("project-inquiry-sent/")) fail("General inquiry success destination missing.");
 }
 
 if (exists("experience.js") &&
@@ -183,6 +192,7 @@ if (exists("sitemap.xml")) {
     "https://icharles.pages.dev/",
     "https://icharles.pages.dev/try/",
     "https://icharles.pages.dev/portfolio/",
+    "https://icharles.pages.dev/services/",
     "https://icharles.pages.dev/website-studio/",
     "https://icharles.pages.dev/about/",
     "https://icharles.pages.dev/contact/",
@@ -190,6 +200,115 @@ if (exists("sitemap.xml")) {
     if (!sitemap.includes(`<loc>${p}</loc>`)) fail(`Sitemap entry missing: ${p}`);
   }
 } else fail("sitemap.xml missing.");
+
+if (!exists("conversion-v45.css")) fail("V4.5 conversion CSS missing.");
+if (!exists("conversion-v45.js")) fail("V4.5 conversion JavaScript missing.");
+
+if (exists("readability-v46.css")) {
+  fail("V4.6 readability CSS should be merged into the authoritative visual system in V4.8.");
+}
+
+if (!exists("visual-system-v47.css")) fail("Authoritative visual-system CSS missing.");
+if (!exists("visual-system-v47.js")) fail("Visual-system JavaScript missing.");
+if (exists("visual-system-v47.css")) {
+  const visual = read("visual-system-v47.css");
+  if (!visual.includes("iCHARLES V4.8 FINAL CLEANUP + WORK UPDATES")) {
+    fail("V4.8 final visual-system marker missing.");
+  }
+  for (const selector of [
+    ".privacy-actions a:first-child",
+    ".sent-actions a:first-child",
+    ".case-try-demo",
+    ".v48-project-form",
+    ".skip-link"
+  ]) {
+    if (!visual.includes(selector)) fail(`V4.8 visual coverage missing: ${selector}`);
+  }
+}
+
+const canonicalNavHrefs = [
+  'href="/"',
+  'href="/try/"',
+  'href="/portfolio/"',
+  'href="/services/"',
+  'href="/website-studio/"',
+  'href="/about/"',
+  'href="/contact/"'
+];
+for (const p of [
+  "index.html",
+  "try/index.html",
+  "portfolio/index.html",
+  "services/index.html",
+  "website-studio/index.html",
+  "about/index.html",
+  "contact/index.html",
+  "privacy/index.html",
+  "projects/index.html",
+  "lab/index.html",
+  "project-inquiry-sent/index.html"
+]) {
+  if (!exists(p)) continue;
+  const html = read(p);
+  const header = html.match(/<header\b[\s\S]*?<\/header>/i)?.[0] || "";
+  for (const href of canonicalNavHrefs) {
+    if (!header.includes(href)) fail(`Native canonical navigation missing ${href} in ${p}`);
+  }
+  if (!html.includes("/visual-system-v47.css?v=2")) fail(`V4.8 visual CSS cache version missing from ${p}`);
+  if (!html.includes("/v4.js?v=7")) fail(`V4.8 v4.js cache version missing from ${p}`);
+  if (html.includes("readability-v46.css")) fail(`Old readability stylesheet tag remains in ${p}`);
+}
+
+for (const [p, version] of [
+  ["portfolio/projects/trade-core.html", "2.7.0+61"],
+  ["portfolio/projects/morsebound.html", "1.2.0+15"],
+  ["portfolio/projects/ette-planner.html", "3.0.0+27"],
+]) {
+  if (exists(p) && !read(p).includes(version)) fail(`Current work version missing from ${p}: ${version}`);
+}
+
+if (exists("lab/index.html")) {
+  const lab = read("lab/index.html");
+  if (!lab.includes("IKO KNOW IT")) fail("Iko Know It current-development entry missing from Lab.");
+  if (!lab.includes("GHOST OPS")) fail("Ghost Ops current-development entry missing from Lab.");
+}
+if (exists("projects/index.html") && !read("projects/index.html").includes("CURRENT DEVELOPMENT")) {
+  fail("Current development entry missing from project directory.");
+}
+
+for (const stale of [
+  "WEBSITE CLIENTS // OPEN",
+  "WEBSITE CLIENTS ARE OPEN",
+  "CURRENTLY LOOKING FOR CLIENTS",
+  "EMPTY ON PURPOSE.",
+  "BEING DOCUMENTED",
+  "ARCHIVE GROWING",
+  "RESUME / CV",
+  "TO BE ADDED"
+]) {
+  for (const file of htmlFiles) {
+    const html = fs.readFileSync(file, "utf8");
+    if (html.includes(stale)) {
+      fail(`Stale/incomplete public wording remains in ${path.relative(root, file).replaceAll("\\", "/")}: ${stale}`);
+    }
+  }
+}
+
+if (exists("404.html")) {
+  const e = read("404.html");
+  if (/\bLab\b/.test(e)) fail("404 page still promotes the unfinished Lab.");
+}
+
+for (const p of [
+  "portfolio/projects/trade-core.html",
+  "portfolio/projects/trade-core-custom-business.html",
+  "portfolio/projects/morsebound.html",
+  "portfolio/projects/ette-planner.html"
+]) {
+  if (exists(p) && !read(p).includes('class="skip-link"')) {
+    fail(`Accessible skip link class missing from ${p}`);
+  }
+}
 
 for (const file of jsFiles) {
   const result = spawnSync(process.execPath, ["--check", file], { encoding: "utf8" });
@@ -200,66 +319,8 @@ for (const file of jsFiles) {
 
 note(`Checked ${htmlFiles.length} HTML files.`);
 note(`Checked ${jsFiles.length} JavaScript files.`);
-note("Checked internal href/src targets, SEO basics, JSON-LD, app URLs, protected branding, security headers and critical UX baselines.");
+note("Checked links/assets, SEO basics, JSON-LD, canonical native navigation, real app URLs, V4.8 work updates, FormSubmit paths, protected branding, security headers and accessibility baselines.");
 
-
-if (exists("services/index.html")) {
-  const services = read("services/index.html");
-  for (const expected of [
-    "WHAT YOU GET",
-    "SCOPE + PRICE CLEAR BEFORE PAYMENT",
-    "/website-studio/",
-    "/contact/",
-    "https://icharles-invsys.web.app/",
-    "https://graysonseven.github.io/Morsebound/",
-    "https://ette-planner-143288371627.web.app/"
-  ]) {
-    if (!services.includes(expected)) fail(`V4.5 services page missing: ${expected}`);
-  }
-}
-
-if (!exists("conversion-v45.css")) fail("V4.5 conversion CSS missing.");
-if (!exists("conversion-v45.js")) fail("V4.5 conversion JavaScript missing.");
-
-if (!exists("readability-v46.css")) fail("V4.6 readability CSS missing.");
-
-for (const p of [
-  "index.html",
-  "services/index.html",
-  "try/index.html",
-  "portfolio/index.html",
-  "website-studio/index.html",
-  "about/index.html",
-  "contact/index.html"
-]) {
-  if (exists(p) && !read(p).includes("/readability-v46.css?v=1")) {
-    fail(`V4.6 readability stylesheet missing from ${p}`);
-  }
-}
-
-if (!exists("visual-system-v47.css")) fail("V4.7 visual system CSS missing.");
-if (!exists("visual-system-v47.js")) fail("V4.7 visual system JavaScript missing.");
-
-for (const p of [
-  "index.html",
-  "services/index.html",
-  "try/index.html",
-  "portfolio/index.html",
-  "website-studio/index.html",
-  "about/index.html",
-  "contact/index.html",
-  "privacy/index.html",
-  "404.html"
-]) {
-  if (!exists(p)) continue;
-  const html = read(p);
-  if (!html.includes("/visual-system-v47.css?v=1")) {
-    fail(`V4.7 stylesheet missing from ${p}`);
-  }
-  if (!html.includes("/visual-system-v47.js?v=1")) {
-    fail(`V4.7 JavaScript missing from ${p}`);
-  }
-}
 if (failures.length) {
   console.error("\nICHARLES SITE QA FAIL\n");
   for (const f of failures) console.error(`- ${f}`);

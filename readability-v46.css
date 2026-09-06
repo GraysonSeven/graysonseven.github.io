@@ -1,0 +1,709 @@
+/* iCHARLES V4.6 — READABILITY / TYPOGRAPHY PASS
+   Goal: keep the cyberpunk identity while making client-facing content
+   as comfortable to read as a strong commercial portfolio.
+   Desktop-first. Mobile remains intentionally compact. */
+
+/* Shared font rhythm */
+:root{
+  --v46-body:17px;
+  --v46-body-lg:18px;
+  --v46-card:15.5px;
+  --v46-small:12px;
+  --v46-label:12px;
+  --v46-button:13px;
+  --v46-nav:14px;
+}
+
+@media (min-width: 900px){
+
+  /* ---------- GLOBAL READABILITY ---------- */
+  body{
+    text-rendering:optimizeLegibility;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .v4-unified-nav a{
+    font-size:var(--v46-nav)!important;
+    letter-spacing:.045em!important;
+    min-height:44px!important;
+  }
+
+  header .brand strong,
+  .site-header .brand strong,
+  .studio-header .brand strong,
+  .try-header .brand strong{
+    font-size:14px!important;
+  }
+
+  header .brand small,
+  .site-header .brand small,
+  .studio-header .brand small,
+  .try-header .brand small{
+    font-size:11.5px!important;
+    line-height:1.4!important;
+    letter-spacing:.055em!important;
+  }
+
+  .v423-menu-button strong{
+    font-size:12px!important;
+    letter-spacing:.04em!important;
+  }
+
+  .v423-panel-intro span,
+  .v423-panel-foot span{
+    font-size:11px!important;
+  }
+
+  .v423-panel-intro p{
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+
+  .v423-panel-nav strong{
+    font-size:15px!important;
+    line-height:1.25!important;
+  }
+
+  .v423-panel-nav small{
+    font-size:12.5px!important;
+    line-height:1.45!important;
+  }
+
+  .v423-panel-contact > span,
+  .v423-panel-contact small{
+    font-size:10.5px!important;
+  }
+
+  .v423-panel-contact strong{
+    font-size:12.5px!important;
+    line-height:1.5!important;
+  }
+
+  .v4-unified-footer{
+    font-size:11.5px!important;
+    line-height:1.65!important;
+  }
+
+  .v4-unified-footer .v4-footer-note{
+    font-size:10.5px!important;
+    line-height:1.65!important;
+  }
+
+  /* ---------- SHARED BUTTONS ---------- */
+  .primary-btn,
+  .secondary-btn,
+  .studio-primary,
+  .studio-secondary,
+  .try-primary,
+  .try-secondary,
+  .try-hire,
+  .showroom-all,
+  .studio-entry-strip>a,
+  .demo-actions a,
+  .demo-actions button,
+  .wizard-next,
+  .wizard-submit,
+  .wizard-back,
+  .full-preview,
+  .recommend-button,
+  .btn,
+  .live-case,
+  .v45-button{
+    font-size:var(--v46-button)!important;
+    line-height:1.25!important;
+    letter-spacing:.035em!important;
+  }
+
+  /* ---------- HOME ---------- */
+  .clarity-status{
+    font-size:12px!important;
+    letter-spacing:.07em!important;
+  }
+
+  .hero-lead{
+    font-size:19px!important;
+    line-height:1.72!important;
+    max-width:760px!important;
+  }
+
+  .clarity-proof strong{
+    font-size:13px!important;
+  }
+
+  .clarity-proof span{
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+
+  .clarity-section-head > p,
+  .web-cta-copy > p{
+    font-size:17px!important;
+    line-height:1.72!important;
+  }
+
+  .clarity-section-head > div > span,
+  .clarity-pill{
+    font-size:12px!important;
+  }
+
+  .clarity-service-card small{
+    font-size:11.5px!important;
+    line-height:1.45!important;
+  }
+
+  .clarity-service-card h3{
+    font-size:clamp(26px,2.6vw,38px)!important;
+  }
+
+  .clarity-service-card p{
+    font-size:16px!important;
+    line-height:1.7!important;
+  }
+
+  .clarity-service-card a{
+    font-size:12.5px!important;
+  }
+
+  .web-cta-steps span{
+    font-size:14px!important;
+    line-height:1.45!important;
+  }
+
+  .v4-proof-intro>div>span{
+    font-size:12px!important;
+  }
+
+  .v4-proof-intro p{
+    font-size:18px!important;
+    line-height:1.7!important;
+  }
+
+  .v4-window-top{
+    font-size:10px!important;
+  }
+
+  .v4-window-kicker{
+    font-size:10.5px!important;
+  }
+
+  .v4-window-stats span{
+    font-size:9.5px!important;
+  }
+
+  .v4-window-stats b{
+    font-size:13px!important;
+  }
+
+  .v4-window-tasks span{
+    font-size:13px!important;
+  }
+
+  .v4-proof-bottom small,
+  .v4-proof-bottom b{
+    font-size:10.5px!important;
+  }
+
+  .v4-proof-bottom strong{
+    font-size:17px!important;
+  }
+
+  .v4-proof-bottom p{
+    font-size:14.5px!important;
+    line-height:1.62!important;
+  }
+
+  /* V4.5 commercial home content */
+  .v45-kicker{
+    font-size:12px!important;
+  }
+
+  .v45-value-head p{
+    font-size:17px!important;
+    line-height:1.72!important;
+  }
+
+  .v45-value-card b{
+    font-size:11px!important;
+  }
+
+  .v45-value-card strong{
+    font-size:19px!important;
+  }
+
+  .v45-value-card p{
+    font-size:15.5px!important;
+    line-height:1.68!important;
+  }
+
+  .v45-value-cta small{
+    font-size:11px!important;
+  }
+
+  .v45-value-cta strong{
+    font-size:17px!important;
+    line-height:1.45!important;
+  }
+
+  .v45-value-cta a{
+    font-size:13px!important;
+  }
+
+  /* ---------- SERVICES ---------- */
+  .v45-services-hero p{
+    font-size:19px!important;
+    line-height:1.74!important;
+  }
+
+  .v45-hero-proof::before{
+    font-size:10.5px!important;
+  }
+
+  .v45-proof-line span{
+    font-size:10.5px!important;
+  }
+
+  .v45-proof-line strong{
+    font-size:14.5px!important;
+    line-height:1.45!important;
+  }
+
+  .v45-section-head p{
+    font-size:17px!important;
+    line-height:1.72!important;
+  }
+
+  .v45-service-num{
+    font-size:11px!important;
+  }
+
+  .v45-service-copy p{
+    font-size:16.5px!important;
+    line-height:1.72!important;
+  }
+
+  .v45-get>strong{
+    font-size:12px!important;
+  }
+
+  .v45-get li{
+    font-size:15.5px!important;
+    line-height:1.55!important;
+  }
+
+  .v45-process b{
+    font-size:11px!important;
+  }
+
+  .v45-process strong{
+    font-size:16px!important;
+  }
+
+  .v45-process p{
+    font-size:14.5px!important;
+    line-height:1.65!important;
+  }
+
+  .v45-evidence small{
+    font-size:10.5px!important;
+  }
+
+  .v45-evidence p{
+    font-size:15px!important;
+    line-height:1.68!important;
+  }
+
+  .v45-evidence em{
+    font-size:11px!important;
+  }
+
+  .v45-faq summary{
+    font-size:17px!important;
+    line-height:1.45!important;
+  }
+
+  .v45-faq details p{
+    font-size:16px!important;
+    line-height:1.75!important;
+  }
+
+  .v45-start-card span{
+    font-size:10.5px!important;
+  }
+
+  .v45-start-card p{
+    font-size:15.5px!important;
+    line-height:1.7!important;
+  }
+
+  .v45-project-strip small{
+    font-size:10.5px!important;
+  }
+
+  .v45-project-strip strong{
+    font-size:19px!important;
+  }
+
+  .v45-project-strip p{
+    font-size:14.5px!important;
+    line-height:1.65!important;
+  }
+
+  .v45-project-strip a{
+    font-size:11.5px!important;
+  }
+
+  /* ---------- TRY APPS ---------- */
+  .try-kicker{
+    font-size:12px!important;
+  }
+
+  .try-hero p{
+    font-size:19px!important;
+    line-height:1.72!important;
+  }
+
+  .live-app-note b{
+    font-size:11px!important;
+  }
+
+  .live-app-note span{
+    font-size:15px!important;
+    line-height:1.6!important;
+  }
+
+  .live-library-head>div>span{
+    font-size:12px!important;
+  }
+
+  .live-library-head p{
+    font-size:17px!important;
+    line-height:1.72!important;
+  }
+
+  .live-app-identity small{
+    font-size:11px!important;
+  }
+
+  .live-app-identity p{
+    font-size:17px!important;
+    line-height:1.72!important;
+  }
+
+  .live-app-facts small{
+    font-size:10px!important;
+  }
+
+  .live-app-facts b{
+    font-size:12px!important;
+  }
+
+  .live-open span{
+    font-size:13px!important;
+  }
+
+  .live-open small{
+    font-size:10.5px!important;
+  }
+
+  .live-case{
+    font-size:12px!important;
+  }
+
+  /* ---------- PORTFOLIO ---------- */
+  .site-nav,
+  .site-nav a{
+    font-size:14px!important;
+  }
+
+  .brand-wordmark{
+    font-size:14px!important;
+  }
+
+  .header-status{
+    font-size:11.5px!important;
+  }
+
+  .eyebrow{
+    font-size:12px!important;
+    line-height:1.5!important;
+  }
+
+  .hero-intro{
+    font-size:18px!important;
+    line-height:1.72!important;
+  }
+
+  .hero-meta small,
+  .hero-meta span{
+    font-size:11px!important;
+    line-height:1.45!important;
+  }
+
+  /* Common portfolio content blocks across overview and case studies */
+  .project-card p,
+  .case-card p,
+  .case-study p,
+  .project-summary,
+  .project-intro,
+  .case-copy p,
+  .project-copy p,
+  .portfolio-copy p,
+  .project-section p,
+  .case-section p{
+    font-size:16.5px!important;
+    line-height:1.72!important;
+  }
+
+  .project-card small,
+  .case-card small,
+  .case-study small,
+  .project-label,
+  .case-label,
+  .project-kicker{
+    font-size:11px!important;
+    line-height:1.45!important;
+  }
+
+  /* Keep decorative HUD text intentionally small; it is visual garnish, not content. */
+  .hud{
+    font-size:9px!important;
+  }
+
+  /* ---------- WEBSITE STUDIO ---------- */
+  .studio-live{
+    font-size:12px!important;
+  }
+
+  .studio-intro-copy p,
+  .studio-mode-head p{
+    font-size:18px!important;
+    line-height:1.72!important;
+  }
+
+  .studio-intro-map strong{
+    font-size:15px!important;
+  }
+
+  .studio-intro-map span{
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+
+  .studio-intro-map small{
+    font-size:11px!important;
+  }
+
+  .mode-badge,
+  .studio-mode-head>span,
+  .step-heading>span{
+    font-size:11.5px!important;
+  }
+
+  .studio-mode-option strong{
+    font-size:22px!important;
+  }
+
+  .studio-mode-option p{
+    font-size:15.5px!important;
+    line-height:1.68!important;
+  }
+
+  .studio-mode-option>span:last-child,
+  .free-design{
+    font-size:11px!important;
+    line-height:1.45!important;
+  }
+
+  .studio-sales-flow strong{
+    font-size:14px!important;
+  }
+
+  .studio-sales-flow span{
+    font-size:12.5px!important;
+    line-height:1.55!important;
+  }
+
+  .studio-sales-flow-note{
+    font-size:13px!important;
+    line-height:1.6!important;
+  }
+
+  .wizard-topbar span,
+  .wizard-topbar button,
+  .studio-mode-status{
+    font-size:11px!important;
+  }
+
+  .wizard-topbar strong{
+    font-size:13px!important;
+  }
+
+  .step-heading p{
+    font-size:16px!important;
+    line-height:1.7!important;
+  }
+
+  .type-choice-grid strong,
+  .design-mode-card strong,
+  .theme-choice-grid strong{
+    font-size:14px!important;
+  }
+
+  .type-choice-grid small,
+  .design-mode-card small,
+  .theme-choice-grid small{
+    font-size:12.5px!important;
+    line-height:1.5!important;
+  }
+
+  .choice-action,
+  .type-choice-grid em,
+  .design-mode-card em{
+    font-size:10.5px!important;
+  }
+
+  .simple-fields label>span,
+  .big-field>span{
+    font-size:11.5px!important;
+  }
+
+  .simple-fields input,
+  .simple-fields select,
+  .simple-fields textarea,
+  .website-wizard input,
+  .website-wizard select,
+  .website-wizard textarea{
+    font-size:15px!important;
+    line-height:1.5!important;
+  }
+
+  .simple-fields small,
+  .custom-design-note,
+  .custom-design-note span{
+    font-size:12.5px!important;
+    line-height:1.6!important;
+  }
+
+  /* ---------- ABOUT / CONTACT / GENERAL SUBPAGES ---------- */
+  .kicker{
+    font-size:12px!important;
+  }
+
+  .lead{
+    font-size:18px!important;
+    line-height:1.72!important;
+  }
+
+  .story p,
+  .contact-copy p{
+    font-size:17px!important;
+    line-height:1.74!important;
+  }
+
+  .principle p{
+    font-size:15.5px!important;
+    line-height:1.68!important;
+  }
+
+  .principle b,
+  .identity-bottom small{
+    font-size:11.5px!important;
+  }
+
+  .contact-note{
+    font-size:12.5px!important;
+    line-height:1.72!important;
+  }
+
+  .contact-services span{
+    font-size:11.5px!important;
+  }
+
+  .studio-entry-strip span{
+    font-size:10.5px!important;
+  }
+
+  .studio-entry-strip strong{
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+
+  .v4-contact-actions a{
+    font-size:12.5px!important;
+  }
+
+  .terminal-top,
+  .terminal-foot{
+    font-size:10.5px!important;
+  }
+
+  .line small{
+    font-size:10.5px!important;
+  }
+
+  .line strong{
+    font-size:12.5px!important;
+    line-height:1.5!important;
+  }
+
+  .contact-status{
+    font-size:11px!important;
+  }
+
+  .v45-contact-path small{
+    font-size:10.5px!important;
+  }
+
+  .v45-contact-path strong{
+    font-size:17px!important;
+  }
+
+  .v45-contact-path p{
+    font-size:14.5px!important;
+    line-height:1.65!important;
+  }
+
+  .v45-contact-path a{
+    font-size:11.5px!important;
+  }
+
+  /* ---------- 404 ---------- */
+  .error-code{
+    font-size:10.5px!important;
+  }
+
+  .error-shell p{
+    font-size:17px!important;
+    line-height:1.72!important;
+  }
+
+  .actions a{
+    font-size:11.5px!important;
+  }
+}
+
+/* Tablet gets a smaller readability lift without changing the mobile design language. */
+@media (min-width: 721px) and (max-width: 899px){
+  .v4-unified-nav a{font-size:12px!important}
+  .hero-lead,.try-hero p,.studio-intro-copy p,.v45-services-hero p,.lead{font-size:17px!important;line-height:1.68!important}
+  .clarity-service-card p,.live-app-identity p,.v45-service-copy p,.story p,.contact-copy p{font-size:15.5px!important;line-height:1.68!important}
+  .v45-get li,.v45-faq details p{font-size:15px!important}
+}
+
+/* Mobile stays deliberately compact, but never let functional controls become microscopic. */
+@media (max-width: 720px){
+  .primary-btn,
+  .secondary-btn,
+  .studio-primary,
+  .studio-secondary,
+  .try-primary,
+  .try-secondary,
+  .v45-button,
+  .wizard-next,
+  .wizard-submit{
+    font-size:11px!important;
+  }
+
+  .v423-panel-nav strong{font-size:13px!important}
+  .v423-panel-nav small{font-size:11px!important;line-height:1.4!important}
+}

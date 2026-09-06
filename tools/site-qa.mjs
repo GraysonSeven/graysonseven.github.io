@@ -220,6 +220,22 @@ if (exists("services/index.html")) {
 
 if (!exists("conversion-v45.css")) fail("V4.5 conversion CSS missing.");
 if (!exists("conversion-v45.js")) fail("V4.5 conversion JavaScript missing.");
+
+if (!exists("readability-v46.css")) fail("V4.6 readability CSS missing.");
+
+for (const p of [
+  "index.html",
+  "services/index.html",
+  "try/index.html",
+  "portfolio/index.html",
+  "website-studio/index.html",
+  "about/index.html",
+  "contact/index.html"
+]) {
+  if (exists(p) && !read(p).includes("/readability-v46.css?v=1")) {
+    fail(`V4.6 readability stylesheet missing from ${p}`);
+  }
+}
 if (failures.length) {
   console.error("\nICHARLES SITE QA FAIL\n");
   for (const f of failures) console.error(`- ${f}`);

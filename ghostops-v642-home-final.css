@@ -1,0 +1,381 @@
+/* ============================================================
+   iCHARLES V6.4.2 — HOME INTEGRATION FINALIZATION
+   Finishes the user-approved dark/light Ghost Ops reference.
+   Locked Iko identity remains unchanged.
+   ============================================================ */
+
+:root{
+  --v64-world:url("/assets/iko-prime/ghostops/home-v642/home-world-dark-v642.webp?v=642");
+  --v642-orbit:url("/assets/iko-prime/ghostops/home-v642/home-orbit-dark-v642.webp?v=642");
+  --v642-mission:url("/assets/iko-prime/ghostops/home-v642/home-mission-dark-v642.webp?v=642");
+  --v642-rail:url("/assets/iko-prime/ghostops/home-v642/home-rail-dark-v642.webp?v=642");
+}
+html[data-ui-theme="light"]{
+  --v64-world:url("/assets/iko-prime/ghostops/home-v642/home-world-light-v642.webp?v=642");
+  --v642-orbit:url("/assets/iko-prime/ghostops/home-v642/home-orbit-light-v642.webp?v=642");
+  --v642-mission:url("/assets/iko-prime/ghostops/home-v642/home-mission-light-v642.webp?v=642");
+  --v642-rail:url("/assets/iko-prime/ghostops/home-v642/home-rail-light-v642.webp?v=642");
+}
+
+/* ------------------------------------------------------------
+   WORLD PLATE
+   V6.4 accidentally left the main world pseudo-element behind the
+   hero's own background. Put the actual environment in the visible
+   stacking context and suppress the old circular/window artifacts.
+   ------------------------------------------------------------ */
+body.v64-reference-home .clarity-hero{
+  background:var(--v60-bg)!important;
+}
+body.v64-reference-home .clarity-hero::before{
+  z-index:0!important;
+  opacity:1!important;
+  mask-image:none!important;
+  -webkit-mask-image:none!important;
+  background:
+    linear-gradient(90deg,
+      rgba(2,7,13,.82) 0%,
+      rgba(2,7,13,.63) 33%,
+      rgba(2,7,13,.17) 55%,
+      rgba(2,7,13,.05) 72%,
+      rgba(2,7,13,.13) 100%),
+    linear-gradient(to bottom,
+      rgba(2,7,13,.04) 0%,
+      rgba(2,7,13,.03) 58%,
+      rgba(2,7,13,.30) 100%),
+    var(--v64-world) center center/cover no-repeat!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .clarity-hero::before{
+  background:
+    linear-gradient(90deg,
+      rgba(248,252,255,.78) 0%,
+      rgba(248,252,255,.58) 34%,
+      rgba(248,252,255,.14) 55%,
+      rgba(248,252,255,.03) 72%,
+      rgba(248,252,255,.10) 100%),
+    linear-gradient(to bottom,
+      rgba(255,255,255,.04) 0%,
+      rgba(255,255,255,.02) 60%,
+      rgba(245,250,255,.24) 100%),
+    var(--v64-world) center center/cover no-repeat!important;
+}
+
+/* Remove legacy hero-copy circular mask/window and old radial network. */
+body.v64-reference-home .hero-copy::before,
+body.v64-reference-home .hero-copy::after,
+body.v64-reference-home .clarity-hero .hero-copy::before,
+body.v64-reference-home .clarity-hero .hero-copy::after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+}
+body.v64-reference-home .hero-core::before{
+  content:none!important;
+  display:none!important;
+}
+
+/* Keep the vector perimeter HUD above the scene but under controls. */
+body.v64-reference-home .clarity-hero::after{
+  z-index:2!important;
+  opacity:.66!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .clarity-hero::after{
+  opacity:.40!important;
+}
+
+/* ------------------------------------------------------------
+   NEW PERIPHERAL HUD ASSETS
+   ------------------------------------------------------------ */
+.v642-orbit-frame,
+.v642-mission-panel,
+.v642-left-rail{
+  position:absolute;
+  pointer-events:none;
+  user-select:none;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain;
+}
+
+.v642-orbit-frame{
+  z-index:1;
+  left:50%;
+  top:49%;
+  width:min(50vw,710px);
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  background-image:var(--v642-orbit);
+  opacity:.62;
+  filter:drop-shadow(0 0 24px rgba(0,231,255,.08))
+         drop-shadow(0 0 28px rgba(255,43,214,.06));
+}
+html[data-ui-theme="light"] .v642-orbit-frame{
+  opacity:.64;
+  filter:drop-shadow(0 8px 22px rgba(56,113,160,.13))
+         drop-shadow(0 0 18px rgba(0,231,255,.08));
+}
+
+/* Ensure the real locked identity remains above the new orbit. */
+body.v64-reference-home .hero-core .core-logo,
+body.v64-reference-home .hero-core .iko-v5-core-logo{
+  z-index:5!important;
+}
+body.v64-reference-home .hero-core .iko-v5-core-orbit{
+  opacity:.20!important;
+}
+body.v64-reference-home .hero-core .core-ring,
+body.v64-reference-home .hero-core .core-scan{
+  opacity:.16!important;
+}
+
+.v642-mission-panel{
+  z-index:6;
+  top:68px;
+  right:8px;
+  width:min(28vw,405px);
+  aspect-ratio:2172/724;
+  background-image:var(--v642-mission);
+  opacity:.72;
+}
+html[data-ui-theme="light"] .v642-mission-panel{
+  opacity:.80;
+}
+
+.v642-left-rail{
+  z-index:6;
+  left:4px;
+  top:22%;
+  width:82px;
+  height:55%;
+  background-image:var(--v642-rail);
+  background-size:auto 100%;
+  background-position:left center;
+  opacity:.66;
+}
+html[data-ui-theme="light"] .v642-left-rail{
+  opacity:.78;
+}
+
+/* Generated assets replace the older tiny text rails. */
+body.v64-reference-home .v60-left-index,
+body.v64-reference-home .v60-right-mission{
+  display:none!important;
+}
+
+/* Keep the small philosophy quote, but anchor it below the left rail. */
+body.v64-reference-home .v60-side-quote{
+  left:26px!important;
+  bottom:17%!important;
+  z-index:7!important;
+  opacity:.78!important;
+}
+
+/* ------------------------------------------------------------
+   HERO BALANCE
+   ------------------------------------------------------------ */
+body.v64-reference-home .hero-copy{
+  z-index:8!important;
+  padding-left:76px!important;
+  max-width:670px!important;
+}
+body.v64-reference-home .hero-core{
+  z-index:7!important;
+}
+body.v64-reference-home .iko-v5-core-logo{
+  width:min(45vw,670px)!important;
+  top:50%!important;
+}
+body.v64-reference-home .iko-v5-core-rail{
+  opacity:.34!important;
+}
+
+/* Strong readable controls on both themes. */
+body.v64-reference-home .hero-actions a,
+body.v64-reference-home .hero-actions a>span:not(.v64-action-icon),
+body.v64-reference-home .hero-actions a>b{
+  color:#f5f7ff!important;
+  -webkit-text-fill-color:#f5f7ff!important;
+  opacity:1!important;
+}
+body.v64-reference-home .hero-actions a>small{
+  color:#a8b7c8!important;
+  -webkit-text-fill-color:#a8b7c8!important;
+  opacity:1!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .hero-actions a,
+html[data-ui-theme="light"] body.v64-reference-home .hero-actions a>span:not(.v64-action-icon),
+html[data-ui-theme="light"] body.v64-reference-home .hero-actions a>b{
+  color:#0b2238!important;
+  -webkit-text-fill-color:#0b2238!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .hero-actions a>small{
+  color:#52697f!important;
+  -webkit-text-fill-color:#52697f!important;
+}
+
+/* ------------------------------------------------------------
+   LOWER COMMAND DECK
+   Make it span the hero like the approved reference instead of
+   inheriting the old narrow proof width.
+   ------------------------------------------------------------ */
+body.v64-reference-home .clarity-proof.v64-proof-deck{
+  grid-column:1/-1!important;
+  justify-self:stretch!important;
+  align-self:end!important;
+  width:calc(100% - 72px)!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0 36px!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+body.v64-reference-home .clarity-proof.v64-proof-deck a{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  min-height:96px!important;
+  grid-template-columns:56px minmax(0,1fr) 28px!important;
+  overflow:hidden!important;
+}
+body.v64-reference-home .clarity-proof.v64-proof-deck strong,
+body.v64-reference-home .clarity-proof.v64-proof-deck span{
+  min-width:0!important;
+  max-width:100%!important;
+}
+body.v64-reference-home .clarity-proof.v64-proof-deck .v64-proof-arrow{
+  width:24px!important;
+  max-width:24px!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+  font-size:22px!important;
+  color:var(--v60-cyan)!important;
+  -webkit-text-fill-color:var(--v60-cyan)!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .clarity-proof.v64-proof-deck .v64-proof-arrow{
+  color:#007da0!important;
+  -webkit-text-fill-color:#007da0!important;
+}
+
+/* Reference-style full-width atmosphere into the lower deck. */
+body.v64-reference-home .clarity-proof.v64-proof-deck a{
+  backdrop-filter:blur(10px) saturate(1.10);
+}
+body.v64-reference-home .v64-bottom-strip{
+  z-index:10!important;
+}
+
+/* ------------------------------------------------------------
+   1024-CLASS
+   Keep Iko/background strong; simplify the decorative peripherals.
+   ------------------------------------------------------------ */
+@media(min-width:821px) and (max-width:1279px){
+  body.v64-reference-home .clarity-hero::before{
+    background:
+      linear-gradient(90deg,rgba(2,7,13,.78),rgba(2,7,13,.53) 42%,rgba(2,7,13,.09) 70%,rgba(2,7,13,.16)),
+      linear-gradient(to bottom,rgba(2,7,13,.03),rgba(2,7,13,.24)),
+      var(--v64-world) 58% center/cover no-repeat!important;
+  }
+  html[data-ui-theme="light"] body.v64-reference-home .clarity-hero::before{
+    background:
+      linear-gradient(90deg,rgba(248,252,255,.76),rgba(248,252,255,.48) 42%,rgba(248,252,255,.07) 70%,rgba(248,252,255,.12)),
+      linear-gradient(to bottom,rgba(255,255,255,.03),rgba(246,250,255,.20)),
+      var(--v64-world) 58% center/cover no-repeat!important;
+  }
+
+  .v642-mission-panel{
+    display:none;
+  }
+  .v642-left-rail{
+    width:58px;
+    height:48%;
+    top:26%;
+    opacity:.52;
+  }
+  body.v64-reference-home .hero-copy{
+    padding-left:48px!important;
+  }
+  .v642-orbit-frame{
+    width:min(56vw,590px);
+  }
+  body.v64-reference-home .clarity-proof.v64-proof-deck{
+    width:calc(100% - 28px)!important;
+    margin:0 14px!important;
+    gap:8px!important;
+  }
+  body.v64-reference-home .clarity-proof.v64-proof-deck a{
+    min-height:90px!important;
+    grid-template-columns:44px minmax(0,1fr) 22px!important;
+    padding:11px!important;
+  }
+}
+
+/* ------------------------------------------------------------
+   MOBILE
+   Mobile uses the same cinematic world and identity, but peripheral
+   HUD graphics are intentionally removed rather than shrunk.
+   ------------------------------------------------------------ */
+@media(max-width:820px){
+  .v642-mission-panel,
+  .v642-left-rail{
+    display:none!important;
+  }
+
+  body.v64-reference-home .clarity-hero::before{
+    z-index:0!important;
+    background:
+      linear-gradient(to bottom,
+        rgba(2,7,13,.82) 0%,
+        rgba(2,7,13,.67) 29%,
+        rgba(2,7,13,.28) 52%,
+        rgba(2,7,13,.14) 75%,
+        rgba(2,7,13,.31) 100%),
+      var(--v64-world) 63% center/cover no-repeat!important;
+  }
+  html[data-ui-theme="light"] body.v64-reference-home .clarity-hero::before{
+    background:
+      linear-gradient(to bottom,
+        rgba(249,253,255,.86) 0%,
+        rgba(249,253,255,.68) 30%,
+        rgba(249,253,255,.30) 52%,
+        rgba(249,253,255,.16) 74%,
+        rgba(246,251,255,.34) 100%),
+      var(--v64-world) 63% center/cover no-repeat!important;
+  }
+
+  body.v64-reference-home .hero-copy{
+    padding:0 12px!important;
+  }
+  .v642-orbit-frame{
+    width:min(120vw,520px);
+    top:50%;
+    opacity:.50;
+  }
+  html[data-ui-theme="light"] .v642-orbit-frame{
+    opacity:.56;
+  }
+
+  body.v64-reference-home .hero-actions a:first-child,
+  body.v64-reference-home .hero-actions a:first-child>span:not(.v64-action-icon),
+  body.v64-reference-home .hero-actions a:first-child>b{
+    color:#f5f7ff!important;
+    -webkit-text-fill-color:#f5f7ff!important;
+    opacity:1!important;
+  }
+  html[data-ui-theme="light"] body.v64-reference-home .hero-actions a:first-child,
+  html[data-ui-theme="light"] body.v64-reference-home .hero-actions a:first-child>span:not(.v64-action-icon),
+  html[data-ui-theme="light"] body.v64-reference-home .hero-actions a:first-child>b{
+    color:#0b2238!important;
+    -webkit-text-fill-color:#0b2238!important;
+  }
+
+  body.v64-reference-home .clarity-proof.v64-proof-deck{
+    width:100%!important;
+    margin:0!important;
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+  }
+  body.v64-reference-home .clarity-proof.v64-proof-deck a{
+    min-height:84px!important;
+  }
+}

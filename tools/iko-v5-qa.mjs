@@ -35,7 +35,7 @@ if (exists("assets/iko-prime/identity/iko-prime-logo-locked.png")) {
   const sha = crypto.createHash("sha256")
     .update(fs.readFileSync(path.join(root, "assets/iko-prime/identity/iko-prime-logo-locked.png")))
     .digest("hex").toUpperCase();
-  if (sha !== "0C224033CC16D2B19D2ECCF27631E948DB8B551863D3EB4EF626953E70728044") fail(`IKO locked-logo hash mismatch: ${sha}`);
+  if (sha !== "DDA9E772F1267325918D3608273124BD21A507B57BB49A9E2148EBFF0CBBB5FD") fail(`IKO locked-logo hash mismatch: ${sha}`);
 }
 
 const htmlFiles = [];
@@ -52,8 +52,8 @@ walk(root);
 for (const file of htmlFiles) {
   const rel = path.relative(root, file).replaceAll("\\","/");
   const html = fs.readFileSync(file,"utf8");
-  if (!html.includes("/iko-prime-v5.css?v=1")) fail(`V5 CSS missing from ${rel}`);
-  if (!html.includes("/iko-prime-v5.js?v=1")) fail(`V5 JS missing from ${rel}`);
+  if (!html.includes("/iko-prime-v5.css?v=2")) fail(`V5 CSS missing from ${rel}`);
+  if (!html.includes("/iko-prime-v5.js?v=2")) fail(`V5 JS missing from ${rel}`);
   if (/cyberpunk-part[1-4]\.(?:css|js)/i.test(html)) fail(`Legacy cyberpunk runtime still loaded by ${rel}`);
   if (/charles-lioc-logo-locked\.svg/i.test(html)) fail(`Old visible logo reference remains in ${rel}`);
   if (/charles-lioc-og\.png/i.test(html)) fail(`Old social/logo image reference remains in ${rel}`);

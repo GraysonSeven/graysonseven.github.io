@@ -1,5 +1,5 @@
 /* ============================================================
-   iCHARLES V5.0 — IKO PRIME IDENTITY + MOTION SYSTEM
+   iCHARLES V5.1 — IKO PRIME IDENTITY + MOTION SYSTEM
    Exact approved Iko identity. Content remains primary.
    Red/amber are rare functional/cinematic accents only.
    ============================================================ */
@@ -94,8 +94,8 @@ body{background:transparent!important;isolation:isolate}
   filter:drop-shadow(0 0 10px rgba(0,239,255,.13))
          drop-shadow(0 0 12px rgba(255,24,216,.10));
 }
-.v423-header-left .brand img{width:42px!important;height:42px!important}
-.v423-panel-brand img{width:48px!important;height:48px!important}
+.v423-header-left .brand img{width:48px!important;height:48px!important}
+.v423-panel-brand img{width:58px!important;height:58px!important}
 
 .clarity-core.iko-v5-home-core{
   isolation:isolate;
@@ -108,7 +108,7 @@ body{background:transparent!important;isolation:isolate}
 }
 .iko-v5-core-orbit{
   position:absolute;
-  width:min(37vw,510px);
+  width:min(47vw,620px);
   aspect-ratio:1;
   left:50%;
   top:48%;
@@ -120,10 +120,10 @@ body{background:transparent!important;isolation:isolate}
 }
 .iko-v5-core-logo{
   position:absolute;
-  width:min(25vw,330px);
+  width:min(43vw,560px);
   aspect-ratio:1;
   left:50%;
-  top:47%;
+  top:46%;
   transform:translate(-50%,-50%);
   object-fit:contain;
   z-index:2;
@@ -134,10 +134,10 @@ body{background:transparent!important;isolation:isolate}
 }
 .iko-v5-core-rail{
   position:absolute;
-  width:min(51vw,680px);
+  width:min(62vw,820px);
   max-width:92%;
   left:50%;
-  top:72%;
+  top:74%;
   transform:translateX(-50%);
   opacity:.42;
   z-index:1;
@@ -305,9 +305,9 @@ html[data-iko-effects="off"] .iko-v5-atmosphere>img{
 
 @media(max-width:900px){
   .iko-v5-atmosphere>img{opacity:.13}
-  .iko-v5-core-orbit{width:min(76vw,430px)}
-  .iko-v5-core-logo{width:min(52vw,290px)}
-  .iko-v5-core-rail{width:min(86vw,620px)}
+  .iko-v5-core-orbit{width:min(88vw,540px)}
+  .iko-v5-core-logo{width:min(78vw,480px)}
+  .iko-v5-core-rail{width:min(96vw,720px)}
   .iko-v5-page-mark{
     width:clamp(90px,27vw,160px);
     right:8px;

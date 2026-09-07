@@ -1,0 +1,84 @@
+/* ============================================================
+   iCHARLES V5.1 — TRANSPARENT IKO IDENTITY FIX
+   Final realistic Iko source; transparent overlays only.
+   ============================================================ */
+
+.iko-v5-core-logo,
+.brand img,
+.v423-panel-brand img,
+.iko-v5-page-mark{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.iko-v5-core-logo{
+  width:min(43vw,560px)!important;
+  height:auto!important;
+  aspect-ratio:auto!important;
+  top:46%!important;
+  object-fit:contain!important;
+  filter:
+    drop-shadow(0 24px 52px rgba(0,0,0,.62))
+    drop-shadow(-10px 0 24px rgba(0,239,255,.15))
+    drop-shadow(10px 0 24px rgba(255,24,216,.13))!important;
+}
+.iko-v5-core-orbit{
+  width:min(47vw,620px)!important;
+  opacity:.48!important;
+}
+.iko-v5-core-rail{
+  width:min(62vw,820px)!important;
+  top:74%!important;
+  opacity:.34!important;
+}
+.clarity-core.iko-v5-home-core,
+.iko-v5-scan-surface.clarity-core{
+  overflow:visible!important;
+}
+
+.v423-header-left .brand img{
+  width:48px!important;
+  height:48px!important;
+}
+.v423-panel-brand img{
+  width:58px!important;
+  height:58px!important;
+}
+
+.iko-v5-page-mark{
+  width:clamp(145px,20vw,285px)!important;
+  opacity:.32!important;
+  object-fit:contain!important;
+}
+
+.iko-v5-core-orbit,
+.iko-v5-core-rail,
+.iko-v5-page-mark{
+  background:transparent!important;
+}
+
+.page-transition::after{
+  width:min(52vw,410px)!important;
+  background-image:url("/assets/iko-prime/identity/iko-prime-logo-512.webp")!important;
+}
+
+.iko-v5-energy-node{
+  width:6px!important;
+  height:6px!important;
+}
+
+@media(max-width:900px){
+  .iko-v5-core-logo{
+    width:min(78vw,480px)!important;
+    top:45%!important;
+  }
+  .iko-v5-core-orbit{width:min(88vw,540px)!important}
+  .iko-v5-core-rail{width:min(96vw,720px)!important}
+  .iko-v5-page-mark{width:clamp(120px,32vw,210px)!important}
+}
+@media(max-width:620px){
+  .iko-v5-core-logo{width:min(88vw,430px)!important}
+  .v423-header-left .brand img{width:40px!important;height:40px!important}
+  .v423-panel-brand img{width:52px!important;height:52px!important}
+}

@@ -1,0 +1,291 @@
+/* ============================================================
+   iCHARLES V6.4.5 — HOME STRUCTURAL FINAL FIX
+   Root cause from V6.4.4 visual QA:
+   the absolute world-media element was still an absolutely-positioned
+   GRID CHILD whose containing block collapsed to the first grid row.
+   Explicitly span the complete hero grid and restore 1024 Iko.
+   ============================================================ */
+
+/* TRUE FULL-HERO CONTAINING AREA
+   Do not let the absolute grid child resolve to only row 1. */
+body.v64-reference-home .clarity-hero{
+  position:relative!important;
+  isolation:isolate!important;
+}
+
+body.v64-reference-home .v644-world-media{
+  position:absolute!important;
+  grid-column:1 / -1!important;
+  grid-row:1 / -1!important;
+  grid-area:1 / 1 / -1 / -1!important;
+
+  top:0!important;
+  right:0!important;
+  bottom:0!important;
+  left:0!important;
+  inset:0!important;
+
+  align-self:stretch!important;
+  justify-self:stretch!important;
+
+  width:auto!important;
+  height:auto!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+
+  overflow:hidden!important;
+  z-index:1!important;
+  pointer-events:none!important;
+
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  transform:none!important;
+}
+
+/* Actual scene plates fill that complete rectangular area. */
+body.v64-reference-home .v644-world-media>img{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+
+  object-fit:cover!important;
+  object-position:center center!important;
+
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  transform:none!important;
+}
+
+/* Theme switching: only one world may participate visually. */
+body.v64-reference-home .v644-world-dark{
+  display:block!important;
+}
+body.v64-reference-home .v644-world-light{
+  display:none!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .v644-world-dark{
+  display:none!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .v644-world-light{
+  display:block!important;
+}
+
+/* Keep the tint as a normal rectangle inside the complete world layer. */
+body.v64-reference-home .v644-world-media::after{
+  inset:0!important;
+  z-index:2!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+}
+
+/* Explicit production stack.
+   world < frame/orbit < identity < copy/HUD/deck */
+body.v64-reference-home .clarity-hero::after{
+  z-index:2!important;
+}
+body.v64-reference-home .v642-orbit-frame{
+  z-index:3!important;
+}
+body.v64-reference-home .hero-core{
+  z-index:5!important;
+}
+body.v64-reference-home .hero-copy{
+  z-index:7!important;
+}
+body.v64-reference-home .v642-left-rail,
+body.v64-reference-home .v642-mission-panel{
+  z-index:8!important;
+}
+body.v64-reference-home .v60-hero-hud{
+  z-index:9!important;
+}
+body.v64-reference-home .clarity-proof.v64-proof-deck,
+body.v64-reference-home .v64-bottom-strip,
+body.v64-reference-home .scroll-hint{
+  z-index:10!important;
+}
+
+/* Do not reintroduce any legacy world renderer. */
+body.v64-reference-home .clarity-hero::before,
+body.v64-reference-home .v643-world-layer{
+  display:none!important;
+}
+
+/* ------------------------------------------------------------
+   DESKTOP
+   Ensure the grid has a stable complete first viewport while still
+   allowing content to increase the hero naturally if required.
+   ------------------------------------------------------------ */
+@media(min-width:1280px){
+  body.v64-reference-home .clarity-hero{
+    min-height:max(780px,calc(100vh - 96px))!important;
+    height:auto!important;
+    grid-template-rows:minmax(570px,1fr) auto auto!important;
+  }
+
+  body.v64-reference-home .v644-world-media{
+    grid-area:1 / 1 / -1 / -1!important;
+  }
+
+  body.v64-reference-home .v644-world-media>img{
+    object-position:center center!important;
+  }
+
+  /* Locked Iko remains intentionally dominant in the target composition. */
+  body.v64-reference-home .hero-core{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    position:relative!important;
+    min-height:620px!important;
+  }
+
+  body.v64-reference-home .iko-v5-core-logo{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    width:min(45vw,670px)!important;
+    top:50%!important;
+    z-index:6!important;
+  }
+
+  body.v64-reference-home .v642-orbit-frame{
+    display:block!important;
+    visibility:visible!important;
+  }
+}
+
+/* ------------------------------------------------------------
+   1024 / SPLIT-SCREEN
+   V6.4.4 lost Iko entirely here. Force a real second-column identity
+   stage and keep the scene spanning the full hero.
+   ------------------------------------------------------------ */
+@media(min-width:821px) and (max-width:1279px){
+  body.v64-reference-home .clarity-hero{
+    min-height:max(760px,calc(100vh - 82px))!important;
+    height:auto!important;
+    grid-template-columns:minmax(0,.98fr) minmax(390px,1.02fr)!important;
+    grid-template-rows:minmax(540px,1fr) auto auto!important;
+    align-items:center!important;
+  }
+
+  body.v64-reference-home .v644-world-media{
+    grid-area:1 / 1 / -1 / -1!important;
+  }
+
+  body.v64-reference-home .v644-world-media>img{
+    object-position:58% center!important;
+  }
+
+  body.v64-reference-home .hero-core{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    position:relative!important;
+
+    grid-column:2!important;
+    grid-row:1!important;
+
+    align-self:center!important;
+    justify-self:stretch!important;
+
+    min-height:540px!important;
+    width:100%!important;
+    overflow:visible!important;
+  }
+
+  body.v64-reference-home .iko-v5-core-logo{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+
+    width:min(51vw,540px)!important;
+    height:auto!important;
+
+    left:50%!important;
+    top:50%!important;
+    transform:translate(-50%,-50%)!important;
+
+    z-index:7!important;
+    pointer-events:none!important;
+  }
+
+  body.v64-reference-home .iko-v5-core-orbit{
+    display:block!important;
+    visibility:visible!important;
+    opacity:.20!important;
+
+    width:min(56vw,590px)!important;
+    left:50%!important;
+    top:50%!important;
+    transform:translate(-50%,-50%)!important;
+
+    z-index:5!important;
+  }
+
+  body.v64-reference-home .v642-orbit-frame{
+    display:block!important;
+    visibility:visible!important;
+    opacity:.54!important;
+
+    width:min(56vw,590px)!important;
+    left:50%!important;
+    top:50%!important;
+    transform:translate(-50%,-50%)!important;
+
+    z-index:4!important;
+  }
+
+  body.v64-reference-home .iko-v5-core-rail{
+    display:block!important;
+    visibility:visible!important;
+    opacity:.28!important;
+  }
+
+  body.v64-reference-home .clarity-core-tags{
+    display:flex!important;
+    visibility:visible!important;
+    opacity:.88!important;
+    z-index:8!important;
+  }
+}
+
+/* ------------------------------------------------------------
+   MOBILE
+   Preserve the V6.4.4 behavior that already showed the cinematic
+   environment correctly. Only make the full-grid span explicit.
+   ------------------------------------------------------------ */
+@media(max-width:820px){
+  body.v64-reference-home .clarity-hero{
+    height:auto!important;
+  }
+
+  body.v64-reference-home .v644-world-media{
+    grid-column:1!important;
+    grid-row:1 / -1!important;
+    grid-area:1 / 1 / -1 / 2!important;
+  }
+
+  body.v64-reference-home .v644-world-media>img{
+    object-position:63% center!important;
+  }
+}

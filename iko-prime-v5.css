@@ -515,3 +515,152 @@ header .brand strong,
   }
   .iko-v5-core-orbit{width:min(96vw,560px)!important}
 }
+/* ============================================================
+   iCHARLES V5.4 — FINAL VISUAL QA
+   Screenshot-driven correction pass. Locked Iko is unchanged.
+   ============================================================ */
+
+/* TRY APPS
+   The page already owns a native orbital Iko composition. Do not visually
+   compete with it, and give the native identity enough size to stay crisp. */
+.live-app-hero>.iko-v5-page-mark{
+  display:none!important;
+}
+.live-orbit{
+  overflow:visible!important;
+}
+.live-orbit-core{
+  width:260px!important;
+  height:260px!important;
+  background:
+    radial-gradient(circle,rgba(0,239,255,.07),rgba(7,10,16,.54) 61%,transparent 72%)!important;
+  box-shadow:
+    0 0 70px rgba(0,239,255,.07),
+    0 0 70px rgba(255,24,216,.045)!important;
+}
+.live-orbit-core img{
+  width:210px!important;
+  height:210px!important;
+  object-fit:contain!important;
+  image-rendering:auto!important;
+  background:transparent!important;
+  filter:
+    drop-shadow(0 16px 30px rgba(0,0,0,.45))
+    drop-shadow(-5px 0 16px rgba(0,239,255,.10))
+    drop-shadow(5px 0 16px rgba(255,24,216,.09))!important;
+}
+.live-orbit-core span{
+  margin-top:-13px!important;
+  position:relative;
+  z-index:3;
+}
+.live-orbit-app{
+  background:rgba(5,9,16,.90)!important;
+  border-color:rgba(135,170,218,.25)!important;
+}
+
+/* PORTFOLIO
+   Restore the first screen to one intentional two-column composition:
+   copy on the left, Iko on the right. This removes the huge empty first-screen
+   area and prevents the visual from dropping into a second row. */
+.site-header + main .hero{
+  grid-template-columns:minmax(0,.94fr) minmax(470px,1.06fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  gap:clamp(38px,5vw,84px)!important;
+  align-items:center!important;
+  min-height:calc(100vh - 86px)!important;
+  padding:56px 0 82px!important;
+}
+.site-header + main .hero .hero-copy{
+  grid-column:1!important;
+  grid-row:1!important;
+  align-self:center!important;
+  justify-self:stretch!important;
+  transform:none!important;
+  margin:0!important;
+}
+.site-header + main .hero .hero-visual{
+  grid-column:2!important;
+  grid-row:1!important;
+  align-self:center!important;
+  justify-self:stretch!important;
+  min-height:610px!important;
+  transform:none!important;
+}
+.site-header + main .hero>.iko-v5-page-mark{
+  display:none!important;
+}
+
+/* Keep HUD labels completely inside the visual. The previous -1% left offset
+   visibly cropped BUILD / IMPROVE / CREATE in the supplied screenshot. */
+.site-header + main .hero .hud-side{
+  left:5%!important;
+  top:42%!important;
+}
+.site-header + main .hero .hud-top{
+  right:5%!important;
+  top:14%!important;
+}
+.site-header + main .hero .hud-bottom{
+  right:7%!important;
+  bottom:9%!important;
+}
+
+/* Preserve sharpness: do not enlarge compact derivatives on large visual roles. */
+.site-header + main .hero .hero-logo,
+.identity-core img{
+  image-rendering:auto!important;
+  backface-visibility:hidden!important;
+}
+
+/* The generated atmosphere is intentionally soft/dark; foreground Iko artwork
+   stays optically sharper so it never reads as low-resolution. */
+.iko-v5-atmosphere>img{
+  filter:saturate(.88) contrast(1.08) brightness(.74)!important;
+}
+.iko-v5-core-logo,
+.hero-logo,
+.live-orbit-core img,
+.identity-core img{
+  filter:
+    drop-shadow(0 18px 38px rgba(0,0,0,.48))
+    drop-shadow(-5px 0 16px rgba(0,239,255,.09))
+    drop-shadow(5px 0 16px rgba(255,24,216,.08));
+}
+
+@media(max-width:1050px){
+  .site-header + main .hero{
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto!important;
+    gap:20px!important;
+    padding-top:44px!important;
+  }
+  .site-header + main .hero .hero-copy{
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+  .site-header + main .hero .hero-visual{
+    grid-column:1!important;
+    grid-row:2!important;
+    min-height:520px!important;
+  }
+  .site-header + main .hero .hud-side{
+    left:8%!important;
+  }
+}
+
+@media(max-width:720px){
+  .live-orbit-core{
+    width:182px!important;
+    height:182px!important;
+  }
+  .live-orbit-core img{
+    width:142px!important;
+    height:142px!important;
+  }
+  .site-header + main .hero .hero-visual{
+    min-height:430px!important;
+  }
+}
+
+/* END V5.4 FINAL VISUAL QA */

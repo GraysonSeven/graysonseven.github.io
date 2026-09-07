@@ -85,7 +85,7 @@
   document.querySelectorAll(
     'img[src*="charles-lioc-logo-locked.svg"],img[src*="charles-lioc-og.png"],img[src*="portfolio/assets/favicon.svg"]'
   ).forEach(img => {
-    img.src = "/assets/iko-prime/identity/iko-prime-logo-512.webp?v=53";
+    img.src = "/assets/iko-prime/identity/iko-prime-logo-512.webp?v=54";
     img.decoding = "async";
   });
 
@@ -192,7 +192,7 @@
   panel.innerHTML = `
     <div class="v423-panel-head">
       <a href="/" class="v423-panel-brand">
-        <img src="/assets/iko-prime/identity/iko-prime-logo-512.webp?v=53" alt="">
+        <img src="/assets/iko-prime/identity/iko-prime-logo-512.webp?v=54" alt="">
         <span><strong>CHARLES LIOC</strong><small>BUILD // IMPROVE // CREATE</small></span>
       </a>
       <button type="button" class="v423-panel-close" aria-label="Close navigation panel">

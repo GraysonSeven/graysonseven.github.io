@@ -9,6 +9,7 @@
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = matchMedia("(hover:hover) and (pointer:fine)").matches;
   const assetRoot = "/assets/iko-prime";
+  const nativeIdentityHero = path === "/try" || path === "/portfolio";
 
   const routeBackground = (() => {
     if (path === "/") return "home-command-center.webp";
@@ -25,7 +26,7 @@
   atmosphere.className = "iko-v5-atmosphere";
   atmosphere.setAttribute("aria-hidden", "true");
   const bg = document.createElement("img");
-  bg.src = `${assetRoot}/backgrounds/${routeBackground}?v=53`;
+  bg.src = `${assetRoot}/backgrounds/${routeBackground}?v=54`;
   bg.alt = "";
   bg.decoding = "async";
   bg.fetchPriority = "low";
@@ -35,7 +36,7 @@
   body.prepend(atmosphere);
 
   document.querySelectorAll(".brand img,.v423-panel-brand img").forEach(img => {
-    img.src = `${assetRoot}/identity/iko-prime-logo-512.webp?v=53`;
+    img.src = `${assetRoot}/identity/iko-prime-logo-512.webp?v=54`;
     img.decoding = "async";
   });
 
@@ -45,13 +46,13 @@
     if (!homeCore.querySelector(".iko-v5-core-orbit")) {
       const orbit = document.createElement("img");
       orbit.className = "iko-v5-core-orbit";
-      orbit.src = `${assetRoot}/hud/iko-orbital-reactor.webp?v=53`;
+      orbit.src = `${assetRoot}/hud/iko-orbital-reactor.webp?v=54`;
       orbit.alt = "";
       orbit.setAttribute("aria-hidden", "true");
 
       const logo = document.createElement("img");
       logo.className = "iko-v5-core-logo";
-      logo.src = `${assetRoot}/identity/iko-prime-logo-1024.webp?v=53`;
+      logo.src = `${assetRoot}/identity/iko-prime-logo-1024.webp?v=54`;
       logo.alt = "";
       logo.setAttribute("aria-hidden", "true");
       logo.fetchPriority = "high";
@@ -60,7 +61,7 @@
 
       const rail = document.createElement("img");
       rail.className = "iko-v5-core-rail";
-      rail.src = `${assetRoot}/hud/iko-signal-rail.webp?v=53`;
+      rail.src = `${assetRoot}/hud/iko-signal-rail.webp?v=54`;
       rail.alt = "";
       rail.setAttribute("aria-hidden", "true");
 
@@ -68,7 +69,7 @@
     }
   }
 
-  if (path !== "/") {
+  if (path !== "/" && !nativeIdentityHero) {
     const hero = document.querySelector("main > .hero,main .try-hero,main .live-app-hero,main .studio-intro");
     if (hero && !hero.querySelector(".iko-v5-page-mark")) {
       hero.classList.add("iko-v5-scan-surface");
@@ -77,8 +78,8 @@
       const mark = document.createElement("img");
       mark.className = "iko-v5-page-mark";
       mark.src = path === "/website-studio"
-        ? `${assetRoot}/hud/iko-portal-emblem.webp?v=53`
-        : `${assetRoot}/identity/iko-prime-logo-512.webp?v=53`;
+        ? `${assetRoot}/hud/iko-portal-emblem.webp?v=54`
+        : `${assetRoot}/identity/iko-prime-logo-512.webp?v=54`;
       mark.alt = "";
       mark.setAttribute("aria-hidden", "true");
       mark.loading = "lazy";

@@ -1,7 +1,6 @@
 /* ============================================================
-   iCHARLES V5.1 — IKO PRIME IDENTITY + MOTION SYSTEM
-   Exact approved Iko identity. Content remains primary.
-   Red/amber are rare functional/cinematic accents only.
+   iCHARLES V5.3 — CONSOLIDATED IKO PRODUCTION SYSTEM
+   Locked Iko identity unchanged. V5.1 + V5.2 final rules merged.
    ============================================================ */
 :root{
   --iko-bg-0:#05060a;
@@ -327,4 +326,192 @@ html[data-iko-effects="off"] .iko-v5-atmosphere>img{
     animation:none!important;
   }
   [data-iko-parallax]{translate:none!important}
+}
+
+/* ===== V5.1 FINAL TRANSPARENT IDENTITY OVERRIDES ===== */
+/* ============================================================
+   iCHARLES V5.1 — TRANSPARENT IKO IDENTITY FIX
+   Final realistic Iko source; transparent overlays only.
+   ============================================================ */
+
+.iko-v5-core-logo,
+.brand img,
+.v423-panel-brand img,
+.iko-v5-page-mark{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.iko-v5-core-logo{
+  width:min(43vw,560px)!important;
+  height:auto!important;
+  aspect-ratio:auto!important;
+  top:46%!important;
+  object-fit:contain!important;
+  filter:
+    drop-shadow(0 24px 52px rgba(0,0,0,.62))
+    drop-shadow(-10px 0 24px rgba(0,239,255,.15))
+    drop-shadow(10px 0 24px rgba(255,24,216,.13))!important;
+}
+.iko-v5-core-orbit{
+  width:min(47vw,620px)!important;
+  opacity:.48!important;
+}
+.iko-v5-core-rail{
+  width:min(62vw,820px)!important;
+  top:74%!important;
+  opacity:.34!important;
+}
+.clarity-core.iko-v5-home-core,
+.iko-v5-scan-surface.clarity-core{
+  overflow:visible!important;
+}
+
+.v423-header-left .brand img{
+  width:48px!important;
+  height:48px!important;
+}
+.v423-panel-brand img{
+  width:58px!important;
+  height:58px!important;
+}
+
+.iko-v5-page-mark{
+  width:clamp(145px,20vw,285px)!important;
+  opacity:.32!important;
+  object-fit:contain!important;
+}
+
+.iko-v5-core-orbit,
+.iko-v5-core-rail,
+.iko-v5-page-mark{
+  background:transparent!important;
+}
+
+.page-transition::after{
+  width:min(52vw,410px)!important;
+  background-image:url("/assets/iko-prime/identity/iko-prime-logo-512.webp")!important;
+}
+
+.iko-v5-energy-node{
+  width:6px!important;
+  height:6px!important;
+}
+
+@media(max-width:900px){
+  .iko-v5-core-logo{
+    width:min(78vw,480px)!important;
+    top:45%!important;
+  }
+  .iko-v5-core-orbit{width:min(88vw,540px)!important}
+  .iko-v5-core-rail{width:min(96vw,720px)!important}
+  .iko-v5-page-mark{width:clamp(120px,32vw,210px)!important}
+}
+@media(max-width:620px){
+  .iko-v5-core-logo{width:min(88vw,430px)!important}
+  .v423-header-left .brand img{width:40px!important;height:40px!important}
+  .v423-panel-brand img{width:52px!important;height:52px!important}
+}
+
+/* ===== V5.2 FINAL HIGH-RESOLUTION OVERRIDES ===== */
+/* ============================================================
+   iCHARLES V5.2 — HIGH-RES VISUAL POLISH
+   The locked Iko main logo is unchanged.
+   ============================================================ */
+
+img[src*="/assets/iko-prime/"]{
+  image-rendering:auto!important;
+  -ms-interpolation-mode:bicubic;
+}
+
+/* Header identity: large enough to read as a real identity, not a favicon. */
+header .brand{
+  align-items:center!important;
+}
+header .brand img,
+.v423-header-left .brand img{
+  width:56px!important;
+  height:56px!important;
+  flex:0 0 56px!important;
+  object-fit:contain!important;
+  background:transparent!important;
+}
+.v423-panel-brand img{
+  width:64px!important;
+  height:64px!important;
+}
+
+/* Keep Charles Lioc visually aligned with the stronger Iko emblem. */
+.v423-header-left .brand,
+header .brand{
+  gap:12px!important;
+}
+header .brand strong,
+.v423-header-left .brand strong{
+  line-height:1!important;
+}
+
+/* Main Iko keeps the large authority the user approved, but sits a little higher
+   so the lower app/status UI has breathing room. */
+.iko-v5-core-logo{
+  width:min(44vw,590px)!important;
+  top:43.5%!important;
+  height:auto!important;
+  aspect-ratio:auto!important;
+}
+.iko-v5-core-orbit{
+  width:min(48vw,640px)!important;
+  top:46%!important;
+}
+.iko-v5-core-rail{
+  top:76%!important;
+}
+
+/* Large non-home identity artwork should never be fed a small derivative. */
+.hero-logo,
+.identity-core img,
+.live-orbit-core img{
+  image-rendering:auto!important;
+  backface-visibility:hidden;
+}
+
+/* Keep tiny internal labels legible or let the art win instead of looking fuzzy. */
+.clarity-core-tags span,
+.core-app-chip,
+.live-orbit-core span{
+  text-rendering:geometricPrecision;
+}
+
+/* Never create a square surface behind transparent Iko artwork. */
+.iko-v5-core-logo,
+.iko-v5-page-mark,
+.hero-logo,
+.identity-core img,
+.live-orbit-core img{
+  background:transparent!important;
+  border-radius:0!important;
+}
+
+/* On smaller displays, keep the header logo clear without crowding navigation. */
+@media(max-width:1279px){
+  header .brand img,
+  .v423-header-left .brand img{
+    width:52px!important;
+    height:52px!important;
+    flex-basis:52px!important;
+  }
+}
+@media(max-width:620px){
+  header .brand img,
+  .v423-header-left .brand img{
+    width:42px!important;
+    height:42px!important;
+    flex-basis:42px!important;
+  }
+  .iko-v5-core-logo{
+    width:min(90vw,500px)!important;
+    top:43%!important;
+  }
+  .iko-v5-core-orbit{width:min(96vw,560px)!important}
 }

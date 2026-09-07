@@ -1,0 +1,299 @@
+/* ============================================================
+   iCHARLES V6.3.1 — SERVICES + STUDIO VISUAL-QA FIXES
+   Screenshot-driven correction layer.
+   Locked Iko identity unchanged.
+   ============================================================ */
+
+/* ============================================================
+   LIGHT THEME — restore deliberate contrast.
+   The first V6.3 QA showed secondary CTA labels and some proof
+   links fading almost into the white panels.
+   ============================================================ */
+html[data-ui-theme="light"] body.v45-services-body .v45-button,
+html[data-ui-theme="light"] body.v45-services-body .v45-button span,
+html[data-ui-theme="light"] body.v45-services-body .v45-button b,
+html[data-ui-theme="light"] body.studio-body .intro-actions a,
+html[data-ui-theme="light"] body.studio-body .intro-actions a b{
+  color:#09233a!important;
+  text-shadow:none!important;
+  opacity:1!important;
+}
+
+html[data-ui-theme="light"] body.v45-services-body .v45-proof-line strong,
+html[data-ui-theme="light"] body.v45-services-body .v45-proof-line strong a{
+  color:#0b2b44!important;
+  opacity:1!important;
+}
+
+html[data-ui-theme="light"] body.v45-services-body .v45-proof-line span,
+html[data-ui-theme="light"] body.v45-services-body .v45-kicker,
+html[data-ui-theme="light"] body.studio-body .studio-live{
+  color:#008ba8!important;
+}
+
+html[data-ui-theme="light"] body.v45-services-body .v45-button,
+html[data-ui-theme="light"] body.studio-body .intro-actions a{
+  background:linear-gradient(120deg,rgba(255,255,255,.97),rgba(236,247,254,.96))!important;
+  border-color:rgba(22,125,186,.28)!important;
+}
+
+html[data-ui-theme="light"] body.v45-services-body .v45-button.primary,
+html[data-ui-theme="light"] body.studio-body .studio-primary{
+  background:linear-gradient(120deg,rgba(0,185,222,.14),rgba(255,255,255,.97),rgba(139,92,255,.09))!important;
+  border-color:rgba(0,161,209,.44)!important;
+}
+
+html[data-ui-theme="light"] body.v45-services-body .v45-hero-proof,
+html[data-ui-theme="light"] body.studio-body .studio-intro-map{
+  background:rgba(250,253,255,.93)!important;
+  backdrop-filter:blur(7px);
+}
+
+html[data-ui-theme="light"] body.v45-services-body .v45-services-hero h1 span,
+html[data-ui-theme="light"] body.studio-body .studio-intro h1 em{
+  -webkit-text-stroke:1.15px rgba(25,78,112,.50)!important;
+  opacity:.95!important;
+}
+
+/* ============================================================
+   MOBILE WIDTH CONTAINMENT
+   The QA screenshots showed the new V6.3 hero copy and right-side
+   consoles extending beyond the 390px viewport.
+   ============================================================ */
+@media(max-width:820px){
+  body.v45-services-body,
+  body.studio-body{
+    overflow-x:hidden!important;
+  }
+
+  body.v45-services-body .shell,
+  body.studio-body .studio-shell{
+    width:100%!important;
+    max-width:100vw!important;
+    margin:0!important;
+    padding-left:12px!important;
+    padding-right:12px!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v45-services-body .v45-services-main,
+  body.studio-body main{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+
+  body.v45-services-body .v45-services-hero,
+  body.studio-body .studio-intro{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding-left:0!important;
+    padding-right:0!important;
+    overflow:hidden!important;
+  }
+
+  body.v45-services-body .v45-services-hero>div,
+  body.studio-body .studio-intro-copy{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  body.v45-services-body .v45-services-hero p,
+  body.studio-body .studio-intro-copy>p{
+    width:100%!important;
+    max-width:100%!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+
+  body.v45-services-body .v45-services-hero h1,
+  body.studio-body .studio-intro h1{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    white-space:normal!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    text-wrap:balance;
+  }
+
+  body.v45-services-body .v45-hero-actions,
+  body.studio-body .intro-actions{
+    width:100%!important;
+    max-width:100%!important;
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+
+  body.v45-services-body .v45-button,
+  body.studio-body .intro-actions a{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v45-services-body .v45-hero-proof,
+  body.studio-body .studio-intro-map{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:28px 0 0!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v45-services-body .v45-proof-line{
+    display:grid!important;
+    grid-template-columns:minmax(82px,.35fr) minmax(0,1fr)!important;
+    gap:12px!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  body.v45-services-body .v45-proof-line span,
+  body.v45-services-body .v45-proof-line strong{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  /* Studio process cards were still trying to remain in a desktop row. */
+  body.studio-body .studio-intro-map article{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    display:grid!important;
+    grid-template-columns:44px minmax(0,1fr)!important;
+    gap:12px!important;
+    padding:14px 0!important;
+  }
+
+  body.studio-body .studio-intro-map article>div{
+    min-width:0!important;
+  }
+
+  body.studio-body .studio-intro-map article strong,
+  body.studio-body .studio-intro-map article span{
+    display:block!important;
+    max-width:100%!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  /* Keep later Services/Studio content in the viewport too. */
+  body.v45-services-body .v45-services-section,
+  body.v45-services-body .v45-section-head,
+  body.v45-services-body .v45-service-stack,
+  body.v45-services-body .v45-service,
+  body.v45-services-body .v45-process,
+  body.v45-services-body .v45-evidence,
+  body.v45-services-body .v45-faq,
+  body.studio-body .studio-mode-gate,
+  body.studio-body .studio-mode-head,
+  body.studio-body .studio-mode-options,
+  body.studio-body .studio-sales-flow,
+  body.studio-body .wizard-shell,
+  body.studio-body .wizard-main,
+  body.studio-body .wizard-steps,
+  body.studio-body .wizard-step{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v45-services-body .v45-service,
+  body.v45-services-body .v45-process,
+  body.v45-services-body .v45-evidence,
+  body.v45-services-body .v45-faq,
+  body.studio-body .studio-mode-options,
+  body.studio-body .studio-sales-flow{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+
+  body.v45-services-body .v45-service>*,
+  body.v45-services-body .v45-process article,
+  body.v45-services-body .v45-evidence>a,
+  body.v45-services-body .v45-faq details,
+  body.studio-body .studio-mode-option,
+  body.studio-body .studio-sales-flow>div{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Mobile header: reserve real room for the theme toggle. */
+  body.v45-services-body header,
+  body.studio-body header{
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v45-services-body .v60-header-tools,
+  body.studio-body .v60-header-tools{
+    right:8px!important;
+  }
+
+  body.v45-services-body .brand,
+  body.studio-body .brand{
+    max-width:calc(100vw - 112px)!important;
+    overflow:hidden!important;
+  }
+}
+
+/* ============================================================
+   PHONE-SPECIFIC TYPOGRAPHY
+   Keep the Ghost Ops headline scale, but never let the words exceed
+   the real 390px capture width.
+   ============================================================ */
+@media(max-width:480px){
+  body.v45-services-body .v45-services-hero h1,
+  body.studio-body .studio-intro h1{
+    font-size:clamp(38px,10.5vw,42px)!important;
+    line-height:.91!important;
+    letter-spacing:-.055em!important;
+  }
+
+  body.v45-services-body .v45-services-hero p,
+  body.studio-body .studio-intro-copy>p{
+    font-size:15px!important;
+    line-height:1.58!important;
+  }
+
+  body.v45-services-body .v45-kicker,
+  body.studio-body .studio-live{
+    max-width:100%!important;
+    font-size:9px!important;
+    letter-spacing:.06em!important;
+    white-space:normal!important;
+  }
+
+  body.v45-services-body .v45-hero-proof,
+  body.studio-body .studio-intro-map{
+    padding:24px 14px!important;
+  }
+
+  body.v45-services-body .v45-proof-line{
+    grid-template-columns:78px minmax(0,1fr)!important;
+    padding:14px 0!important;
+  }
+
+  body.v45-services-body .v45-proof-line strong{
+    font-size:12px!important;
+    line-height:1.35!important;
+  }
+
+  body.studio-body .studio-intro-map article strong{
+    font-size:13px!important;
+    line-height:1.35!important;
+  }
+
+  body.studio-body .studio-intro-map article span{
+    font-size:11px!important;
+    line-height:1.45!important;
+  }
+}

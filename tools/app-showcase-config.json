@@ -1,0 +1,143 @@
+{
+  "version": "6.2",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "apps": [
+    {
+      "id": "trade-core",
+      "title": "TRADE CORE",
+      "url": "https://icharles-invsys.web.app/",
+      "requiresAuth": true,
+      "screens": [
+        {
+          "id": "overview",
+          "label": "Operations Overview",
+          "nav": [
+            "dashboard",
+            "overview",
+            "home"
+          ]
+        },
+        {
+          "id": "pos",
+          "label": "POS / Sales",
+          "nav": [
+            "point of sale",
+            "pos",
+            "sales",
+            "checkout"
+          ]
+        },
+        {
+          "id": "inventory",
+          "label": "Inventory",
+          "nav": [
+            "inventory",
+            "stock"
+          ]
+        },
+        {
+          "id": "reports",
+          "label": "Reports / Intelligence",
+          "nav": [
+            "reports",
+            "analytics",
+            "insights"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morsebound",
+      "title": "MORSEBOUND",
+      "url": "https://graysonseven.github.io/Morsebound/",
+      "requiresAuth": false,
+      "screens": [
+        {
+          "id": "home",
+          "label": "Training Home",
+          "nav": [
+            "home"
+          ]
+        },
+        {
+          "id": "practice",
+          "label": "Practice / Training",
+          "nav": [
+            "adaptive run",
+            "practice",
+            "train",
+            "play"
+          ]
+        },
+        {
+          "id": "progress",
+          "label": "Progress / Mastery",
+          "nav": [
+            "progress",
+            "mastery",
+            "stats"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ette-planner",
+      "title": "ETTE PLANNER",
+      "url": "https://ette-planner-143288371627.web.app/",
+      "requiresAuth": true,
+      "screens": [
+        {
+          "id": "planner",
+          "label": "Planner / Schedule",
+          "nav": [
+            "planner",
+            "schedule",
+            "calendar"
+          ]
+        },
+        {
+          "id": "workout",
+          "label": "Workout / Exercise",
+          "nav": [
+            "workout",
+            "exercise"
+          ]
+        },
+        {
+          "id": "progress",
+          "label": "Progress / History",
+          "nav": [
+            "progress",
+            "history",
+            "stats"
+          ]
+        }
+      ]
+    }
+  ],
+  "futureTargets": [
+    {
+      "id": "iko-know-it",
+      "title": "IKO KNOW IT",
+      "captureWhen": "A local or public web target is available."
+    },
+    {
+      "id": "ghost-ops",
+      "title": "GHOST OPS",
+      "captureWhen": "A local or public web target is available."
+    },
+    {
+      "id": "ette-exercise",
+      "title": "ETTE EXERCISE",
+      "captureWhen": "Android/ADB showcase capture is enabled."
+    },
+    {
+      "id": "ette-ward-care",
+      "title": "ETTE WARD CARE",
+      "captureWhen": "Android/ADB showcase capture is enabled."
+    }
+  ]
+}

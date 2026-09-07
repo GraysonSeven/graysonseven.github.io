@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1440" fill="none">
+<defs>
+  <linearGradient id="c" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00E7FF"/><stop offset=".52" stop-color="#1597FF"/><stop offset="1" stop-color="#8B5CFF"/></linearGradient>
+  <linearGradient id="m" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#00E7FF"/><stop offset=".52" stop-color="#8B5CFF"/><stop offset="1" stop-color="#FF2BD6"/></linearGradient>
+</defs>
+<g stroke="url(#c)" stroke-width="2" opacity=".56">
+  <path d="M30 112V34h178l38 38h520"/>
+  <path d="M2530 112V34h-178l-38 38h-520"/>
+  <path d="M30 1328v78h220l38-38h510"/>
+  <path d="M2530 1328v78h-220l-38-38h-510"/>
+  <path d="M30 195h70l24 24h150"/>
+  <path d="M2530 195h-70l-24 24h-150"/>
+  <path d="M30 1216h78l26-26h166"/>
+  <path d="M2530 1216h-78l-26-26h-166"/>
+</g>
+<g stroke="url(#m)" opacity=".28">
+  <path d="M224 116h560"/><path d="M1776 116h560"/>
+  <path d="M232 1330h660"/><path d="M1668 1330h660"/>
+</g>
+<g fill="#00E7FF">
+  <rect x="51" y="452" width="4" height="72" opacity=".75"/>
+  <rect x="2505" y="342" width="4" height="92" opacity=".75"/>
+</g>
+<g fill="#FF2BD6">
+  <rect x="51" y="538" width="4" height="24" opacity=".62"/>
+  <rect x="2505" y="454" width="4" height="34" opacity=".62"/>
+</g>
+</svg>

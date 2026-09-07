@@ -1,0 +1,183 @@
+/* ============================================================
+   iCHARLES V6.0.1 — RESPONSIVE HERO FIX
+   Fixes the 900–1100px desktop/tablet layout shown in QA screenshot.
+   Locked Iko identity unchanged.
+   ============================================================ */
+
+/* Dark-theme CTA text must never disappear into the button surface. */
+body.v60-ghostops-home .hero-actions a,
+body.v60-ghostops-home .hero-actions a span,
+body.v60-ghostops-home .hero-actions a b{
+  color:var(--v60-heading)!important;
+}
+body.v60-ghostops-home .hero-actions a small{
+  color:var(--v60-muted)!important;
+}
+body.v60-ghostops-home .hero-actions .primary-btn{
+  background:
+    linear-gradient(115deg,rgba(0,231,255,.12),rgba(5,16,28,.96),rgba(139,92,255,.12))!important;
+}
+html[data-ui-theme="light"] body.v60-ghostops-home .hero-actions .primary-btn{
+  background:
+    linear-gradient(115deg,rgba(0,190,235,.10),rgba(255,255,255,.92),rgba(139,92,255,.08))!important;
+}
+
+/* Keep a real two-column hero on normal desktop and split-screen widths.
+   The previous 1000px breakpoint forced Iko below all proof cards. */
+@media (min-width:821px) and (max-width:1279px){
+  body.v60-ghostops-home .clarity-hero{
+    grid-template-columns:minmax(0,.98fr) minmax(390px,1.02fr)!important;
+    grid-template-rows:1fr!important;
+    min-height:calc(100vh - 84px)!important;
+    padding:42px 0 72px!important;
+    gap:clamp(20px,3vw,42px)!important;
+    align-items:center!important;
+    overflow:hidden!important;
+  }
+
+  body.v60-ghostops-home .hero-copy{
+    grid-column:1!important;
+    grid-row:1!important;
+    align-self:center!important;
+    padding-left:clamp(28px,4vw,48px)!important;
+    padding-right:0!important;
+    margin:0!important;
+    transform:none!important;
+    max-width:620px!important;
+  }
+
+  body.v60-ghostops-home .hero-copy h1{
+    font-size:clamp(54px,6.1vw,78px)!important;
+    line-height:.88!important;
+    margin:18px 0 18px!important;
+  }
+
+  body.v60-ghostops-home .hero-lead{
+    font-size:clamp(15px,1.65vw,17px)!important;
+    line-height:1.55!important;
+  }
+
+  body.v60-ghostops-home .v60-hero-motto{
+    margin-top:15px!important;
+    font-size:9px!important;
+  }
+
+  body.v60-ghostops-home .hero-actions{
+    margin-top:22px!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+
+  body.v60-ghostops-home .hero-actions a{
+    min-width:0!important;
+    width:100%!important;
+    min-height:62px!important;
+  }
+
+  body.v60-ghostops-home .clarity-proof{
+    margin-top:24px!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  body.v60-ghostops-home .clarity-proof a{
+    min-height:104px!important;
+    padding:14px 12px!important;
+  }
+
+  body.v60-ghostops-home .clarity-proof strong{
+    font-size:11px!important;
+  }
+
+  body.v60-ghostops-home .clarity-proof span{
+    font-size:10px!important;
+    line-height:1.45!important;
+  }
+
+  body.v60-ghostops-home .hero-core{
+    grid-column:2!important;
+    grid-row:1!important;
+    align-self:center!important;
+    min-height:590px!important;
+    margin:0!important;
+    transform:none!important;
+  }
+
+  body.v60-ghostops-home .iko-v5-core-logo{
+    width:min(52vw,550px)!important;
+    top:49%!important;
+  }
+
+  body.v60-ghostops-home .iko-v5-core-orbit{
+    width:min(57vw,600px)!important;
+    top:49%!important;
+  }
+
+  body.v60-ghostops-home .iko-v5-core-rail{
+    width:min(67vw,700px)!important;
+    top:76%!important;
+  }
+
+  body.v60-ghostops-home .clarity-core-label{
+    right:4%!important;
+    top:10%!important;
+  }
+
+  body.v60-ghostops-home .clarity-core-tags{
+    bottom:8%!important;
+  }
+
+  /* The index rail should not steal horizontal room at split-screen widths. */
+  .v60-left-index,
+  .v60-side-quote,
+  .v60-right-mission{
+    display:none!important;
+  }
+}
+
+/* One-column mode starts only at true tablet/mobile widths. */
+@media (max-width:820px){
+  body.v60-ghostops-home .clarity-hero{
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto!important;
+    min-height:auto!important;
+    padding:38px 0 58px!important;
+    overflow:visible!important;
+  }
+
+  body.v60-ghostops-home .hero-copy{
+    grid-column:1!important;
+    grid-row:1!important;
+    padding:0 clamp(18px,5vw,36px)!important;
+    margin:0!important;
+    transform:none!important;
+  }
+
+  body.v60-ghostops-home .hero-core{
+    grid-column:1!important;
+    grid-row:2!important;
+    min-height:470px!important;
+  }
+
+  body.v60-ghostops-home .clarity-proof{
+    grid-template-columns:1fr!important;
+  }
+}
+
+/* Header tools stay inside the viewport and don't force odd wrapping. */
+@media (min-width:821px) and (max-width:1100px){
+  .v60-header-tools{
+    position:absolute!important;
+    right:14px!important;
+    top:50%!important;
+    transform:translateY(-50%)!important;
+    z-index:8!important;
+  }
+  .v60-theme-toggle{
+    min-height:38px!important;
+  }
+  .v60-theme-label{
+    display:none!important;
+  }
+}

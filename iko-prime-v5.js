@@ -25,7 +25,7 @@
   atmosphere.className = "iko-v5-atmosphere";
   atmosphere.setAttribute("aria-hidden", "true");
   const bg = document.createElement("img");
-  bg.src = `${assetRoot}/backgrounds/${routeBackground}`;
+  bg.src = `${assetRoot}/backgrounds/${routeBackground}?v=52`;
   bg.alt = "";
   bg.decoding = "async";
   if (path !== "/") bg.loading = "lazy";
@@ -34,7 +34,7 @@
   body.prepend(atmosphere);
 
   document.querySelectorAll(".brand img,.v423-panel-brand img").forEach(img => {
-    img.src = `${assetRoot}/identity/iko-prime-logo-256.webp`;
+    img.src = `${assetRoot}/identity/iko-prime-logo-512.webp?v=52`;
     img.decoding = "async";
   });
 
@@ -44,20 +44,20 @@
     if (!homeCore.querySelector(".iko-v5-core-orbit")) {
       const orbit = document.createElement("img");
       orbit.className = "iko-v5-core-orbit";
-      orbit.src = `${assetRoot}/hud/iko-orbital-reactor.webp`;
+      orbit.src = `${assetRoot}/hud/iko-orbital-reactor.webp?v=52`;
       orbit.alt = "";
       orbit.setAttribute("aria-hidden", "true");
 
       const logo = document.createElement("img");
       logo.className = "iko-v5-core-logo";
-      logo.src = `${assetRoot}/identity/iko-prime-logo-512.webp`;
+      logo.src = `${assetRoot}/identity/iko-prime-logo-1024.webp?v=52`;
       logo.alt = "";
       logo.setAttribute("aria-hidden", "true");
       logo.dataset.ikoParallax = ".55";
 
       const rail = document.createElement("img");
       rail.className = "iko-v5-core-rail";
-      rail.src = `${assetRoot}/hud/iko-signal-rail.webp`;
+      rail.src = `${assetRoot}/hud/iko-signal-rail.webp?v=52`;
       rail.alt = "";
       rail.setAttribute("aria-hidden", "true");
 
@@ -74,8 +74,8 @@
       const mark = document.createElement("img");
       mark.className = "iko-v5-page-mark";
       mark.src = path === "/website-studio"
-        ? `${assetRoot}/hud/iko-portal-emblem.webp`
-        : `${assetRoot}/identity/iko-prime-logo-256.webp`;
+        ? `${assetRoot}/hud/iko-portal-emblem.webp?v=52`
+        : `${assetRoot}/identity/iko-prime-logo-512.webp?v=52`;
       mark.alt = "";
       mark.setAttribute("aria-hidden", "true");
       mark.loading = "lazy";

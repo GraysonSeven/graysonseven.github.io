@@ -1,0 +1,87 @@
+{
+  "version": "5.2",
+  "locked_main_logo_sha256": "DDA9E772F1267325918D3608273124BD21A507B57BB49A9E2148EBFF0CBBB5FD",
+  "locked_main_logo_policy": "READ_ONLY_NOT_INCLUDED_IN_PATCH",
+  "assets": {
+    "assets/iko-prime/backgrounds/about-skyline.webp": {
+      "width": 1672,
+      "height": 941,
+      "sha256": "290CD2FC31CCD025DE0E3103F959139F6BE81481AF9587D039BCA6FE81ABEC1E"
+    },
+    "assets/iko-prime/backgrounds/contact-horizon.webp": {
+      "width": 1916,
+      "height": 821,
+      "sha256": "B8563BE94333C5E05AE0A56F8BC98E831E2DA758D632F1DA7C013F4CC7155DB0"
+    },
+    "assets/iko-prime/backgrounds/home-command-center.webp": {
+      "width": 1672,
+      "height": 941,
+      "sha256": "17FDB0B2EF9C91D67E017B5270D3727C99C437494AD7385432F96A1E2DF69A60"
+    },
+    "assets/iko-prime/backgrounds/portfolio-control-city.webp": {
+      "width": 1672,
+      "height": 941,
+      "sha256": "EA4068FDDECEB3B697C52624805A00F0BF3C072622286D628E5ABC0D778FE3C1"
+    },
+    "assets/iko-prime/backgrounds/services-workspace.webp": {
+      "width": 1672,
+      "height": 941,
+      "sha256": "F8535A2E267AC7F7C0D33160FCF2893395F750039CE70C1D2DD5CF2AAE7C6DF1"
+    },
+    "assets/iko-prime/backgrounds/studio-design-console.webp": {
+      "width": 1672,
+      "height": 941,
+      "sha256": "8A52BFCBDB1B498BDD003F31F6EE3D2CFECE4791BFCA1666EEC55060C6A17DC0"
+    },
+    "assets/iko-prime/backgrounds/try-apps-network.webp": {
+      "width": 1672,
+      "height": 941,
+      "sha256": "83AC5B34875F2E242E47A72C0BF34A7A973B02A05F1AEAD37ECF38EBFB242D2D"
+    },
+    "assets/iko-prime/character/iko-prime-character.webp": {
+      "width": 1122,
+      "height": 1402,
+      "sha256": "762900CB49B2FCC1A6BB32ED344E991218E028FABBB758E4BD3284FC8525A31F"
+    },
+    "assets/iko-prime/decorative/iko-crystal-slash.webp": {
+      "width": 2172,
+      "height": 724,
+      "sha256": "C0D02F6DDBB0C4A957DE7CDCAA7BC505AF3C40423973277A73CD11F3368407B7"
+    },
+    "assets/iko-prime/hud/iko-hud-frame.webp": {
+      "width": 1448,
+      "height": 1086,
+      "sha256": "717C8158629F2CD58E6A4A17AA98ABF75CD47C0CD254D62A278C528095715C86"
+    },
+    "assets/iko-prime/hud/iko-network-emblem.webp": {
+      "width": 1448,
+      "height": 1086,
+      "sha256": "BDCCD655BE11B1B6BD99034139368BE0309D69F1AD9E43B74F8B53443030172E"
+    },
+    "assets/iko-prime/hud/iko-portal-emblem.webp": {
+      "width": 1254,
+      "height": 1254,
+      "sha256": "C65E0906AEC03FB1E5183B381ECAC1F2C4C122D5FA337CACE4F65B518583CD3D"
+    },
+    "assets/iko-prime/hud/iko-signal-rail.webp": {
+      "width": 2172,
+      "height": 724,
+      "sha256": "D374BB2C394C06154647A34BCB074432A7BB79CAAE1280B9A244DC3CD2739E9F"
+    },
+    "assets/iko-prime/identity/iko-prime-logo-1024.webp": {
+      "width": 1024,
+      "height": 1024,
+      "sha256": "B6AF5EB874266D7146E4FD6F758A59A32BFBC37469FC659865F8869ABAAB74EE"
+    },
+    "assets/iko-prime/identity/iko-prime-logo-256.webp": {
+      "width": 256,
+      "height": 256,
+      "sha256": "89B96880DD4A8204523091E52120C936669322AC0B5A32CCFC67F5BE47A7353A"
+    },
+    "assets/iko-prime/identity/iko-prime-logo-512.webp": {
+      "width": 512,
+      "height": 512,
+      "sha256": "5D27CF3921F2F7CDFFD70EAB8F8725EC1A3804B4C40DBA189767BBEF73415417"
+    }
+  }
+}

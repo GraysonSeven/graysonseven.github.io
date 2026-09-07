@@ -130,12 +130,6 @@
 
   applyTheme(getTheme(), false);
 
-  // Respect system changes only when the user has never made a choice.
-  const scheme = matchMedia("(prefers-color-scheme: light)");
-  const onScheme = event => {
-    let saved = null;
-    try { saved = localStorage.getItem(storageKey); } catch (_) {}
-    if (saved !== "dark" && saved !== "light") applyTheme(event.matches ? "light" : "dark", false);
-  };
-  if (scheme.addEventListener) scheme.addEventListener("change", onScheme);
+  // The public brand defaults to DARK. We intentionally do not follow later
+  // operating-system theme changes. Only the site's own toggle changes/persists it.
 })();

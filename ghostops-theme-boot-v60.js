@@ -7,8 +7,10 @@
   if (!theme) {
     try { theme = localStorage.getItem("icharles-ui-theme"); } catch (_) {}
   }
+  // Brand default: first visit always starts in DARK.
+  // A manually saved user choice still wins, and Visual QA can explicitly override it.
   if (theme !== "dark" && theme !== "light") {
-    theme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    theme = "dark";
   }
 
   if (qaTheme === "dark" || qaTheme === "light") {

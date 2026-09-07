@@ -1,6 +1,6 @@
 ﻿param(
   [string]$BaseUrl='https://icharles.pages.dev',
-  [string]$Label='V6.4.5A-HOME'
+  [string]$Label='V6.4.6A-ASSET-SETTLED'
 )
 
 $ErrorActionPreference='Stop'
@@ -49,13 +49,14 @@ try{
   $BaseUrl=$BaseUrl.TrimEnd('/')
 
   $config=[ordered]@{
-    version='6.4.5A'
+    version='6.4.6A'
     baseUrl=$BaseUrl
     label=$Label
     deep=$false
     outputRoot=$work
     navigationTimeoutMs=75000
     navigationAttempts=3
+    visualAssetTimeoutMs=45000
     groups=@(
       @{
         group='HOME-UPDATE'
@@ -73,11 +74,12 @@ try{
 
   Write-Utf8NoBom $configPath ($config | ConvertTo-Json -Depth 10)
 
-  Write-Host "`n=== ICHARLES HOME-ONLY VISUAL QA // RETRY HARDENED ===" -ForegroundColor Cyan
+  Write-Host "`n=== ICHARLES HOME-ONLY VISUAL QA // ASSET-SETTLED ===" -ForegroundColor Cyan
   Write-Host 'Scope: HOME ONLY'
   Write-Host 'Themes: DARK + LIGHT'
   Write-Host 'Viewports: 1440 / 1024 / 390'
-  Write-Host 'Navigation: up to 3 attempts per capture, 75s response timeout'
+  Write-Host 'Critical asset wait: ENABLED'
+  Write-Host 'Waits for: hero background + Iko 1024 + orbit + visible images'
   Write-Host ''
 
   Push-Location $engineRoot
@@ -103,6 +105,7 @@ try{
   Write-Host "Captures: $($manifest.capture_count)"
   Write-Host "Failures: $($manifest.failure_count)"
   Write-Host "Layout warnings: $($manifest.layout_warning_count)"
+  Write-Host "Critical visual asset wait: $($manifest.visual_asset_wait)"
   Write-Host "ZIP: $zipPath" -ForegroundColor Cyan
 
   try{
@@ -110,11 +113,11 @@ try{
   }catch{}
 
   if([int]$manifest.capture_count -ne 6){
-    throw "Expected 6 Home captures but got $($manifest.capture_count). Partial QA ZIP was preserved at: $zipPath"
+    throw "Expected 6 Home captures but got $($manifest.capture_count). Partial QA ZIP preserved at: $zipPath"
   }
 
   if($engineExit-ne0 -or [int]$manifest.failure_count -gt 0){
-    throw "Home Visual QA completed with $($manifest.failure_count) failure(s). QA ZIP was preserved at: $zipPath"
+    throw "Home Visual QA completed with $($manifest.failure_count) failure(s). QA ZIP preserved at: $zipPath"
   }
 }
 finally{

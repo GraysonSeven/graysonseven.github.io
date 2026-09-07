@@ -17,6 +17,7 @@ const layoutWarnings = [];
 
 const navTimeoutMs = Number(config.navigationTimeoutMs || 75000);
 const maxAttempts = Math.max(1, Number(config.navigationAttempts || 3));
+const assetTimeoutMs = Number(config.visualAssetTimeoutMs || 45000);
 
 const browser = await chromium.launch({
   channel: "msedge",
@@ -46,7 +47,7 @@ async function settle(page) {
       }
     });
   } catch {}
-  await page.waitForTimeout(1100);
+  await page.waitForTimeout(700);
 }
 
 async function navigateWithRetry(page, url, label) {
@@ -54,8 +55,6 @@ async function navigateWithRetry(page, url, label) {
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      // "commit" only waits until the server responds and the browser commits
-      // the main document. settle() handles DOM/fonts afterwards.
       await page.goto(url, {
         waitUntil: "commit",
         timeout: navTimeoutMs
@@ -92,6 +91,138 @@ async function navigateWithRetry(page, url, label) {
   throw lastError || new Error(`Navigation failed after ${maxAttempts} attempts`);
 }
 
+async function waitForVisualAssets(page, routeName, theme, viewportName) {
+  const result = await page.evaluate(async ({ assetTimeoutMs }) => {
+    const timeout = (promise, ms, label) =>
+      Promise.race([
+        promise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error(`Timed out waiting for ${label}`)), ms)
+        )
+      ]);
+
+    const decodeImage = async (img, label) => {
+      if (!img) return { label, skipped:true };
+
+      if (!img.complete || img.naturalWidth < 1) {
+        await timeout(new Promise((resolve, reject) => {
+          const done = () => {
+            cleanup();
+            img.naturalWidth > 0 ? resolve() : reject(new Error(`${label} loaded with zero width`));
+          };
+          const fail = () => {
+            cleanup();
+            reject(new Error(`${label} failed to load`));
+          };
+          const cleanup = () => {
+            img.removeEventListener("load", done);
+            img.removeEventListener("error", fail);
+          };
+          img.addEventListener("load", done, { once:true });
+          img.addEventListener("error", fail, { once:true });
+        }), assetTimeoutMs, label);
+      }
+
+      if (typeof img.decode === "function") {
+        try {
+          await timeout(img.decode(), assetTimeoutMs, `${label} decode`);
+        } catch {
+          // Some browsers reject decode() even when the image is fully rendered.
+          if (!(img.complete && img.naturalWidth > 0)) throw new Error(`${label} did not decode`);
+        }
+      }
+
+      return {
+        label,
+        complete:img.complete,
+        width:img.naturalWidth,
+        height:img.naturalHeight,
+        src:img.currentSrc || img.src
+      };
+    };
+
+    const critical = [];
+    const criticalSelectors = [
+      [".brand img","header identity"],
+      [".v646-identity-logo","Home Iko 1024"],
+      [".v646-identity-orbit","Home orbit"]
+    ];
+
+    for (const [selector,label] of criticalSelectors) {
+      const el = document.querySelector(selector);
+      if (el) critical.push(await decodeImage(el,label));
+    }
+
+    // Wait for every visible normal <img>, not just the identity.
+    const visibleImages = [...document.images].filter(img => {
+      const style = getComputedStyle(img);
+      const rect = img.getBoundingClientRect();
+      return style.display !== "none" &&
+             style.visibility !== "hidden" &&
+             Number(style.opacity || 1) !== 0 &&
+             rect.width > 0 &&
+             rect.height > 0;
+    });
+
+    for (const img of visibleImages) {
+      if (criticalSelectors.some(([selector]) => img.matches(selector))) continue;
+      try {
+        await decodeImage(img, img.className ? `img.${String(img.className).split(/\s+/)[0]}` : "visible image");
+      } catch {
+        // Non-critical below-the-fold images must not block a Home screenshot.
+      }
+    }
+
+    // CSS background images are not document.images. Preload and decode
+    // the hero's computed background URLs explicitly.
+    const backgroundTargets = [
+      document.querySelector(".clarity-hero"),
+      document.body
+    ].filter(Boolean);
+
+    const backgroundUrls = new Set();
+
+    for (const target of backgroundTargets) {
+      const value = getComputedStyle(target).backgroundImage || "";
+      for (const match of value.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+        try {
+          backgroundUrls.add(new URL(match[1], location.href).href);
+        } catch {}
+      }
+    }
+
+    const backgroundResults = [];
+    for (const url of backgroundUrls) {
+      const img = new Image();
+      img.src = url;
+      try {
+        await decodeImage(img, `CSS background ${url.split("/").pop()}`);
+        backgroundResults.push({url,loaded:true,width:img.naturalWidth,height:img.naturalHeight});
+      } catch (error) {
+        backgroundResults.push({url,loaded:false,error:String(error?.message || error)});
+        throw error;
+      }
+    }
+
+    // Two animation frames ensure decoded paint is committed.
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    return {
+      critical,
+      backgroundResults
+    };
+  }, { assetTimeoutMs });
+
+  await page.waitForTimeout(500);
+
+  console.log(
+    `ASSETS READY ${routeName} / ${theme} / ${viewportName} ` +
+    `critical=${result.critical.length} backgrounds=${result.backgroundResults.length}`
+  );
+
+  return result;
+}
+
 async function captureOne(route, theme, vp, group) {
   const file = `${route.name}__${theme}__${vp.name}.png`;
   const filePath = path.join(shotsDir, file);
@@ -119,6 +250,13 @@ async function captureOne(route, theme, vp, group) {
       page,
       url,
       `${route.name} / ${theme} / ${vp.name}`
+    );
+
+    const assetState = await waitForVisualAssets(
+      page,
+      route.name,
+      theme,
+      vp.name
     );
 
     const metrics = await page.evaluate(() => ({
@@ -178,6 +316,9 @@ async function captureOne(route, theme, vp, group) {
       devicePixelRatio: metrics.devicePixelRatio,
       horizontalOverflowPx: Math.max(0, horizontalOverflow),
       scrollWidth: Math.max(metrics.scrollWidth, metrics.bodyScrollWidth),
+      visualAssetsReady:true,
+      criticalAssetCount:assetState.critical.length,
+      cssBackgroundCount:assetState.backgroundResults.length,
       file,
       bytes: stat.size,
       url
@@ -194,6 +335,7 @@ async function captureOne(route, theme, vp, group) {
       viewport: vp.name,
       error: error?.message || String(error)
     });
+
     console.error(
       `FAIL ${route.name} / ${theme} / ${vp.name}: ${error?.message || error}`
     );
@@ -219,7 +361,7 @@ await browser.close();
 const uniqueNames = new Set(captures.map(c => c.file));
 if (uniqueNames.size !== captures.length) {
   failures.push({
-    error: `Filename collision: ${captures.length} captures but ${uniqueNames.size} unique files.`
+    error:`Filename collision: ${captures.length} captures but ${uniqueNames.size} unique files.`
   });
 }
 
@@ -228,24 +370,26 @@ const actualFiles = fs.readdirSync(shotsDir)
 
 if (actualFiles.length !== captures.length) {
   failures.push({
-    error: `Screenshot count mismatch: ${captures.length} capture records but ${actualFiles.length} PNG files.`
+    error:`Screenshot count mismatch: ${captures.length} capture records but ${actualFiles.length} PNG files.`
   });
 }
 
 const manifest = {
-  version: "6.4.5A",
-  engine: "Playwright Core controlling installed Microsoft Edge",
-  generated_at: new Date().toISOString(),
-  label: config.label,
-  base_url: config.baseUrl,
-  deep: !!config.deep,
-  navigation_timeout_ms: navTimeoutMs,
-  navigation_attempts: maxAttempts,
-  capture_count: captures.length,
-  failure_count: failures.length,
-  layout_warning_count: layoutWarnings.length,
+  version:"6.4.6A",
+  engine:"Playwright Core controlling installed Microsoft Edge",
+  generated_at:new Date().toISOString(),
+  label:config.label,
+  base_url:config.baseUrl,
+  deep:!!config.deep,
+  navigation_timeout_ms:navTimeoutMs,
+  navigation_attempts:maxAttempts,
+  visual_asset_timeout_ms:assetTimeoutMs,
+  visual_asset_wait:true,
+  capture_count:captures.length,
+  failure_count:failures.length,
+  layout_warning_count:layoutWarnings.length,
   captures,
-  layout_warnings: layoutWarnings,
+  layout_warnings:layoutWarnings,
   failures
 };
 
@@ -259,7 +403,7 @@ const cards = captures.map(c => `
 <article class="card">
   <header><strong>${safeHtml(c.route)}</strong><span>${safeHtml(c.theme)} · ${safeHtml(c.viewport)} · ${c.actualViewport}</span></header>
   <img src="screenshots/${safeHtml(c.file)}" alt="${safeHtml(c.route)} ${safeHtml(c.theme)} ${safeHtml(c.viewport)}">
-  <footer><span>${safeHtml(c.path)}</span><b>${c.horizontalOverflowPx > 2 ? `OVERFLOW +${c.horizontalOverflowPx}px` : "WIDTH OK"}</b></footer>
+  <footer><span>ASSETS READY · ${safeHtml(c.path)}</span><b>${c.horizontalOverflowPx > 2 ? `OVERFLOW +${c.horizontalOverflowPx}px` : "WIDTH OK"}</b></footer>
 </article>`).join("\n");
 
 const warningBlock = layoutWarnings.length
@@ -268,7 +412,7 @@ const warningBlock = layoutWarnings.length
 
 const failureBlock = failures.length
   ? `<section class="fail"><strong>${failures.length} capture failure(s)</strong><pre>${safeHtml(failures.map(f => `${f.route || "system"} / ${f.theme || ""} / ${f.viewport || ""}: ${f.error}`).join("\n"))}</pre></section>`
-  : `<section class="pass"><strong>All requested screenshots were captured with exact viewport emulation.</strong></section>`;
+  : `<section class="pass"><strong>All requested screenshots were captured after critical visual assets fully loaded and decoded.</strong></section>`;
 
 const gallery = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -282,7 +426,7 @@ const gallery = `<!doctype html>
 .card header span{color:#88a0b5;font-size:12px}.card img{display:block;width:100%;height:auto;background:#020408}
 .pass,.fail,.warn{margin:20px;padding:14px;border:1px solid #1c5747;background:#071912}.fail{border-color:#7b2930;background:#1b090b}.warn{border-color:#785f21;background:#181407}
 pre{white-space:pre-wrap;margin-bottom:0}</style></head><body>
-<div class="top"><h1>iCharles Visual QA — ${safeHtml(config.label)}</h1><p>${safeHtml(config.baseUrl)} · ${captures.length} captures · retry-hardened Edge capture</p></div>
+<div class="top"><h1>iCharles Visual QA — ${safeHtml(config.label)}</h1><p>${safeHtml(config.baseUrl)} · ${captures.length} captures · CRITICAL ASSETS DECODED BEFORE CAPTURE</p></div>
 ${failureBlock}${warningBlock}<main class="grid">${cards}</main></body></html>`;
 
 fs.writeFileSync(
@@ -300,12 +444,14 @@ Label: ${config.label}
 Engine: Playwright Core + installed Microsoft Edge
 Navigation attempts: ${maxAttempts}
 Navigation timeout: ${navTimeoutMs} ms
+Visual asset timeout: ${assetTimeoutMs} ms
+Critical visual asset wait: ENABLED
 Captures: ${captures.length}
 Failures: ${failures.length}
 Layout warnings: ${layoutWarnings.length}
 
-Every capture verifies the actual CSS viewport before the screenshot.
-Upload this ZIP to ChatGPT for visual inspection.
+Each screenshot is taken only after visible images and hero CSS background
+images are loaded and decoded.
 `,
   "utf8"
 );

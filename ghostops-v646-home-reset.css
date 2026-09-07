@@ -1,0 +1,417 @@
+/* ============================================================
+   iCHARLES V6.4.6 — HOME HERO ARCHITECTURE RESET
+   Final simplification after V6.4.5A visual QA:
+   - world is a direct rectangular hero background
+   - identity uses a dedicated stage built from existing locked assets
+   - legacy world/identity renderers are hidden, not stacked
+   ============================================================ */
+
+body.v64-reference-home .clarity-hero{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+
+  background:
+    linear-gradient(90deg,
+      rgba(2,7,13,.78) 0%,
+      rgba(2,7,13,.54) 30%,
+      rgba(2,7,13,.14) 52%,
+      rgba(2,7,13,.03) 72%,
+      rgba(2,7,13,.10) 100%),
+    linear-gradient(to bottom,
+      rgba(2,7,13,.02) 0%,
+      rgba(2,7,13,.015) 62%,
+      rgba(2,7,13,.24) 100%),
+    url("/assets/iko-prime/ghostops/home-v642/home-world-dark-v642.webp?v=646")
+      center center/cover no-repeat!important;
+}
+
+html[data-ui-theme="light"] body.v64-reference-home .clarity-hero{
+  background:
+    linear-gradient(90deg,
+      rgba(249,253,255,.68) 0%,
+      rgba(249,253,255,.47) 30%,
+      rgba(249,253,255,.11) 52%,
+      rgba(249,253,255,.02) 72%,
+      rgba(249,253,255,.07) 100%),
+    linear-gradient(to bottom,
+      rgba(255,255,255,.02) 0%,
+      rgba(255,255,255,.01) 62%,
+      rgba(245,250,255,.16) 100%),
+    url("/assets/iko-prime/ghostops/home-v642/home-world-light-v642.webp?v=646")
+      center center/cover no-repeat!important;
+}
+
+/* Completely retire the experimental world stack. */
+body.v64-reference-home .v643-world-layer,
+body.v64-reference-home .v644-world-media,
+body.v64-reference-home .clarity-hero::before{
+  display:none!important;
+  content:none!important;
+}
+
+/* Retire the legacy Home identity container.
+   V6.4.6 renders the SAME production asset in one predictable stage. */
+body.v64-reference-home .hero-core{
+  display:none!important;
+}
+
+/* Retire duplicated peripheral renderers from the earlier experiment. */
+body.v64-reference-home .v642-orbit-frame,
+body.v64-reference-home .v642-mission-panel,
+body.v64-reference-home .v642-left-rail{
+  display:none!important;
+}
+
+/* Keep only the vector perimeter framing. */
+body.v64-reference-home .clarity-hero::after{
+  display:block!important;
+  z-index:2!important;
+  opacity:.54!important;
+  pointer-events:none!important;
+}
+html[data-ui-theme="light"] body.v64-reference-home .clarity-hero::after{
+  opacity:.36!important;
+}
+
+/* ============================================================
+   NEW DEDICATED LOCKED-IDENTITY STAGE
+   ============================================================ */
+.v646-identity-stage{
+  grid-column:2!important;
+  grid-row:1!important;
+  align-self:stretch!important;
+  justify-self:stretch!important;
+
+  position:relative!important;
+  z-index:5!important;
+  min-width:0!important;
+  min-height:620px!important;
+
+  overflow:visible!important;
+  pointer-events:none!important;
+}
+
+.v646-identity-orbit{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+
+  width:min(49vw,710px)!important;
+  max-width:none!important;
+  aspect-ratio:1!important;
+
+  object-fit:contain!important;
+  opacity:.58!important;
+  z-index:1!important;
+  pointer-events:none!important;
+
+  filter:
+    drop-shadow(0 0 24px rgba(0,231,255,.08))
+    drop-shadow(0 0 28px rgba(255,43,214,.07))!important;
+}
+
+html[data-ui-theme="light"] .v646-identity-orbit{
+  opacity:.62!important;
+  filter:
+    drop-shadow(0 8px 22px rgba(56,113,160,.13))
+    drop-shadow(0 0 18px rgba(0,231,255,.08))!important;
+}
+
+.v646-identity-logo{
+  position:absolute!important;
+  left:50%!important;
+  top:49%!important;
+  transform:translate(-50%,-50%)!important;
+
+  width:min(45vw,670px)!important;
+  height:auto!important;
+  max-width:none!important;
+
+  object-fit:contain!important;
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+
+  z-index:3!important;
+  pointer-events:none!important;
+
+  filter:
+    drop-shadow(0 28px 54px rgba(0,0,0,.52))
+    drop-shadow(-10px 0 24px rgba(0,231,255,.15))
+    drop-shadow(10px 0 24px rgba(255,43,214,.13))!important;
+}
+
+.v646-identity-tags{
+  position:absolute!important;
+  left:50%!important;
+  bottom:7%!important;
+  transform:translateX(-50%)!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+
+  z-index:5!important;
+}
+.v646-identity-tags span{
+  min-width:66px;
+  min-height:26px;
+  display:grid;
+  place-items:center;
+
+  border:1px solid rgba(0,231,255,.20);
+  background:rgba(3,11,20,.68);
+  color:#aab7c9;
+
+  font:800 8px/1 "Space Mono",monospace;
+  letter-spacing:.045em;
+}
+html[data-ui-theme="light"] .v646-identity-tags span{
+  background:rgba(255,255,255,.80);
+  color:#4f6479;
+  border-color:rgba(26,139,196,.20);
+}
+
+/* Compact native mission rail, no raster HUD dependency. */
+.v646-mission{
+  position:absolute;
+  right:20px;
+  top:78px;
+  z-index:7;
+
+  width:150px;
+  padding-left:15px;
+
+  color:var(--v60-muted-2);
+  font:700 8px/1.5 "Space Mono",monospace;
+  letter-spacing:.055em;
+  text-align:left;
+}
+.v646-mission::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(var(--v60-cyan),rgba(0,231,255,.08),var(--v60-magenta));
+  opacity:.72;
+}
+.v646-mission strong{
+  display:block;
+  margin:5px 0 18px;
+  color:var(--v60-heading);
+  font:800 13px/1.25 Inter,system-ui,sans-serif;
+  letter-spacing:-.01em;
+}
+.v646-mission span{
+  display:block;
+  margin:5px 0;
+}
+.v646-mission b{
+  display:block;
+  margin-top:16px;
+  padding-top:10px;
+  border-top:1px solid var(--v60-line);
+  color:var(--v60-muted-2);
+  font:700 8px/1.5 "Space Mono",monospace;
+}
+
+.v646-left-index{
+  position:absolute;
+  left:22px;
+  top:29%;
+  z-index:7;
+
+  display:grid;
+  gap:18px;
+
+  color:var(--v60-muted-2);
+  font:700 9px/1 "Space Mono",monospace;
+}
+.v646-left-index::before{
+  content:"";
+  position:absolute;
+  left:-10px;
+  top:-4px;
+  width:2px;
+  height:90px;
+  background:linear-gradient(var(--v60-cyan),rgba(0,231,255,.08));
+}
+.v646-left-index b{
+  color:var(--v60-heading);
+  font-size:12px;
+}
+
+/* ============================================================
+   COPY / DECK STACKING
+   ============================================================ */
+body.v64-reference-home .hero-copy{
+  grid-column:1!important;
+  grid-row:1!important;
+  z-index:8!important;
+  align-self:center!important;
+}
+
+body.v64-reference-home .clarity-proof.v64-proof-deck{
+  z-index:9!important;
+}
+body.v64-reference-home .v64-bottom-strip{
+  z-index:9!important;
+}
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+@media(min-width:1280px){
+  body.v64-reference-home .clarity-hero{
+    min-height:max(800px,calc(100vh - 96px))!important;
+    height:auto!important;
+
+    grid-template-columns:minmax(0,.93fr) minmax(560px,1.07fr)!important;
+    grid-template-rows:minmax(600px,1fr) auto auto!important;
+  }
+
+  .v646-identity-stage{
+    min-height:620px!important;
+  }
+}
+
+/* ============================================================
+   1024 / SPLIT-SCREEN
+   ============================================================ */
+@media(min-width:821px) and (max-width:1279px){
+  body.v64-reference-home .clarity-hero{
+    min-height:max(800px,calc(100vh - 82px))!important;
+    height:auto!important;
+
+    grid-template-columns:minmax(0,.94fr) minmax(380px,1.06fr)!important;
+    grid-template-rows:minmax(560px,1fr) auto auto!important;
+    column-gap:18px!important;
+
+    background:
+      linear-gradient(90deg,
+        rgba(2,7,13,.74),
+        rgba(2,7,13,.48) 41%,
+        rgba(2,7,13,.08) 70%,
+        rgba(2,7,13,.12)),
+      linear-gradient(to bottom,rgba(2,7,13,.02),rgba(2,7,13,.20)),
+      url("/assets/iko-prime/ghostops/home-v642/home-world-dark-v642.webp?v=646")
+        58% center/cover no-repeat!important;
+  }
+
+  html[data-ui-theme="light"] body.v64-reference-home .clarity-hero{
+    background:
+      linear-gradient(90deg,
+        rgba(249,253,255,.69),
+        rgba(249,253,255,.42) 41%,
+        rgba(249,253,255,.05) 70%,
+        rgba(249,253,255,.09)),
+      linear-gradient(to bottom,rgba(255,255,255,.02),rgba(245,250,255,.14)),
+      url("/assets/iko-prime/ghostops/home-v642/home-world-light-v642.webp?v=646")
+        58% center/cover no-repeat!important;
+  }
+
+  .v646-identity-stage{
+    min-height:560px!important;
+  }
+
+  .v646-identity-logo{
+    width:min(51vw,520px)!important;
+    top:50%!important;
+  }
+
+  .v646-identity-orbit{
+    width:min(57vw,575px)!important;
+    top:50%!important;
+  }
+
+  .v646-mission{
+    display:none!important;
+  }
+
+  .v646-left-index{
+    left:16px;
+    top:30%;
+    opacity:.62;
+  }
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+@media(max-width:820px){
+  body.v64-reference-home .clarity-hero{
+    min-height:0!important;
+    height:auto!important;
+
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto auto auto!important;
+
+    background:
+      linear-gradient(to bottom,
+        rgba(2,7,13,.78) 0%,
+        rgba(2,7,13,.60) 25%,
+        rgba(2,7,13,.25) 49%,
+        rgba(2,7,13,.10) 74%,
+        rgba(2,7,13,.26) 100%),
+      url("/assets/iko-prime/ghostops/home-v642/home-world-dark-v642.webp?v=646")
+        63% center/cover no-repeat!important;
+  }
+
+  html[data-ui-theme="light"] body.v64-reference-home .clarity-hero{
+    background:
+      linear-gradient(to bottom,
+        rgba(249,253,255,.82) 0%,
+        rgba(249,253,255,.62) 25%,
+        rgba(249,253,255,.25) 49%,
+        rgba(249,253,255,.11) 74%,
+        rgba(246,251,255,.28) 100%),
+      url("/assets/iko-prime/ghostops/home-v642/home-world-light-v642.webp?v=646")
+        63% center/cover no-repeat!important;
+  }
+
+  body.v64-reference-home .hero-copy{
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+
+  .v646-identity-stage{
+    grid-column:1!important;
+    grid-row:2!important;
+    min-height:440px!important;
+  }
+
+  .v646-identity-logo{
+    width:min(110vw,500px)!important;
+    top:50%!important;
+  }
+
+  .v646-identity-orbit{
+    width:min(120vw,540px)!important;
+    top:50%!important;
+    opacity:.48!important;
+  }
+
+  .v646-identity-tags{
+    bottom:4%!important;
+  }
+
+  .v646-mission,
+  .v646-left-index{
+    display:none!important;
+  }
+
+  body.v64-reference-home .clarity-proof.v64-proof-deck{
+    grid-column:1!important;
+    grid-row:3!important;
+  }
+
+  body.v64-reference-home .v64-bottom-strip{
+    grid-column:1!important;
+    grid-row:4!important;
+  }
+}

@@ -1,0 +1,180 @@
+/* ============================================================
+   iCHARLES V6.4.4 — TRUE FULL-HERO WORLD
+   Robust fix: the mountain environment is now an actual DOM image
+   layer above legacy background effects and below all real content.
+   ============================================================ */
+
+body.v64-reference-home .v643-world-layer{
+  display:none!important;
+}
+
+/* Disable every legacy hero background renderer that can interfere. */
+body.v64-reference-home .clarity-hero::before{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  clip-path:none!important;
+}
+body.v64-reference-home .hero-copy,
+body.v64-reference-home .hero-copy::before,
+body.v64-reference-home .hero-copy::after{
+  background:none!important;
+  background-image:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  clip-path:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+body.v64-reference-home .v60-hero-hud{
+  background:none!important;
+}
+body.v64-reference-home .v60-hero-hud::before,
+body.v64-reference-home .v60-hero-hud::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* Actual image layer. No CSS background clipping possible here. */
+body.v64-reference-home .v644-world-media{
+  position:absolute!important;
+  inset:0!important;
+  z-index:4!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+  user-select:none!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  transform:none!important;
+}
+body.v64-reference-home .v644-world-media>img{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  border:0!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  filter:none!important;
+  transform:none!important;
+}
+body.v64-reference-home .v644-world-light{display:none!important}
+html[data-ui-theme="light"] body.v64-reference-home .v644-world-dark{display:none!important}
+html[data-ui-theme="light"] body.v64-reference-home .v644-world-light{display:block!important}
+
+/* Theme overlays sit inside the rectangular media layer, not as masks. */
+body.v64-reference-home .v644-world-media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  background:
+    linear-gradient(90deg,
+      rgba(2,7,13,.76) 0%,
+      rgba(2,7,13,.54) 30%,
+      rgba(2,7,13,.14) 51%,
+      rgba(2,7,13,.03) 71%,
+      rgba(2,7,13,.09) 100%),
+    linear-gradient(to bottom,
+      rgba(2,7,13,.02) 0%,
+      rgba(2,7,13,.015) 58%,
+      rgba(2,7,13,.23) 100%);
+}
+html[data-ui-theme="light"] body.v64-reference-home .v644-world-media::after{
+  background:
+    linear-gradient(90deg,
+      rgba(248,252,255,.69) 0%,
+      rgba(248,252,255,.48) 30%,
+      rgba(248,252,255,.11) 51%,
+      rgba(248,252,255,.02) 71%,
+      rgba(248,252,255,.07) 100%),
+    linear-gradient(to bottom,
+      rgba(255,255,255,.02) 0%,
+      rgba(255,255,255,.01) 58%,
+      rgba(245,250,255,.15) 100%);
+}
+
+/* Keep all intentional HUD/content above the world media. */
+body.v64-reference-home .clarity-hero::after{z-index:5!important}
+body.v64-reference-home .v642-orbit-frame{z-index:6!important}
+body.v64-reference-home .hero-core{z-index:7!important}
+body.v64-reference-home .hero-copy{z-index:8!important}
+body.v64-reference-home .v642-left-rail,
+body.v64-reference-home .v642-mission-panel{z-index:9!important}
+body.v64-reference-home .v60-hero-hud{z-index:10!important}
+body.v64-reference-home .clarity-proof.v64-proof-deck,
+body.v64-reference-home .v64-bottom-strip,
+body.v64-reference-home .scroll-hint{z-index:11!important}
+
+/* Old glow/circular systems are no longer needed. */
+body.v64-reference-home .hero-core::after{
+  content:none!important;
+  display:none!important;
+}
+body.v64-reference-home .core-halo{
+  display:none!important;
+}
+
+/* Keep desktop world visible across both columns. */
+@media(min-width:1280px){
+  body.v64-reference-home .v644-world-media>img{
+    object-position:center center!important;
+  }
+}
+
+/* 1024: shift composition a little toward the Iko/mountain center. */
+@media(min-width:821px) and (max-width:1279px){
+  body.v64-reference-home .v644-world-media>img{
+    object-position:58% center!important;
+  }
+  body.v64-reference-home .v644-world-media::after{
+    background:
+      linear-gradient(90deg,
+        rgba(2,7,13,.72),rgba(2,7,13,.48) 40%,rgba(2,7,13,.07) 70%,rgba(2,7,13,.12)),
+      linear-gradient(to bottom,rgba(2,7,13,.02),rgba(2,7,13,.20));
+  }
+  html[data-ui-theme="light"] body.v64-reference-home .v644-world-media::after{
+    background:
+      linear-gradient(90deg,
+        rgba(248,252,255,.68),rgba(248,252,255,.42) 40%,rgba(248,252,255,.05) 70%,rgba(248,252,255,.09)),
+      linear-gradient(to bottom,rgba(255,255,255,.02),rgba(245,250,255,.13));
+  }
+}
+
+/* Mobile: same world, no crop-mask, different focal point only. */
+@media(max-width:820px){
+  body.v64-reference-home .v644-world-media>img{
+    object-position:63% center!important;
+  }
+  body.v64-reference-home .v644-world-media::after{
+    background:
+      linear-gradient(to bottom,
+        rgba(2,7,13,.78) 0%,
+        rgba(2,7,13,.61) 28%,
+        rgba(2,7,13,.24) 51%,
+        rgba(2,7,13,.11) 75%,
+        rgba(2,7,13,.25) 100%);
+  }
+  html[data-ui-theme="light"] body.v64-reference-home .v644-world-media::after{
+    background:
+      linear-gradient(to bottom,
+        rgba(249,253,255,.82) 0%,
+        rgba(249,253,255,.62) 29%,
+        rgba(249,253,255,.25) 51%,
+        rgba(249,253,255,.12) 74%,
+        rgba(246,251,255,.27) 100%);
+  }
+}

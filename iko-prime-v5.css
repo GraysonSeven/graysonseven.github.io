@@ -664,3 +664,289 @@ header .brand strong,
 }
 
 /* END V5.4 FINAL VISUAL QA */
+/* ============================================================
+   iCHARLES V5.5 — REST OF SITE FINAL POLISH
+   Source-driven final pass for remaining pages.
+   Locked Iko identity unchanged. No new graphics.
+   ============================================================ */
+
+/* SERVICES — preserve commercial clarity, remove desktop microtext. */
+.v45-services-hero p{
+  font-size:18px!important;
+  color:#a8b4c6!important;
+}
+.v45-button{
+  font-size:11.5px!important;
+  min-height:54px!important;
+}
+.v45-hero-proof::before,
+.v45-proof-line span{
+  font-size:10px!important;
+}
+.v45-proof-line strong{
+  font-size:14px!important;
+  line-height:1.45!important;
+}
+.v45-service-copy p{
+  font-size:15px!important;
+}
+.v45-get>strong{
+  font-size:11px!important;
+}
+.v45-get li{
+  font-size:14px!important;
+  line-height:1.5!important;
+}
+.v45-process strong{
+  font-size:15px!important;
+}
+.v45-process p{
+  font-size:13px!important;
+}
+.v45-evidence p,
+.v45-section-head p{
+  font-size:15px!important;
+}
+.v45-faq summary{
+  font-size:15px!important;
+}
+.v45-faq p{
+  font-size:15px!important;
+  line-height:1.7!important;
+}
+
+/* ABOUT — this page had the most obvious desktop microtext. */
+.identity-top{
+  font-size:9px!important;
+}
+.identity-bottom small{
+  font-size:9px!important;
+}
+.identity-bottom strong{
+  font-size:19px!important;
+  line-height:1.35!important;
+}
+.story span{
+  font-size:9px!important;
+}
+.story p{
+  font-size:16px!important;
+  color:#9aa6ba!important;
+  line-height:1.72!important;
+}
+.pill-row i{
+  font-size:9px!important;
+  padding:8px 10px!important;
+}
+.principle b{
+  font-size:9px!important;
+}
+.principle strong{
+  font-size:16px!important;
+}
+.principle p{
+  font-size:13px!important;
+  color:#909cb0!important;
+}
+.identity-core img{
+  width:min(420px,76%)!important;
+}
+
+/* CONTACT — make the practical contact information easy to scan. */
+.contact-copy p{
+  font-size:16px!important;
+  color:#9ca8ba!important;
+}
+.contact-note{
+  font-size:10px!important;
+  line-height:1.65!important;
+}
+.terminal-top,
+.terminal-foot{
+  font-size:9px!important;
+}
+.line small{
+  font-size:9px!important;
+}
+.line strong{
+  font-size:11px!important;
+  line-height:1.45!important;
+}
+.contact-status{
+  font-size:10px!important;
+}
+.v48-project-form>span{
+  font-size:10px!important;
+}
+.v48-project-form h3{
+  font-size:clamp(28px,3vw,40px)!important;
+}
+.v48-project-form p{
+  font-size:15px!important;
+  line-height:1.65!important;
+}
+.v48-project-form label{
+  font-size:10px!important;
+}
+.v48-project-form input,
+.v48-project-form select,
+.v48-project-form textarea{
+  font-size:15px!important;
+  min-height:50px!important;
+}
+
+/* WEBSITE STUDIO — keep choices glanceable without tiny labels. */
+.studio-intro-map>small{
+  font-size:11px!important;
+}
+.wizard-topbar span{
+  font-size:11px!important;
+}
+.text-button{
+  font-size:11px!important;
+}
+.type-choice-grid em{
+  font-size:10px!important;
+}
+.theme-choice-grid label>small{
+  font-size:12px!important;
+}
+.palette-option span{
+  font-size:10px!important;
+}
+.advanced-control>strong{
+  font-size:11px!important;
+}
+.segmented span{
+  font-size:11px!important;
+}
+.custom-colors label{
+  font-size:10px!important;
+}
+.request-summary span{
+  font-size:11px!important;
+}
+.choice-action{
+  font-size:10px!important;
+}
+.studio-intro>.iko-v5-page-mark{
+  opacity:.16!important;
+  width:clamp(135px,16vw,220px)!important;
+}
+
+/* PRIVACY — clear legal/project information without tiny buttons. */
+.privacy-grid small{
+  font-size:10px!important;
+}
+.privacy-actions a{
+  font-size:11px!important;
+  min-height:48px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+}
+.privacy-note{
+  font-size:15px!important;
+}
+
+/* WEBSITE REQUEST SENT — confirmation should be easy to understand at a glance. */
+.sent-box .status{
+  font-size:10px!important;
+}
+.sent-box .request-code{
+  font-size:10px!important;
+}
+.sent-box .next-grid small{
+  font-size:9px!important;
+}
+.sent-box .next-grid strong{
+  font-size:14px!important;
+}
+.sent-box .next-grid p{
+  font-size:13px!important;
+}
+.sent-box .sent-actions a{
+  font-size:11px!important;
+  min-height:46px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+}
+
+/* GENERAL PROJECT SENT */
+.v48-sent-status{
+  font-size:10px!important;
+}
+.v48-sent-box p{
+  font-size:16px!important;
+  line-height:1.7!important;
+}
+.v48-sent-actions a{
+  font-size:11px!important;
+  min-height:46px!important;
+}
+
+/* CASE STUDIES — project information is content, not decorative microtext. */
+main#case-main .kicker,
+main#case-main .label{
+  font-size:10px!important;
+}
+main#case-main .fact small{
+  font-size:9px!important;
+}
+main#case-main .fact strong{
+  font-size:14px!important;
+}
+main#case-main .copy p{
+  font-size:16px!important;
+  color:#9da8ba!important;
+}
+main#case-main .tag{
+  font-size:9px!important;
+}
+main#case-main .next{
+  font-size:10px!important;
+}
+main#case-main .case-try-demo span{
+  font-size:11px!important;
+}
+main#case-main .case-try-demo small{
+  font-size:9px!important;
+}
+
+/* Case studies own their product identity; a second Iko page mark is redundant. */
+main#case-main>.hero>.iko-v5-page-mark{
+  display:none!important;
+}
+
+/* Mobile: preserve the larger desktop readability without making controls huge. */
+@media(max-width:900px){
+  .v45-services-hero{
+    grid-template-columns:1fr!important;
+    gap:28px!important;
+    padding-top:58px!important;
+  }
+  .v45-service{
+    grid-template-columns:1fr!important;
+  }
+  .v45-get{
+    border-left:0!important;
+    border-top:1px solid rgba(126,158,203,.13)!important;
+    padding:22px 0 0!important;
+  }
+  .about-layout,
+  .contact-layout{
+    gap:34px!important;
+  }
+}
+@media(max-width:620px){
+  .story p,
+  .contact-copy p,
+  .v48-project-form p,
+  main#case-main .copy p{
+    font-size:15px!important;
+  }
+  .studio-intro>.iko-v5-page-mark{
+    opacity:.10!important;
+  }
+}
+
+/* END V5.5 REST OF SITE FINAL POLISH */

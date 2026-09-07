@@ -1,6 +1,6 @@
 ﻿param(
   [string]$BaseUrl='https://icharles.pages.dev',
-  [string]$Label='V6.4.1-HOME'
+  [string]$Label='V6.4.5A-HOME'
 )
 
 $ErrorActionPreference='Stop'
@@ -30,7 +30,9 @@ function Ensure-Engine {
     try{
       & npm install --silent --no-audit --no-fund playwright-core@latest
       if($LASTEXITCODE-ne0){throw 'Could not install playwright-core.'}
-    }finally{Pop-Location}
+    }finally{
+      Pop-Location
+    }
   }
 
   Copy-Item -LiteralPath (Join-Path $siteRoot 'tools\Capture-Visual-QA.mjs') `
@@ -39,21 +41,27 @@ function Ensure-Engine {
 
 try{
   New-Item -ItemType Directory -Force -Path $work|Out-Null
-  if(!(Test-Path -LiteralPath $downloads)){New-Item -ItemType Directory -Force -Path $downloads|Out-Null}
-  Ensure-Engine
+  if(!(Test-Path -LiteralPath $downloads)){
+    New-Item -ItemType Directory -Force -Path $downloads|Out-Null
+  }
 
+  Ensure-Engine
   $BaseUrl=$BaseUrl.TrimEnd('/')
 
   $config=[ordered]@{
-    version='6.4.1'
+    version='6.4.5A'
     baseUrl=$BaseUrl
     label=$Label
     deep=$false
     outputRoot=$work
+    navigationTimeoutMs=75000
+    navigationAttempts=3
     groups=@(
       @{
         group='HOME-UPDATE'
-        routes=@(@{name='home';path='/'})
+        routes=@(
+          @{name='home';path='/'}
+        )
         viewports=@(
           @{name='desktop-1440';width=1440;height=1000},
           @{name='split-1024';width=1024;height=900},
@@ -65,26 +73,27 @@ try{
 
   Write-Utf8NoBom $configPath ($config | ConvertTo-Json -Depth 10)
 
-  Write-Host "`n=== ICHARLES HOME-ONLY VISUAL QA ===" -ForegroundColor Cyan
+  Write-Host "`n=== ICHARLES HOME-ONLY VISUAL QA // RETRY HARDENED ===" -ForegroundColor Cyan
   Write-Host 'Scope: HOME ONLY'
   Write-Host 'Themes: DARK + LIGHT'
   Write-Host 'Viewports: 1440 / 1024 / 390'
+  Write-Host 'Navigation: up to 3 attempts per capture, 75s response timeout'
   Write-Host ''
 
   Push-Location $engineRoot
   try{
     & node '.\Capture-Visual-QA.mjs' "--config=$configPath"
     $engineExit=$LASTEXITCODE
-  }finally{Pop-Location}
+  }finally{
+    Pop-Location
+  }
 
-  if(!(Test-Path -LiteralPath (Join-Path $work 'manifest.json'))){
+  $manifestPath=Join-Path $work 'manifest.json'
+  if(!(Test-Path -LiteralPath $manifestPath)){
     throw 'Home Visual QA did not create manifest.json.'
   }
 
-  $manifest=Get-Content -LiteralPath (Join-Path $work 'manifest.json') -Raw | ConvertFrom-Json
-  if([int]$manifest.capture_count -ne 6){
-    throw "Expected 6 Home captures but got $($manifest.capture_count)."
-  }
+  $manifest=Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
 
   $stamp=Get-Date -Format 'yyyyMMdd-HHmmss'
   $zipPath=Join-Path $downloads "iCharles_Visual_QA_${Label}_${stamp}.zip"
@@ -96,10 +105,16 @@ try{
   Write-Host "Layout warnings: $($manifest.layout_warning_count)"
   Write-Host "ZIP: $zipPath" -ForegroundColor Cyan
 
-  try{Start-Process explorer.exe "/select,`"$zipPath`""}catch{}
+  try{
+    Start-Process explorer.exe "/select,`"$zipPath`""
+  }catch{}
+
+  if([int]$manifest.capture_count -ne 6){
+    throw "Expected 6 Home captures but got $($manifest.capture_count). Partial QA ZIP was preserved at: $zipPath"
+  }
 
   if($engineExit-ne0 -or [int]$manifest.failure_count -gt 0){
-    throw "Home Visual QA completed with $($manifest.failure_count) failure(s)."
+    throw "Home Visual QA completed with $($manifest.failure_count) failure(s). QA ZIP was preserved at: $zipPath"
   }
 }
 finally{

@@ -23,7 +23,7 @@
   body.append(pointerLight);
 
   // ---------- One short boot sequence per tab session ----------
-  const bootKey = "cl-immersive-boot-v3";
+  const bootKey = "cl-immersive-boot-v5-iko";
   let showBoot = false;
   try {
     showBoot = !sessionStorage.getItem(bootKey) && !reduceMotion && !body.classList.contains("clarity-home") && !body.classList.contains("studio-body");
@@ -37,7 +37,7 @@
     boot.innerHTML = `
       <div class="fx-boot-box">
         <strong>CHARLES LIOC // INITIALIZING</strong>
-        <div class="fx-boot-line"><span>IDENTITY CORE</span><b>ONLINE</b></div>
+        <div class="fx-boot-line"><span>IKO PRIME CORE</span><b>ONLINE</b></div>
         <div class="fx-boot-line"><span>PROJECT ARCHIVE</span><b>READY</b></div>
         <div class="fx-boot-line"><span>INTERACTION LAYER</span><b>ACTIVE</b></div>
         <div class="fx-boot-progress"><i></i></div>
@@ -219,7 +219,7 @@
       <span>BUILD WHAT SHOULD EXIST</span><b>◆</b>
       <span>SOFTWARE + SYSTEMS</span><b>◆</b>
       <span>ANDROID + WEB</span><b>◆</b>
-      <span>WEBSITE CLIENTS OPEN</span><b>◆</b>
+      <span>PROJECT INQUIRIES OPEN</span><b>◆</b>
       <span>DESIGN YOUR SITE LIVE</span><b>◆</b>
       <span>CUSTOM WEBSITES + PORTFOLIOS</span><b>◆</b>
       <span>LOCAL-FIRST THINKING</span><b>◆</b>

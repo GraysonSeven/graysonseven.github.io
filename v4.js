@@ -68,16 +68,6 @@
   const host = document.querySelector(".shell,.wrap") || body;
   host.append(footer);
 
-  // Self-drawing signal map: line animation + ambient motion, inspired by modern scrollytelling.
-  const firstHero = document.querySelector("main .hero, main .try-hero, main .studio-intro");
-  if (firstHero && !firstHero.querySelector(".v4-hero-network")) {
-    firstHero.style.position = "relative";
-    const net = document.createElement("div");
-    net.className = "v4-hero-network";
-    net.setAttribute("aria-hidden", "true");
-    net.innerHTML = `<svg viewBox="0 0 1200 650" preserveAspectRatio="xMidYMid slice"><path d="M-30 510 C180 315 286 585 470 350 S760 85 1220 250"/><path d="M70 90 C275 220 325 155 510 265 S860 585 1210 455"/><path d="M-40 265 C210 170 410 420 610 285 S930 180 1240 85"/><circle cx="470" cy="350" r="4"/><circle cx="860" cy="445" r="4"/><circle cx="1010" cy="165" r="4"/></svg>`;
-    firstHero.prepend(net);
-  }
 
   // Horizontal kinetic strip acts as a visual chapter break, not another paragraph.
   const homeHero = document.querySelector(".clarity-home .clarity-hero");
@@ -90,19 +80,12 @@
     homeHero.insertAdjacentElement("afterend", strip);
   }
 
-  // Moving structured graphics, separate from the softer particle field.
-  if (!document.querySelector(".v4-signal-field")) {
-    const field = document.createElement("div");
-    field.className = "v4-signal-field";
-    field.setAttribute("aria-hidden", "true");
-    field.innerHTML = `<i class="v4-signal-lane"></i><i class="v4-signal-lane"></i><i class="v4-signal-lane"></i><i class="v4-orbit-ghost"></i>`;
-    body.prepend(field);
-  }
 
-  // Let the exact source logo load once from the shared PNG instead of several duplicate SVG wrappers.
-  // The PNG bytes are exactly the embedded raster from the locked SVG; the locked SVG itself stays untouched in the repository.
-  document.querySelectorAll('img[src*="charles-lioc-logo-locked.svg"],img[src*="portfolio/assets/favicon.svg"]').forEach(img => {
-    img.src = "/assets/charles-lioc-og.png";
+  // IKO PRIME V5 identity fallback. Historical locked files remain untouched.
+  document.querySelectorAll(
+    'img[src*="charles-lioc-logo-locked.svg"],img[src*="charles-lioc-og.png"],img[src*="portfolio/assets/favicon.svg"]'
+  ).forEach(img => {
+    img.src = "/assets/iko-prime/identity/iko-prime-logo-256.webp";
     img.decoding = "async";
   });
 
@@ -209,7 +192,7 @@
   panel.innerHTML = `
     <div class="v423-panel-head">
       <a href="/" class="v423-panel-brand">
-        <img src="/assets/charles-lioc-og.png" alt="">
+        <img src="/assets/iko-prime/identity/iko-prime-logo-256.webp" alt="">
         <span><strong>CHARLES LIOC</strong><small>BUILD // IMPROVE // CREATE</small></span>
       </a>
       <button type="button" class="v423-panel-close" aria-label="Close navigation panel">

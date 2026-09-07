@@ -1,16 +1,22 @@
 {
-  "name": "Charles Lioc \u2014 Portfolio",
+  "name": "Charles Lioc — Official Website",
   "short_name": "Charles Lioc",
-  "description": "Portfolio of Charles Lioc \u2014 developer, builder and problem solver.",
+  "description": "Official website of Charles Lioc — developer, builder and problem solver.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#05060a",
   "theme_color": "#05060a",
   "icons": [
     {
-      "src": "/assets/charles-lioc-logo-locked.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/assets/iko-prime/identity/iko-prime-logo-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/iko-prime/identity/iko-prime-logo-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
       "purpose": "any"
     }
   ]

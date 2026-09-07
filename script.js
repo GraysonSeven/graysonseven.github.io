@@ -1,5 +1,6 @@
 (() => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const allowAmbientGrid = false;
   document.getElementById("year").textContent = new Date().getFullYear();
 
   // Mobile menu
@@ -127,12 +128,11 @@
   };
 
   const tick=()=>{t++;draw();raf=requestAnimationFrame(tick);};
-  resize();draw();
-  if(!reduceMotion) tick();
+  if(allowAmbientGrid){resize();draw();if(!reduceMotion)tick();}else{canvas.remove();}
   addEventListener("resize",resize,{passive:true});
   document.addEventListener("visibilitychange",()=>{
     if(reduceMotion)return;
     if(document.hidden){if(raf)cancelAnimationFrame(raf);raf=null;}
-    else if(!raf)tick();
+    else if(allowAmbientGrid && !raf)tick();
   });
 })();

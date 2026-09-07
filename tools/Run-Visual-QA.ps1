@@ -1,4 +1,4 @@
-﻿param(
+param(
   [string]$BaseUrl = 'https://icharles.pages.dev',
   [string]$Label = 'CURRENT',
   [switch]$Deep,
@@ -129,7 +129,7 @@ function Capture-Set {
   foreach($route in $Routes){
     foreach($theme in $themes){
       foreach($vp in $ViewportSet){
-        $fileName="$($route.Name)__$theme__$($vp.Name).png"
+        $fileName="$($route.Name)__${theme}__$($vp.Name).png"
         $out=Join-Path $shots $fileName
         $cacheBust=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         $joiner=if($route.Path.Contains('?')){'&'}else{'?'}
@@ -195,7 +195,16 @@ try{
     Capture-Set -Routes $homeSections -ViewportSet $viewports -Group 'HOME-SECTIONS'
   }
 
-  $manifest=[ordered]@{
+    $uniqueNames=@($captures | Select-Object -ExpandProperty file -Unique)
+  if($uniqueNames.Count -ne $captures.Count){
+    throw "Visual QA filename collision: $($captures.Count) captures mapped to only $($uniqueNames.Count) unique filenames."
+  }
+
+  $actualScreenshotCount=@(Get-ChildItem -LiteralPath $shots -File -Filter '*.png').Count
+  if($actualScreenshotCount -ne $captures.Count){
+    throw "Visual QA screenshot integrity failure: expected $($captures.Count) files but found $actualScreenshotCount."
+  }
+$manifest=[ordered]@{
     generated_at=(Get-Date).ToString('o')
     label=$Label;base_url=$BaseUrl;edge=$edge;deep=[bool]$Deep
     capture_count=$captures.Count;failure_count=$failures.Count

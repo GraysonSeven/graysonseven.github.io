@@ -1,0 +1,19 @@
+{
+  "name": "Clientbound",
+  "short_name": "Clientbound",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#07111F",
+  "theme_color": "#07111F",
+  "description": "Learn sales. Win clients. Execution-first sales training, community, and tools.",
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

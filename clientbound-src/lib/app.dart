@@ -12,6 +12,20 @@ const _accent = Color(0xFF6EA8FE);
 const _success = Color(0xFF50D890);
 const _warning = Color(0xFFFFC857);
 
+Color _stageColor(ModuleStage stage) => switch (stage) {
+      ModuleStage.notStarted => Colors.white38,
+      ModuleStage.inProgress => _accent,
+      ModuleStage.readyForReview => _warning,
+      ModuleStage.passed => _success,
+    };
+
+IconData _stageIcon(ModuleStage stage) => switch (stage) {
+      ModuleStage.notStarted => Icons.circle_outlined,
+      ModuleStage.inProgress => Icons.play_circle_outline_rounded,
+      ModuleStage.readyForReview => Icons.rate_review_outlined,
+      ModuleStage.passed => Icons.check_circle_rounded,
+    };
+
 class ClientboundApp extends StatelessWidget {
   const ClientboundApp({super.key, required this.progress});
 
@@ -355,7 +369,7 @@ class _ProgressCard extends StatelessWidget {
           const Icon(Icons.track_changes_rounded, color: _success, size: 30),
           const SizedBox(height: 18),
           Text('$percent%', style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
-          const Text('Course progress', style: TextStyle(color: Colors.white60)),
+          const Text('Course PASS progress', style: TextStyle(color: Colors.white60)),
           const SizedBox(height: 16),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -368,7 +382,7 @@ class _ProgressCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '${progress.completed.length} of 14 modules completed',
+            '${progress.passedCount} of 14 modules passed',
             style: const TextStyle(color: Colors.white70, fontSize: 13),
           ),
         ],
@@ -447,12 +461,13 @@ class _ModuleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final complete = progress.isCompleted(module.id);
+    final stage = progress.stageFor(module.id);
+    final stageColor = _stageColor(stage);
     return _Panel(
       onTap: () => _openModule(context, module, progress),
       padding: const EdgeInsets.all(19),
       child: SizedBox(
-        height: 210,
+        height: 222,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -462,40 +477,63 @@ class _ModuleCard extends StatelessWidget {
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
-                    color: complete ? _success.withValues(alpha: .16) : _accent.withValues(alpha: .14),
+                    color: stageColor.withValues(alpha: .14),
                     borderRadius: BorderRadius.circular(11),
                   ),
                   child: Icon(
-                    complete ? Icons.check_rounded : module.icon,
-                    color: complete ? _success : _accent,
+                    stage == ModuleStage.notStarted ? module.icon : _stageIcon(stage),
+                    color: stage == ModuleStage.notStarted ? _accent : stageColor,
                     size: 21,
                   ),
                 ),
                 const Spacer(),
                 Text(
                   '${module.id.toString().padLeft(2, '0')} / 14',
-                  style: const TextStyle(color: Colors.white38, fontWeight: FontWeight.w700, fontSize: 12),
+                  style: const TextStyle(
+                    color: Colors.white38,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 17),
-            Text(module.title, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(
+              module.title,
+              style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
+            ),
             const SizedBox(height: 8),
             Text(
               module.tagline,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.white60, height: 1.4, fontSize: 13),
+              style: const TextStyle(
+                color: Colors.white60,
+                height: 1.4,
+                fontSize: 13,
+              ),
             ),
             const Spacer(),
             Row(
               children: [
-                Text(
-                  module.focus.toUpperCase(),
-                  style: const TextStyle(color: _accent, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: .9),
+                Icon(_stageIcon(stage), size: 15, color: stageColor),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    stage.label.toUpperCase(),
+                    style: TextStyle(
+                      color: stageColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: .7,
+                    ),
+                  ),
                 ),
-                const Spacer(),
-                Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white.withValues(alpha: .45)),
+                Icon(
+                  Icons.arrow_forward_rounded,
+                  size: 18,
+                  color: Colors.white.withValues(alpha: .45),
+                ),
               ],
             ),
           ],
@@ -505,21 +543,59 @@ class _ModuleCard extends StatelessWidget {
   }
 }
 
-class ModuleDetailPage extends StatelessWidget {
-  const ModuleDetailPage({super.key, required this.module, required this.progress});
+class ModuleDetailPage extends StatefulWidget {
+  const ModuleDetailPage({
+    super.key,
+    required this.module,
+    required this.progress,
+  });
 
   final CourseModule module;
   final ProgressStore progress;
 
   @override
+  State<ModuleDetailPage> createState() => _ModuleDetailPageState();
+}
+
+class _ModuleDetailPageState extends State<ModuleDetailPage> {
+  late final TextEditingController _notesController;
+
+  CourseModule get module => widget.module;
+  ProgressStore get progress => widget.progress;
+
+  @override
+  void initState() {
+    super.initState();
+    _notesController = TextEditingController(text: progress.notesFor(module.id));
+  }
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _saveNotes() async {
+    await progress.setNotes(module.id, _notesController.text);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Module notes saved locally.')),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _ink,
-      appBar: AppBar(backgroundColor: _ink, title: Text('Module ${module.id}')),
+      appBar: AppBar(
+        backgroundColor: _ink,
+        title: Text('Module ${module.id}'),
+      ),
       body: AnimatedBuilder(
         animation: progress,
         builder: (context, _) {
-          final complete = progress.isCompleted(module.id);
+          final stage = progress.stageFor(module.id);
+          final stageColor = _stageColor(stage);
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
             children: [
@@ -529,49 +605,285 @@ class ModuleDetailPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        module.focus.toUpperCase(),
-                        style: const TextStyle(color: _accent, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+                      Row(
+                        children: [
+                          Text(
+                            module.focus.toUpperCase(),
+                            style: const TextStyle(
+                              color: _accent,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 11,
+                              vertical: 7,
+                            ),
+                            decoration: BoxDecoration(
+                              color: stageColor.withValues(alpha: .12),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: stageColor.withValues(alpha: .35),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  _stageIcon(stage),
+                                  size: 15,
+                                  color: stageColor,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  stage.label,
+                                  style: TextStyle(
+                                    color: stageColor,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 10),
-                      Text(module.title, style: const TextStyle(fontSize: 38, height: 1.03, fontWeight: FontWeight.w900)),
+                      Text(
+                        module.title,
+                        style: const TextStyle(
+                          fontSize: 38,
+                          height: 1.03,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
                       const SizedBox(height: 12),
-                      Text(module.tagline, style: const TextStyle(fontSize: 17, color: Colors.white70, height: 1.45)),
+                      Text(
+                        module.tagline,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          color: Colors.white70,
+                          height: 1.45,
+                        ),
+                      ),
                       const SizedBox(height: 24),
-                      _InfoBlock(title: 'Required deliverable', icon: Icons.inventory_2_outlined, body: module.deliverable),
-                      const SizedBox(height: 14),
-                      _InfoBlock(title: 'Quality gate', icon: Icons.verified_outlined, body: module.passGate),
+                      _Panel(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.auto_stories_outlined,
+                                  color: _accent,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Learn',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 14),
+                            for (
+                              var i = 0;
+                              i < module.lessonPoints.length;
+                              i++
+                            ) ...[
+                              _NumberedLine(
+                                number: i + 1,
+                                text: module.lessonPoints[i],
+                              ),
+                              if (i != module.lessonPoints.length - 1)
+                                const SizedBox(height: 11),
+                            ],
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 14),
                       _Panel(
                         padding: const EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Execution rule', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17)),
+                            const Row(
+                              children: [
+                                Icon(Icons.task_alt_outlined, color: _success),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Do',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 14),
+                            for (
+                              var i = 0;
+                              i < module.taskSteps.length;
+                              i++
+                            ) ...[
+                              _NumberedLine(
+                                number: i + 1,
+                                text: module.taskSteps[i],
+                              ),
+                              if (i != module.taskSteps.length - 1)
+                                const SizedBox(height: 11),
+                            ],
+                            const SizedBox(height: 16),
+                            Text(
+                              'Deliverable: ${module.deliverable}',
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                height: 1.45,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      _InfoBlock(
+                        title: 'Quality gate',
+                        icon: Icons.verified_outlined,
+                        body: module.passGate,
+                      ),
+                      const SizedBox(height: 14),
+                      _Panel(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(Icons.edit_note_rounded, color: _warning),
+                                SizedBox(width: 10),
+                                Text(
+                                  'My workspace',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 8),
                             const Text(
-                              'Do the real deliverable, review the single biggest weakness, repair it, then use the skill. A checked box is not proof of competence.',
-                              style: TextStyle(color: Colors.white70, height: 1.5),
+                              'Capture research, draft wording, questions, feedback, and the single biggest weakness here. Notes stay on this device/browser.',
+                              style: TextStyle(
+                                color: Colors.white60,
+                                height: 1.45,
+                              ),
                             ),
-                            const SizedBox(height: 18),
+                            const SizedBox(height: 14),
+                            TextField(
+                              controller: _notesController,
+                              minLines: 5,
+                              maxLines: 10,
+                              decoration: const InputDecoration(
+                                hintText:
+                                    'Write your working notes for this module...',
+                                alignLabelWithHint: true,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            OutlinedButton.icon(
+                              onPressed: _saveNotes,
+                              icon: const Icon(Icons.save_outlined),
+                              label: const Text('Save notes locally'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      _Panel(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Module state',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 18,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Move the module to Ready for review when the real deliverable is complete. Record PASS only after instructor review; filling the worksheet alone is not a pass.',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                height: 1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
                             Wrap(
                               spacing: 10,
                               runSpacing: 10,
                               children: [
                                 OutlinedButton.icon(
-                                  onPressed: () => _openAsset(context, module.worksheetAsset),
-                                  icon: const Icon(Icons.picture_as_pdf_outlined),
-                                  label: const Text('Open worksheet'),
+                                  onPressed: () => progress.setStage(
+                                    module.id,
+                                    ModuleStage.inProgress,
+                                  ),
+                                  icon: const Icon(Icons.play_arrow_rounded),
+                                  label: const Text('Start / continue'),
+                                ),
+                                OutlinedButton.icon(
+                                  onPressed: () => progress.setStage(
+                                    module.id,
+                                    ModuleStage.readyForReview,
+                                  ),
+                                  icon: const Icon(Icons.rate_review_outlined),
+                                  label: const Text('Ready for review'),
                                 ),
                                 FilledButton.icon(
-                                  onPressed: () => progress.setCompleted(module.id, !complete),
-                                  icon: Icon(complete ? Icons.undo_rounded : Icons.check_circle_outline),
-                                  label: Text(complete ? 'Mark incomplete' : 'Mark completed'),
+                                  onPressed: () => progress.setStage(
+                                    module.id,
+                                    ModuleStage.passed,
+                                  ),
+                                  icon: const Icon(
+                                    Icons.check_circle_outline,
+                                  ),
+                                  label: const Text('Record PASS'),
+                                ),
+                                TextButton(
+                                  onPressed: () => progress.setStage(
+                                    module.id,
+                                    ModuleStage.notStarted,
+                                  ),
+                                  child: const Text('Reset state'),
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 14),
+                            OutlinedButton.icon(
+                              onPressed: () => _openAsset(
+                                context,
+                                module.worksheetAsset,
+                              ),
+                              icon: const Icon(
+                                Icons.picture_as_pdf_outlined,
+                              ),
+                              label: const Text('Open execution worksheet'),
+                            ),
                           ],
                         ),
+                      ),
+                      const SizedBox(height: 14),
+                      const _InfoBlock(
+                        title: 'Execution rule',
+                        icon: Icons.bolt_outlined,
+                        body:
+                            'Do the real deliverable, review the single biggest weakness, repair it, then use the skill. Real replies, interviews, and client conversations take priority over hypothetical exercises.',
                       ),
                     ],
                   ),
@@ -581,6 +893,52 @@ class ModuleDetailPage extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class _NumberedLine extends StatelessWidget {
+  const _NumberedLine({required this.number, required this.text});
+
+  final int number;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 26,
+          height: 26,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: _accent.withValues(alpha: .12),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            '$number',
+            style: const TextStyle(
+              color: _accent,
+              fontWeight: FontWeight.w900,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(width: 11),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white70,
+                height: 1.45,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

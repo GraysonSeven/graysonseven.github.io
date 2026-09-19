@@ -1,0 +1,45 @@
+name: Build Clientbound
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'clientbound-src/**'
+      - '.github/workflows/clientbound-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-clientbound:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter stable
+        run: |
+          git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
+          echo "$HOME/flutter/bin" >> "$GITHUB_PATH"
+          "$HOME/flutter/bin/flutter" --version
+
+      - name: Build Clientbound
+        working-directory: clientbound-src
+        run: |
+          flutter pub get
+          flutter build web --release --base-href /clientbound/
+
+      - name: Publish Clientbound into GitHub Pages tree
+        run: |
+          rm -rf clientbound
+          mkdir -p clientbound
+          cp -R clientbound-src/build/web/. clientbound/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add clientbound
+          if git diff --cached --quiet; then
+            echo "Clientbound output unchanged"
+          else
+            git commit -m "build: publish Clientbound web [skip ci]"
+            git push
+          fi

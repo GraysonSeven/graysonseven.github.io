@@ -212,7 +212,7 @@ class _NavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected ? _accent.withOpacity(.14) : Colors.transparent,
+      color: selected ? _accent.withValues(alpha: .14) : Colors.transparent,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
@@ -462,7 +462,7 @@ class _ModuleCard extends StatelessWidget {
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
-                    color: complete ? _success.withOpacity(.16) : _accent.withOpacity(.14),
+                    color: complete ? _success.withValues(alpha: .16) : _accent.withValues(alpha: .14),
                     borderRadius: BorderRadius.circular(11),
                   ),
                   child: Icon(
@@ -495,7 +495,7 @@ class _ModuleCard extends StatelessWidget {
                   style: const TextStyle(color: _accent, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: .9),
                 ),
                 const Spacer(),
-                Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white.withOpacity(.45)),
+                Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white.withValues(alpha: .45)),
               ],
             ),
           ],
@@ -739,7 +739,7 @@ class _ResourceTile extends StatelessWidget {
           Container(
             width: 44,
             height: 44,
-            decoration: BoxDecoration(color: _accent.withOpacity(.12), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(color: _accent.withValues(alpha: .12), borderRadius: BorderRadius.circular(12)),
             child: Icon(icon, color: _accent),
           ),
           const SizedBox(width: 14),

@@ -60,6 +60,7 @@ jobs:
             echo "Clientbound web output unchanged"
           else
             git commit -m "build: publish Clientbound web [skip ci]"
+            git reset --hard HEAD
             git pull --rebase origin main
             git push
           fi

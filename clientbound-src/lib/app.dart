@@ -12,8 +12,8 @@ const _accent = Color(0xFF6EA8FE);
 const _success = Color(0xFF50D890);
 const _warning = Color(0xFFFFC857);
 
-class FirstClientSalesSystemApp extends StatelessWidget {
-  const FirstClientSalesSystemApp({super.key, required this.progress});
+class ClientboundApp extends StatelessWidget {
+  const ClientboundApp({super.key, required this.progress});
 
   final ProgressStore progress;
 
@@ -876,15 +876,14 @@ void _openModule(BuildContext context, CourseModule module, ProgressStore progre
 }
 
 Future<void> _openAsset(BuildContext context, String assetPath) async {
-  if (!kIsWeb) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('PDF opening is enabled in the web release. In-app mobile PDF viewing comes next.')),
-    );
-    return;
+  final Uri uri;
+  if (kIsWeb) {
+    uri = Uri.base.resolve('assets/$assetPath');
+  } else {
+    uri = Uri.parse('https://graysonseven.github.io/clientbound/assets/$assetPath');
   }
 
-  final uri = Uri.base.resolve('assets/$assetPath');
-  final ok = await launchUrl(uri);
+  final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!ok && context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Could not open this resource.')),

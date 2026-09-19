@@ -7,5 +7,5 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final progress = ProgressStore();
   await progress.load();
-  runApp(FirstClientSalesSystemApp(progress: progress));
+  runApp(ClientboundApp(progress: progress));
 }

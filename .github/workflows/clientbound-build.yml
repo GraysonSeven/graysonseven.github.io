@@ -23,13 +23,32 @@ jobs:
           echo "$HOME/flutter/bin" >> "$GITHUB_PATH"
           "$HOME/flutter/bin/flutter" --version
 
-      - name: Build Clientbound
+      - name: Validate Clientbound
         working-directory: clientbound-src
         run: |
           flutter pub get
+          dart format --output=none lib test
+          flutter analyze
+          flutter test
+
+      - name: Build Clientbound Web
+        working-directory: clientbound-src
+        run: |
           flutter build web --release --base-href /clientbound/
 
-      - name: Publish Clientbound into GitHub Pages tree
+      - name: Build Clientbound Android arm64
+        run: |
+          rm -rf /tmp/clientbound-android
+          cp -R clientbound-src /tmp/clientbound-android
+          cd /tmp/clientbound-android
+          rm -rf build .dart_tool android
+          flutter create . --platforms android --org com.icharles --project-name clientbound
+          sed -i 's/android:label="clientbound"/android:label="Clientbound"/' android/app/src/main/AndroidManifest.xml
+          flutter pub get
+          flutter build apk --release --target-platform android-arm64
+          test -f build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Publish Clientbound Web to GitHub Pages tree
         run: |
           rm -rf clientbound
           mkdir -p clientbound
@@ -38,9 +57,31 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add clientbound
           if git diff --cached --quiet; then
-            echo "Clientbound output unchanged"
+            echo "Clientbound web output unchanged"
           else
             git commit -m "build: publish Clientbound web [skip ci]"
             git pull --rebase origin main
             git push
+          fi
+
+      - name: Publish Android APK and checksum
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="$(awk '/^version:/{print $2}' clientbound-src/pubspec.yaml)"
+          SEMVER="${VERSION%%+*}"
+          BUILD="${VERSION##*+}"
+          TAG="clientbound-v${SEMVER}"
+          APK_NAME="Clientbound-v${SEMVER}-build${BUILD}-arm64.apk"
+          SHA_NAME="${APK_NAME}.sha256.txt"
+          cp /tmp/clientbound-android/build/app/outputs/flutter-apk/app-release.apk "/tmp/${APK_NAME}"
+          cd /tmp
+          sha256sum "${APK_NAME}" > "${SHA_NAME}"
+          if gh release view "${TAG}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release upload "${TAG}" "${APK_NAME}" "${SHA_NAME}" --clobber --repo "${{ github.repository }}"
+          else
+            gh release create "${TAG}" "${APK_NAME}" "${SHA_NAME}" \
+              --repo "${{ github.repository }}" \
+              --title "Clientbound v${SEMVER}" \
+              --notes "Zero-cost Clientbound Android arm64 build ${VERSION}. Built from the validated Flutter source mirror. The APK is intended for direct installation/testing and is not a Play Store signed release."
           fi

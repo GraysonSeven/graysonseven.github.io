@@ -34,7 +34,7 @@ const note = msg => notes.push(msg);
 function walk(dir) {
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if ([".git", "node_modules"].includes(entry.name)) continue;
+    if ([".git", "node_modules", "clientbound-src", "clientbound"].includes(entry.name)) continue;
     const p = path.join(dir, entry.name);
     if (entry.isDirectory()) out.push(...walk(p));
     else out.push(p);

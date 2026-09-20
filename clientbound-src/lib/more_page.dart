@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'app_settings_store.dart';
 import 'community_store.dart';
 import 'progress_store.dart';
+import 'review_exchange_store.dart';
 import 'review_page.dart';
 import 'settings_page.dart';
 import 'update_store.dart';
@@ -16,6 +17,7 @@ class MorePage extends StatelessWidget {
     required this.settings,
     required this.updates,
     required this.workspace,
+    required this.reviewExchange,
     required this.appVersion,
   });
 
@@ -24,6 +26,7 @@ class MorePage extends StatelessWidget {
   final AppSettingsStore settings;
   final UpdateStore updates;
   final WorkspaceStore workspace;
+  final ReviewExchangeStore reviewExchange;
   final String appVersion;
 
   @override
@@ -66,6 +69,7 @@ class MorePage extends StatelessWidget {
                 builder: (_) => ReviewPage(
                   progress: progress,
                   workspace: workspace,
+                  reviewExchange: reviewExchange,
                   appVersion: appVersion,
                 ),
               ),
@@ -93,6 +97,7 @@ class MorePage extends StatelessWidget {
                   settings: settings,
                   updates: updates,
                   workspace: workspace,
+                  reviewExchange: reviewExchange,
                   appVersion: appVersion,
                 ),
               ),

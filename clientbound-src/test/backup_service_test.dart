@@ -4,6 +4,8 @@ import 'package:clientbound/app_settings_store.dart';
 import 'package:clientbound/backup_service.dart';
 import 'package:clientbound/community_store.dart';
 import 'package:clientbound/progress_store.dart';
+import 'package:clientbound/review_exchange.dart';
+import 'package:clientbound/review_exchange_store.dart';
 import 'package:clientbound/workspace_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,11 +18,13 @@ void main() {
     final community = CommunityStore();
     final settings = AppSettingsStore();
     final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
 
     await progress.load();
     await community.load();
     await settings.load();
     await workspace.load();
+    await reviewExchange.load();
 
     await progress.setStage(2, ModuleStage.inProgress);
     await progress.toggleTask(2, 0);
@@ -59,7 +63,8 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.7.0+7',
+      reviewExchange: reviewExchange,
+      appVersion: '0.8.0+8',
     );
 
     final json = backup.createBackupJson();
@@ -95,10 +100,12 @@ void main() {
     final community = CommunityStore();
     final settings = AppSettingsStore();
     final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
     await progress.load();
     await community.load();
     await settings.load();
     await workspace.load();
+    await reviewExchange.load();
 
     workspace.setString(1, 'niche', 'Will be replaced');
     await workspace.flush();
@@ -108,7 +115,8 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.7.0+7',
+      reviewExchange: reviewExchange,
+      appVersion: '0.8.0+8',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -133,10 +141,12 @@ void main() {
     final community = CommunityStore();
     final settings = AppSettingsStore();
     final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
     await progress.load();
     await community.load();
     await settings.load();
     await workspace.load();
+    await reviewExchange.load();
 
     await progress.setNotes(1, 'Keep me');
     workspace.setString(1, 'niche', 'Keep this too');
@@ -146,7 +156,8 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.7.0+7',
+      reviewExchange: reviewExchange,
+      appVersion: '0.8.0+8',
     );
 
     await expectLater(
@@ -164,10 +175,12 @@ void main() {
     final community = CommunityStore();
     final settings = AppSettingsStore();
     final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
     await progress.load();
     await community.load();
     await settings.load();
     await workspace.load();
+    await reviewExchange.load();
 
     await progress.setNotes(3, 'Outreach system review notes.');
     await progress.toggleTask(3, 0);
@@ -187,7 +200,8 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.7.0+7',
+      reviewExchange: reviewExchange,
+      appVersion: '0.8.0+8',
     );
     final json = backup.createBackupJson();
 
@@ -212,10 +226,12 @@ void main() {
     final community = CommunityStore();
     final settings = AppSettingsStore();
     final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
     await progress.load();
     await community.load();
     await settings.load();
     await workspace.load();
+    await reviewExchange.load();
 
     final legacyProgress =
         Map<String, dynamic>.from(progress.exportData())
@@ -226,7 +242,8 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.7.0+7',
+      reviewExchange: reviewExchange,
+      appVersion: '0.8.0+8',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -244,6 +261,86 @@ void main() {
 
     expect(progress.reviewSubmissionsFor(1), isEmpty);
     expect(progress.recoveryWarning, isNull);
+  });
+
+
+  test('schema 2 backup preserves review exchange inbox and decisions',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+
+    final progress = ProgressStore();
+    final community = CommunityStore();
+    final settings = AppSettingsStore();
+    final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
+    await progress.load();
+    await community.load();
+    await settings.load();
+    await workspace.load();
+    await reviewExchange.load();
+
+    final packageJson = jsonEncode(<String, dynamic>{
+      'format': 'clientbound-review-package',
+      'packageSchemaVersion': 1,
+      'clientboundVersion': '0.7.0+7',
+      'module': <String, dynamic>{
+        'id': 2,
+        'title': 'ICP & Lead Research',
+        'focus': 'Research',
+        'deliverable': '10 verified leads',
+        'qualityGate': '9 of 10 pass all proof checks',
+      },
+      'submission': <String, dynamic>{
+        'id': 'module-2-r1-test',
+        'revision': 1,
+        'submittedAt': '2026-09-20T10:00:00Z',
+        'decision': 'pending',
+        'reviewerFeedback': '',
+        'reviewedAt': null,
+      },
+      'taskCompletion': <dynamic>[],
+      'structuredEvidence': <String, dynamic>{
+        'industry': 'Manufacturing',
+      },
+      'scratchNotes': '',
+      'previousReviewerFeedback': <dynamic>[],
+    });
+
+    await reviewExchange.importReviewPackage(packageJson);
+    await reviewExchange.recordDecision(
+      'module-2-r1-test',
+      decision: ReviewExchangeDecision.revise,
+      feedback: 'Add stronger contact proof.',
+    );
+
+    final backup = BackupService(
+      progress: progress,
+      community: community,
+      settings: settings,
+      workspace: workspace,
+      reviewExchange: reviewExchange,
+      appVersion: '0.8.0+8',
+    );
+    final json = backup.createBackupJson();
+
+    await reviewExchange.reset();
+    expect(reviewExchange.records, isEmpty);
+
+    await backup.restoreBackupJson(json);
+
+    expect(reviewExchange.records, hasLength(1));
+    expect(
+      reviewExchange.records.single.package.submissionId,
+      'module-2-r1-test',
+    );
+    expect(
+      reviewExchange.records.single.decision?.decision,
+      ReviewExchangeDecision.revise,
+    );
+    expect(
+      reviewExchange.records.single.decision?.feedback,
+      'Add stronger contact proof.',
+    );
   });
 
 }

@@ -12,6 +12,7 @@ import 'module_workspace_card.dart';
 import 'more_page.dart';
 import 'onboarding_page.dart';
 import 'progress_store.dart';
+import 'review_exchange_store.dart';
 import 'review_page.dart';
 import 'settings_page.dart';
 import 'toolkit_page.dart';
@@ -48,6 +49,7 @@ class ClientboundApp extends StatelessWidget {
     required this.settings,
     required this.updates,
     required this.workspace,
+    required this.reviewExchange,
     required this.appVersion,
   });
 
@@ -56,6 +58,7 @@ class ClientboundApp extends StatelessWidget {
   final AppSettingsStore settings;
   final UpdateStore updates;
   final WorkspaceStore workspace;
+  final ReviewExchangeStore reviewExchange;
   final String appVersion;
 
   @override
@@ -96,6 +99,7 @@ class ClientboundApp extends StatelessWidget {
                   settings: settings,
                   updates: updates,
                   workspace: workspace,
+                  reviewExchange: reviewExchange,
                   appVersion: appVersion,
                 )
               : OnboardingPage(
@@ -115,6 +119,7 @@ class AppShell extends StatefulWidget {
     required this.settings,
     required this.updates,
     required this.workspace,
+    required this.reviewExchange,
     required this.appVersion,
   });
 
@@ -123,6 +128,7 @@ class AppShell extends StatefulWidget {
   final AppSettingsStore settings;
   final UpdateStore updates;
   final WorkspaceStore workspace;
+  final ReviewExchangeStore reviewExchange;
   final String appVersion;
 
   @override
@@ -184,6 +190,7 @@ class _AppShellState extends State<AppShell> {
                 builder: (_) => ReviewPage(
                   progress: widget.progress,
                   workspace: widget.workspace,
+                  reviewExchange: widget.reviewExchange,
                   appVersion: widget.appVersion,
                 ),
               ),
@@ -204,6 +211,7 @@ class _AppShellState extends State<AppShell> {
             ReviewPage(
               progress: widget.progress,
               workspace: widget.workspace,
+              reviewExchange: widget.reviewExchange,
               appVersion: widget.appVersion,
             ),
             SettingsPage(
@@ -212,6 +220,7 @@ class _AppShellState extends State<AppShell> {
               settings: widget.settings,
               updates: widget.updates,
               workspace: widget.workspace,
+              reviewExchange: widget.reviewExchange,
               appVersion: widget.appVersion,
             ),
           ];
@@ -227,6 +236,7 @@ class _AppShellState extends State<AppShell> {
               settings: widget.settings,
               updates: widget.updates,
               workspace: widget.workspace,
+              reviewExchange: widget.reviewExchange,
               appVersion: widget.appVersion,
             ),
           ];

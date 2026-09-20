@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'app_settings_store.dart';
 import 'community_store.dart';
 import 'progress_store.dart';
+import 'review_exchange_store.dart';
 import 'workspace_store.dart';
 
 class BackupService {
@@ -11,6 +12,7 @@ class BackupService {
     required this.community,
     required this.settings,
     required this.workspace,
+    required this.reviewExchange,
     required this.appVersion,
   });
 
@@ -20,6 +22,7 @@ class BackupService {
   final CommunityStore community;
   final AppSettingsStore settings;
   final WorkspaceStore workspace;
+  final ReviewExchangeStore reviewExchange;
   final String appVersion;
 
   String createBackupJson() {
@@ -32,6 +35,7 @@ class BackupService {
       'community': community.exportData(),
       'settings': settings.exportData(),
       'workspace': workspace.exportData(),
+      'reviewExchange': reviewExchange.exportData(),
     };
     return const JsonEncoder.withIndent('  ').convert(payload);
   }
@@ -90,10 +94,15 @@ class BackupService {
             decoded['workspace'] as Map<String, dynamic>,
           )
         : <String, dynamic>{'modules': <String, dynamic>{}};
+    final reviewExchangeRaw = decoded['reviewExchange'];
+    final reviewExchangeData = reviewExchangeRaw is Map
+        ? Map<String, dynamic>.from(reviewExchangeRaw)
+        : <String, dynamic>{'records': <dynamic>[]};
 
     await progress.importData(progressData);
     await community.importData(communityData);
     await settings.importData(settingsData);
     await workspace.importData(workspaceData);
+    await reviewExchange.importData(reviewExchangeData);
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'course_catalog.dart';
 import 'progress_store.dart';
+import 'review_exchange_page.dart';
+import 'review_exchange_store.dart';
 import 'review_package.dart';
 import 'workspace_store.dart';
 
@@ -11,11 +13,13 @@ class ReviewPage extends StatelessWidget {
     super.key,
     required this.progress,
     required this.workspace,
+    required this.reviewExchange,
     required this.appVersion,
   });
 
   final ProgressStore progress;
   final WorkspaceStore workspace;
+  final ReviewExchangeStore reviewExchange;
   final String appVersion;
 
   @override
@@ -58,6 +62,22 @@ class ReviewPage extends StatelessWidget {
             const Text(
               'This is the local reviewer boundary for PASS / REVISE decisions. It does not claim secure multi-user authorization; it keeps learner submission and reviewer decisions separate without a paid backend.',
               style: TextStyle(color: Colors.white60, height: 1.45),
+            ),
+            const SizedBox(height: 14),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => ReviewExchangePage(
+                      progress: progress,
+                      store: reviewExchange,
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.swap_horiz_rounded),
+                label: const Text('Open Review Exchange'),
+              ),
             ),
             const SizedBox(height: 20),
             _SummaryCard(

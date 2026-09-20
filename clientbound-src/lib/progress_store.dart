@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'review_exchange.dart';
+
 enum ModuleStage { notStarted, inProgress, readyForReview, passed }
 
 extension ModuleStageLabel on ModuleStage {
@@ -553,6 +555,71 @@ class ProgressStore extends ChangeNotifier {
       reviewerFeedback: feedback,
       reviewedAtMs: now,
     );
+  }
+
+  Future<void> applyExternalReviewDecision(
+    ReviewDecisionPackage package,
+  ) async {
+    if (!_validModule(package.moduleId)) {
+      throw const FormatException('Review decision module is invalid.');
+    }
+
+    final index = _reviewSubmissions.indexWhere(
+      (item) => item.id == package.submissionId,
+    );
+    if (index == -1) {
+      throw const FormatException(
+        'No matching local review submission was found.',
+      );
+    }
+
+    final submission = _reviewSubmissions[index];
+    if (submission.moduleId != package.moduleId ||
+        submission.revision != package.revision) {
+      throw const FormatException(
+        'Review decision does not match the local submission revision.',
+      );
+    }
+
+    final mappedDecision =
+        package.decision == ReviewExchangeDecision.pass
+            ? ReviewDecision.pass
+            : ReviewDecision.revise;
+    final normalizedFeedback =
+        mappedDecision == ReviewDecision.revise &&
+                package.feedback.trim().isEmpty
+            ? 'Revise the current deliverable and resubmit for review.'
+            : package.feedback.trim();
+
+    if (submission.decision != ReviewDecision.pending) {
+      if (submission.decision == mappedDecision &&
+          submission.reviewerFeedback == normalizedFeedback) {
+        return;
+      }
+      throw const FormatException(
+        'This submission already has a different review decision.',
+      );
+    }
+
+    _reviewSubmissions[index] = submission.copyWith(
+      decision: mappedDecision,
+      reviewerFeedback: normalizedFeedback,
+      reviewedAtMs: package.reviewedAt.millisecondsSinceEpoch,
+    );
+
+    if (mappedDecision == ReviewDecision.pass) {
+      _stages[package.moduleId] = ModuleStage.passed;
+      if (normalizedFeedback.isNotEmpty) {
+        _feedback[package.moduleId] = normalizedFeedback;
+      }
+    } else {
+      _stages[package.moduleId] = ModuleStage.inProgress;
+      _feedback[package.moduleId] = normalizedFeedback;
+    }
+
+    _touch(package.moduleId);
+    notifyListeners();
+    await _persist();
   }
 
   Future<void> reset() async {

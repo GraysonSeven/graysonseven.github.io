@@ -30,12 +30,12 @@ jobs:
       - name: Resolve Cloudflare authentication
         shell: pwsh
         env:
-          CF_TOKEN_A: \${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CF_TOKEN_B: \${{ secrets.CF_API_TOKEN }}
-          CF_TOKEN_C: \${{ secrets.CLOUDFLARE_TOKEN }}
-          CF_TOKEN_D: \${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
-          CF_ACCOUNT_A: \${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CF_ACCOUNT_B: \${{ secrets.CF_ACCOUNT_ID }}
+          CF_TOKEN_A: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_TOKEN_B: ${{ secrets.CF_API_TOKEN }}
+          CF_TOKEN_C: ${{ secrets.CLOUDFLARE_TOKEN }}
+          CF_TOKEN_D: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
+          CF_ACCOUNT_A: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_ACCOUNT_B: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
           $ErrorActionPreference = 'Stop'
           $token = @($env:CF_TOKEN_A,$env:CF_TOKEN_B,$env:CF_TOKEN_C,$env:CF_TOKEN_D) |
@@ -95,8 +95,8 @@ jobs:
           if (-not $experience.Contains('data-v7-version="7.4.0"')) { throw 'Accepted V7.4.0 marker missing.' }
           if (-not $experience.Contains('noindex,nofollow,noarchive')) { throw 'Hidden-route noindex marker missing.' }
 
-          $home = Get-Content '.\index.html' -Raw
-          if ($home.Contains('data-v7-home="production"')) { throw 'Public Home promotion leaked into accepted main.' }
+          $homeHtml = Get-Content '.\index.html' -Raw
+          if ($homeHtml.Contains('data-v7-home="production"')) { throw 'Public Home promotion leaked into accepted main.' }
 
           node --check .\experience\experience.js
           node .\tools\v7-foundation-qa.mjs

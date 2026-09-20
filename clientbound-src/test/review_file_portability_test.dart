@@ -64,7 +64,9 @@ void main() {
 
     expect(source, contains('allowedExtensions: const <String>[\'json\']'));
     expect(source, contains('type: FileType.custom'));
-    expect(source, contains('withData: true'));
+    expect(source, contains('FilePicker.pickFile'));
+    expect(source, contains('readAsBytes()'));
+    expect(source, contains('mimeType: \'application/json\''));
     expect(source, isNot(contains('http://')));
     expect(source, isNot(contains('https://')));
   });

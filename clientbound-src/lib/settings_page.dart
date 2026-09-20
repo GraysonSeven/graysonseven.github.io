@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'app_reload.dart';
 import 'app_settings_store.dart';
-import 'backup_download.dart';
+import 'backup_file_service.dart';
 import 'backup_service.dart';
 import 'community_store.dart';
 import 'progress_store.dart';
@@ -158,27 +158,24 @@ class SettingsPage extends StatelessWidget {
                 runSpacing: 10,
                 children: [
                   FilledButton.icon(
-                    onPressed: () => _exportBackup(context, backup),
-                    icon: Icon(
-                      kIsWeb
-                          ? Icons.download_rounded
-                          : Icons.copy_rounded,
-                    ),
-                    label: Text(
-                      kIsWeb
-                          ? 'Download backup'
-                          : 'Copy backup JSON',
-                    ),
+                    onPressed: () => _saveBackupFile(context, backup),
+                    icon: const Icon(Icons.save_alt_rounded),
+                    label: const Text('Save backup file'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () => _restoreBackupFile(context, backup),
+                    icon: const Icon(Icons.file_open_outlined),
+                    label: const Text('Restore backup file'),
                   ),
                   OutlinedButton.icon(
                     onPressed: () => _copyBackup(context, backup),
                     icon: const Icon(Icons.copy_all_rounded),
                     label: const Text('Copy backup JSON'),
                   ),
-                  OutlinedButton.icon(
-                    onPressed: () => _restoreBackup(context, backup),
-                    icon: const Icon(Icons.restore_rounded),
-                    label: const Text('Restore backup'),
+                  TextButton.icon(
+                    onPressed: () => _restoreBackupJson(context, backup),
+                    icon: const Icon(Icons.content_paste_go_rounded),
+                    label: const Text('Paste backup JSON'),
                   ),
                 ],
               ),
@@ -311,27 +308,50 @@ class SettingsPage extends StatelessWidget {
     }
   }
 
-  Future<void> _exportBackup(
+  Future<void> _saveBackupFile(
     BuildContext context,
     BackupService backup,
   ) async {
     final json = backup.createBackupJson();
-    final day =
-        DateTime.now().toUtc().toIso8601String().split('T').first;
-    final filename = 'clientbound-backup-$day.json';
-    final downloaded = await downloadBackupText(json, filename);
-    if (!downloaded) {
-      await Clipboard.setData(ClipboardData(text: json));
-    }
-    if (context.mounted) {
+    final filename = BackupFileService.filenameForDate(DateTime.now());
+
+    try {
+      final saved = await BackupFileService.saveBackup(
+        contents: json,
+        filename: filename,
+      );
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            downloaded
-                ? 'Clientbound backup downloaded.'
-                : 'Backup JSON copied to clipboard.',
+            saved ? 'Clientbound backup file saved.' : 'Backup save canceled.',
           ),
         ),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not save backup file: $error')),
+      );
+    }
+  }
+
+  Future<void> _restoreBackupFile(
+    BuildContext context,
+    BackupService backup,
+  ) async {
+    try {
+      final raw = await BackupFileService.pickBackupText();
+      if (raw == null) return;
+      await backup.restoreBackupJson(raw);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Backup file restored successfully.')),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Backup file restore rejected: $error')),
       );
     }
   }
@@ -350,7 +370,7 @@ class SettingsPage extends StatelessWidget {
     }
   }
 
-  Future<void> _restoreBackup(
+  Future<void> _restoreBackupJson(
     BuildContext context,
     BackupService backup,
   ) async {
@@ -358,7 +378,7 @@ class SettingsPage extends StatelessWidget {
     final accepted = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Restore Clientbound backup'),
+        title: const Text('Paste Clientbound backup JSON'),
         content: SizedBox(
           width: 620,
           child: TextField(
@@ -377,7 +397,7 @@ class SettingsPage extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Validate & restore'),
+            child: const Text('Validate & restore JSON'),
           ),
         ],
       ),

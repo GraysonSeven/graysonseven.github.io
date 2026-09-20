@@ -1,0 +1,89 @@
+name: iCharles V7 Production QA
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "experience/**"
+      - "assets/iko-prime/identity/iko-prime-logo-locked.png"
+      - "assets/vendor/v7/**"
+      - "tools/v7-runtime-qa.mjs"
+      - ".github/workflows/v7-production-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cloudflare-production:
+    name: Cloudflare production Edge qualification
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout accepted main
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Read expected V7 version
+        id: expected
+        shell: pwsh
+        run: |
+          $html = Get-Content -LiteralPath '.\experience\index.html' -Raw
+          if ($html -notmatch 'data-v7-version="([^"]+)"') {
+            throw 'Could not resolve data-v7-version from experience/index.html'
+          }
+          $version = $Matches[1]
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Expected production V7 version: $version"
+
+      - name: Wait for Cloudflare production to reach accepted version
+        shell: pwsh
+        env:
+          EXPECTED_VERSION: ${{ steps.expected.outputs.version }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $deadline = (Get-Date).AddMinutes(5)
+          $url = 'https://icharles.pages.dev/experience/'
+          $last = ''
+          do {
+            try {
+              $stamp = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+              $response = Invoke-WebRequest -UseBasicParsing -Uri "$url?qa=$stamp" -Headers @{ 'Cache-Control'='no-cache' }
+              $last = $response.Content
+              if ($response.StatusCode -eq 200 -and $last -match ('data-v7-version="' + [regex]::Escape($env:EXPECTED_VERSION) + '"')) {
+                Write-Host "Cloudflare production is serving V$env:EXPECTED_VERSION"
+                exit 0
+              }
+              Write-Host "Production reachable but not yet on V$env:EXPECTED_VERSION"
+            } catch {
+              Write-Host "Production probe not ready: $($_.Exception.Message)"
+            }
+            Start-Sleep -Seconds 15
+          } while ((Get-Date) -lt $deadline)
+
+          if ($last -match 'data-v7-version="([^"]+)"') {
+            throw "Cloudflare production remained on V$($Matches[1]); expected V$env:EXPECTED_VERSION"
+          }
+          throw "Cloudflare production did not expose expected V$env:EXPECTED_VERSION within five minutes"
+
+      - name: Install Playwright Core
+        shell: pwsh
+        run: npm install --no-save --package-lock=false playwright-core@1.55.0
+
+      - name: Qualify Cloudflare production in Microsoft Edge
+        shell: pwsh
+        run: node .\tools\v7-runtime-qa.mjs --channel=msedge --base=https://icharles.pages.dev/experience/ --output=artifacts\v7-production
+
+      - name: Upload production evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-cloudflare-production-evidence
+          path: artifacts/v7-production
+          if-no-files-found: warn

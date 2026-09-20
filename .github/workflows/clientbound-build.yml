@@ -17,6 +17,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enforce zero-cost architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden_files=(firebase.json .firebaserc railway.toml Dockerfile CNAME)
+          for name in "${forbidden_files[@]}"; do
+            if find clientbound-src -type f -name "$name" -print -quit | grep -q .; then
+              echo "Forbidden infrastructure file detected: $name"
+              exit 1
+            fi
+          done
+          if grep -R -I -n -E 'firebase_core:|firebase_auth:|cloud_firestore:|cloud_functions:|stripe:|railway|cloud[ _-]?run|app[ _-]?hosting|clientbound\.co' clientbound-src/pubspec.yaml clientbound-src/lib clientbound-src/web; then
+            echo "Forbidden paid/cloud dependency reference detected"
+            exit 1
+          fi
+          echo "ZERO_COST_GUARD=PASS"
+
       - name: Install Flutter stable
         run: |
           git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
@@ -31,28 +48,48 @@ jobs:
           flutter analyze
           flutter test
 
-      - name: Build Clientbound Web
+      - name: Build and verify Clientbound Web
         working-directory: clientbound-src
         run: |
           flutter build web --release --base-href /clientbound/
+          test -f build/web/index.html
+          test -f build/web/main.dart.js
+          test -f build/web/manifest.json
+          test -f build/web/icons/Icon-192.png
+          test -f build/web/icons/Icon-512.png
+          test -f build/web/404.html
+          grep -q '/clientbound/' build/web/index.html
+          grep -q 'Clientbound' build/web/manifest.json
+          echo "WEB_RELEASE_GATE=PASS"
 
-      - name: Build Clientbound Android arm64
+      - name: Build and verify Clientbound Android arm64
         run: |
+          set -euo pipefail
           rm -rf /tmp/clientbound-android
           cp -R clientbound-src /tmp/clientbound-android
           cd /tmp/clientbound-android
           rm -rf build .dart_tool android
           flutter create . --platforms android --org com.icharles --project-name clientbound
           sed -i 's/android:label="clientbound"/android:label="Clientbound"/' android/app/src/main/AndroidManifest.xml
+          mkdir -p android/app/src/main/res/drawable-nodpi
+          cp web/icons/Icon-512.png android/app/src/main/res/drawable-nodpi/clientbound_launcher.png
+          sed -i 's#android:icon="@mipmap/ic_launcher"#android:icon="@drawable/clientbound_launcher"#' android/app/src/main/AndroidManifest.xml
           flutter pub get
           flutter build apk --release --target-platform android-arm64
-          test -f build/app/outputs/flutter-apk/app-release.apk
+          APK=build/app/outputs/flutter-apk/app-release.apk
+          test -f "$APK"
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)"
+          "$AAPT" dump badging "$APK" | tee /tmp/clientbound-apk-badging.txt
+          grep -q "package: name='com.icharles.clientbound'" /tmp/clientbound-apk-badging.txt
+          grep -q "application-label:'Clientbound'" /tmp/clientbound-apk-badging.txt
+          echo "ANDROID_RELEASE_GATE=PASS"
 
       - name: Publish Clientbound Web to GitHub Pages tree
         run: |
           rm -rf clientbound
           mkdir -p clientbound
           cp -R clientbound-src/build/web/. clientbound/
+          touch clientbound/.nojekyll
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add clientbound
@@ -81,8 +118,5 @@ jobs:
           if gh release view "${TAG}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload "${TAG}" "${APK_NAME}" "${SHA_NAME}" --clobber --repo "${{ github.repository }}"
           else
-            gh release create "${TAG}" "${APK_NAME}" "${SHA_NAME}" \
-              --repo "${{ github.repository }}" \
-              --title "Clientbound v${SEMVER}" \
-              --notes "Zero-cost Clientbound Android arm64 build ${VERSION}. Built from the validated Flutter source mirror. The APK is intended for direct installation/testing and is not a Play Store signed release."
+            gh release create "${TAG}" "${APK_NAME}" "${SHA_NAME}"               --repo "${{ github.repository }}"               --title "Clientbound v${SEMVER}"               --notes "Zero-cost Clientbound Web + Android release ${VERSION}. Validated with zero-cost guard, Flutter format/analyze/tests, PWA asset checks, and Android package/label verification. Direct-install APK; not a Play Store signed release."
           fi

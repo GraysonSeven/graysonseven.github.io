@@ -2,8 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'community_hub_page.dart';
+import 'community_store.dart';
 import 'course_catalog.dart';
 import 'progress_store.dart';
+import 'review_page.dart';
+import 'toolkit_page.dart';
 
 const _ink = Color(0xFF07111F);
 const _panel = Color(0xFF0E1B2D);
@@ -27,9 +31,14 @@ IconData _stageIcon(ModuleStage stage) => switch (stage) {
     };
 
 class ClientboundApp extends StatelessWidget {
-  const ClientboundApp({super.key, required this.progress});
+  const ClientboundApp({
+    super.key,
+    required this.progress,
+    required this.community,
+  });
 
   final ProgressStore progress;
+  final CommunityStore community;
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +66,20 @@ class ClientboundApp extends StatelessWidget {
           border: OutlineInputBorder(borderSide: BorderSide.none),
         ),
       ),
-      home: AppShell(progress: progress),
+      home: AppShell(progress: progress, community: community),
     );
   }
 }
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key, required this.progress});
+  const AppShell({
+    super.key,
+    required this.progress,
+    required this.community,
+  });
 
   final ProgressStore progress;
+  final CommunityStore community;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -74,12 +88,13 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _index = 0;
 
-  static const _labels = ['Home', 'Classroom', 'Community', 'Toolkit'];
+  static const _labels = ['Home', 'Classroom', 'Community', 'Toolkit', 'Review'];
   static const _icons = [
     Icons.home_outlined,
     Icons.school_outlined,
     Icons.forum_outlined,
     Icons.folder_outlined,
+    Icons.fact_check_outlined,
   ];
 
   @override
@@ -88,10 +103,15 @@ class _AppShellState extends State<AppShell> {
       animation: widget.progress,
       builder: (context, _) {
         final pages = <Widget>[
-          HomePage(progress: widget.progress, onOpenCourse: () => setState(() => _index = 1)),
+          HomePage(
+            progress: widget.progress,
+            onOpenCourse: () => setState(() => _index = 1),
+            onOpenReview: () => setState(() => _index = 4),
+          ),
           CoursePage(progress: widget.progress),
-          const CommunityPage(),
-          const ResourcesPage(),
+          CommunityHubPage(store: widget.community),
+          const ToolkitPage(),
+          ReviewPage(progress: widget.progress),
         ];
 
         return LayoutBuilder(
@@ -253,10 +273,16 @@ class _NavButton extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.progress, required this.onOpenCourse});
+  const HomePage({
+    super.key,
+    required this.progress,
+    required this.onOpenCourse,
+    required this.onOpenReview,
+  });
 
   final ProgressStore progress;
   final VoidCallback onOpenCourse;
+  final VoidCallback onOpenReview;
 
   @override
   Widget build(BuildContext context) {
@@ -293,19 +319,172 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
+          const SizedBox(height: 18),
+          _ActionCenter(
+            progress: progress,
+            onOpenReview: onOpenReview,
+          ),
           const SizedBox(height: 28),
           Row(
             children: [
               const Expanded(
-                child: Text('Your classroom', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800)),
+                child: Text(
+                  'Your classroom',
+                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800),
+                ),
               ),
-              TextButton(onPressed: onOpenCourse, child: const Text('View all 14 modules')),
+              TextButton(
+                onPressed: onOpenCourse,
+                child: const Text('View all 14 modules'),
+              ),
             ],
           ),
           const SizedBox(height: 12),
           _ModulePreview(progress: progress),
           const SizedBox(height: 28),
           const _CommunityTeaser(),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionCenter extends StatelessWidget {
+  const _ActionCenter({
+    required this.progress,
+    required this.onOpenReview,
+  });
+
+  final ProgressStore progress;
+  final VoidCallback onOpenReview;
+
+  @override
+  Widget build(BuildContext context) {
+    final recent = progress.recentlyTouchedModuleIds;
+    final recentId = recent.isEmpty ? null : recent.first;
+    final recentTitle = recentId == null
+        ? 'No workspace activity yet'
+        : 'Module $recentId · ${courseModules[recentId - 1].title}';
+
+    return _Panel(
+      padding: const EdgeInsets.all(20),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final compact = constraints.maxWidth < 680;
+          final metrics = <Widget>[
+            _ActionMetric(
+              icon: Icons.play_circle_outline_rounded,
+              value: progress.activeCount,
+              label: 'Active',
+            ),
+            _ActionMetric(
+              icon: Icons.rate_review_outlined,
+              value: progress.readyForReviewCount,
+              label: 'Ready for review',
+            ),
+            _ActionMetric(
+              icon: Icons.history_rounded,
+              valueText: recentTitle,
+              label: 'Recent workspace',
+            ),
+          ];
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Action center',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 14),
+              if (compact)
+                Column(
+                  children: [
+                    for (final metric in metrics) ...[
+                      metric,
+                      const SizedBox(height: 10),
+                    ],
+                  ],
+                )
+              else
+                Row(
+                  children: [
+                    for (var i = 0; i < metrics.length; i++) ...[
+                      Expanded(child: metrics[i]),
+                      if (i != metrics.length - 1)
+                        const SizedBox(width: 10),
+                    ],
+                  ],
+                ),
+              if (progress.readyForReviewCount > 0) ...[
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  onPressed: onOpenReview,
+                  icon: const Icon(Icons.fact_check_outlined),
+                  label: Text(
+                    'Review ${progress.readyForReviewCount} ready module(s)',
+                  ),
+                ),
+              ],
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ActionMetric extends StatelessWidget {
+  const _ActionMetric({
+    required this.icon,
+    this.value,
+    this.valueText,
+    required this.label,
+  });
+
+  final IconData icon;
+  final int? value;
+  final String? valueText;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: _panelSoft,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: _accent),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  valueText ?? '${value ?? 0}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white54,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -730,14 +909,22 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                               var i = 0;
                               i < module.taskSteps.length;
                               i++
-                            ) ...[
-                              _NumberedLine(
-                                number: i + 1,
-                                text: module.taskSteps[i],
+                            )
+                              CheckboxListTile(
+                                contentPadding: EdgeInsets.zero,
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                value: progress.taskDone(module.id, i),
+                                onChanged: (_) =>
+                                    progress.toggleTask(module.id, i),
+                                title: Text(
+                                  module.taskSteps[i],
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    height: 1.4,
+                                  ),
+                                ),
                               ),
-                              if (i != module.taskSteps.length - 1)
-                                const SizedBox(height: 11),
-                            ],
                             const SizedBox(height: 16),
                             Text(
                               'Deliverable: ${module.deliverable}',
@@ -939,81 +1126,6 @@ class _NumberedLine extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class CommunityPage extends StatelessWidget {
-  const CommunityPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const _PageFrame(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _PageHeader(
-            eyebrow: 'COMMUNITY',
-            title: 'The Clientbound community.',
-            subtitle: 'Questions, wins, practice, feedback, and real sales conversations in one focused learning community.',
-          ),
-          SizedBox(height: 24),
-          _CommunityPost(
-            badge: 'SYSTEM',
-            title: 'How this community will work',
-            body: 'Post real questions, share anonymized outreach examples, practice objections, report wins, and get feedback. No fake case studies, spam, or confidential client information.',
-          ),
-          SizedBox(height: 14),
-          _CommunityPost(
-            badge: 'INSTRUCTOR',
-            title: 'Real opportunities outrank lessons',
-            body: 'If a prospect replies, an interview appears, or a client asks a question, handle the live opportunity first. Return to the module after the opportunity is stabilized.',
-          ),
-          SizedBox(height: 14),
-          _CommunityPost(
-            badge: 'NEXT RELEASE',
-            title: 'Cloud community',
-            body: 'Firebase authentication, synced progress, posts, comments, reactions, announcements, and moderation will turn this preview into the full Skool-style community layer.',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ResourcesPage extends StatelessWidget {
-  const ResourcesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _PageFrame(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _PageHeader(
-            eyebrow: 'TOOLKIT',
-            title: 'Your sales toolkit',
-            subtitle: 'Use the smallest useful resource for the task in front of you. The web release can open bundled PDFs directly.',
-          ),
-          const SizedBox(height: 24),
-          _ResourceTile(
-            icon: Icons.menu_book_outlined,
-            title: 'Complete course',
-            subtitle: 'The First Client Sales System reference PDF',
-            onTap: () => _openAsset(context, 'The-First-Client-Sales-System.pdf'),
-          ),
-          const SizedBox(height: 12),
-          for (final module in courseModules) ...[
-            _ResourceTile(
-              icon: module.icon,
-              title: 'Module ${module.id}: ${module.title}',
-              subtitle: 'Execution worksheet PDF',
-              onTap: () => _openAsset(context, module.worksheetAsset),
-            ),
-            const SizedBox(height: 12),
-          ],
-        ],
-      ),
     );
   }
 }

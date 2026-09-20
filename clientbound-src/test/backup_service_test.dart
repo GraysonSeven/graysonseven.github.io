@@ -64,7 +64,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.7.0+7',
+      appVersion: '0.8.0+8',
     );
 
     final json = backup.createBackupJson();
@@ -116,7 +116,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.7.0+7',
+      appVersion: '0.8.0+8',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -157,7 +157,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.7.0+7',
+      appVersion: '0.8.0+8',
     );
 
     await expectLater(
@@ -201,7 +201,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.7.0+7',
+      appVersion: '0.8.0+8',
     );
     final json = backup.createBackupJson();
 
@@ -243,7 +243,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.7.0+7',
+      appVersion: '0.8.0+8',
     );
 
     final legacy = jsonEncode(<String, dynamic>{

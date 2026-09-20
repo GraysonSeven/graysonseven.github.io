@@ -1,7 +1,7 @@
 name: clientbound
 description: Clientbound - learn sales, build proof, and win clients through execution-first B2B sales training.
 publish_to: "none"
-version: 0.7.0+7
+version: 0.8.0+8
 
 environment:
   sdk: ">=3.9.0 <4.0.0"

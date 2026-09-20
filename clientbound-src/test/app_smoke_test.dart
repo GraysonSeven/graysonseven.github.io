@@ -17,7 +17,7 @@ void main() {
     final settings = AppSettingsStore();
     final workspace = WorkspaceStore();
     final reviewExchange = ReviewExchangeStore();
-    final updates = UpdateStore(currentVersion: '0.7.0+7');
+    final updates = UpdateStore(currentVersion: '0.8.0+8');
 
     await progress.load();
     await community.load();
@@ -32,7 +32,7 @@ void main() {
       updates: updates,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.7.0+7',
+      appVersion: '0.8.0+8',
     );
 
     expect(app.progress, same(progress));
@@ -41,7 +41,7 @@ void main() {
     expect(app.updates, same(updates));
     expect(app.workspace, same(workspace));
     expect(app.reviewExchange, same(reviewExchange));
-    expect(app.appVersion, '0.7.0+7');
+    expect(app.appVersion, '0.8.0+8');
     expect(progress.passedCount, 0);
     expect(community.posts, isNotEmpty);
     expect(settings.onboardingComplete, isFalse);

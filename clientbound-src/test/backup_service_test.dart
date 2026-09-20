@@ -59,7 +59,7 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.5.0+5',
+      appVersion: '0.6.0+6',
     );
 
     final json = backup.createBackupJson();
@@ -108,7 +108,7 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.5.0+5',
+      appVersion: '0.6.0+6',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -146,7 +146,7 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.5.0+5',
+      appVersion: '0.6.0+6',
     );
 
     await expectLater(

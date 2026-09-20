@@ -278,17 +278,40 @@ class _WorkspaceTable extends StatelessWidget {
               ],
             ),
           ),
-        OutlinedButton.icon(
-          onPressed: () {
-            store.addTableRow(
-              moduleId,
-              definition.key,
-              definition.columns.map((column) => column.key),
-            );
-            onStructureChanged();
-          },
-          icon: const Icon(Icons.add_rounded),
-          label: const Text('Add row'),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            OutlinedButton.icon(
+              onPressed: () {
+                store.addTableRow(
+                  moduleId,
+                  definition.key,
+                  definition.columns.map((column) => column.key),
+                );
+                onStructureChanged();
+              },
+              icon: const Icon(Icons.add_rounded),
+              label: const Text('Add row'),
+            ),
+            if (definition.expectedRows case final expected?)
+              if (rows.length < expected)
+                OutlinedButton.icon(
+                  onPressed: () {
+                    store.ensureTableRows(
+                      moduleId,
+                      definition.key,
+                      definition.columns.map((column) => column.key),
+                      expected,
+                    );
+                    onStructureChanged();
+                  },
+                  icon: const Icon(Icons.playlist_add_rounded),
+                  label: Text(
+                    'Add remaining ${expected - rows.length} required row(s)',
+                  ),
+                ),
+          ],
         ),
       ],
     );

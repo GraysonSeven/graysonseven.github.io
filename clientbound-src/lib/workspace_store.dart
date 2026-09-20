@@ -95,6 +95,22 @@ class WorkspaceStore extends ChangeNotifier {
     _setTable(moduleId, fieldKey, rows);
   }
 
+  void ensureTableRows(
+    int moduleId,
+    String fieldKey,
+    Iterable<String> columnKeys,
+    int count,
+  ) {
+    if (count < 1) return;
+    final rows = tableValue(moduleId, fieldKey);
+    while (rows.length < count) {
+      rows.add(<String, String>{
+        for (final key in columnKeys) key: '',
+      });
+    }
+    _setTable(moduleId, fieldKey, rows);
+  }
+
   void setTableCell(
     int moduleId,
     String fieldKey,

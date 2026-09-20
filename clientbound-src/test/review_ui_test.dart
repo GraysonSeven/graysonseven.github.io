@@ -122,7 +122,7 @@ void main() {
             progress: progress,
             workspace: workspace,
             reviewExchange: reviewExchange,
-            appVersion: '0.8.0+8',
+            appVersion: '0.9.0+9',
           ),
         ),
       ),

@@ -69,6 +69,18 @@ function assert(condition, message) {
   if (!condition) failures.push(message);
 }
 
+
+async function captureCheckpoint(page, file) {
+  try {
+    await page.screenshot({ path: file, fullPage: false, timeout: 20000 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!/screenshot|Timeout/i.test(message)) throw error;
+    await page.waitForTimeout(650);
+    await page.screenshot({ path: file, fullPage: false, timeout: 40000 });
+  }
+}
+
 async function qualifyProfile(profile) {
   const profileDir = path.join(outputDir, profile.name);
   fs.mkdirSync(profileDir, { recursive: true });
@@ -159,7 +171,7 @@ async function qualifyProfile(profile) {
       assert(state.activeScene === expectedScene, prefix + name + " expected active scene " + expectedScene + ", found " + state.activeScene);
 
       const file = path.join(profileDir, name + ".png");
-      await page.screenshot({ path: file, fullPage: false });
+      await captureCheckpoint(page, file);
       shots.push({ name, progress, expectedScene, activeScene: state.activeScene, frames: state.frames, file: path.relative(outputDir, file) });
     }
 

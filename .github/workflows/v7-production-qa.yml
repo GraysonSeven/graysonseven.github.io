@@ -54,7 +54,7 @@ jobs:
           do {
             try {
               $stamp = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-              $response = Invoke-WebRequest -UseBasicParsing -Uri "$url?qa=$stamp" -Headers @{ 'Cache-Control'='no-cache' }
+              $response = Invoke-WebRequest -UseBasicParsing -Uri "${url}?qa=$stamp" -Headers @{ 'Cache-Control'='no-cache' }
               $last = $response.Content
               if ($response.StatusCode -eq 200 -and $last -match ('data-v7-version="' + [regex]::Escape($env:EXPECTED_VERSION) + '"')) {
                 Write-Host "Cloudflare production is serving V$env:EXPECTED_VERSION"

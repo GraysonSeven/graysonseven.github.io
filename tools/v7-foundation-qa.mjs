@@ -38,13 +38,13 @@ if (exists("experience/index.html")) {
   const html = read("experience/index.html");
   for (const marker of [
     "noindex,nofollow,noarchive",
-    "data-v7-version=\"7.0.1\"",
+    "data-v7-version=\"7.1.0\"",
     "SYSTEM 01 // IKO ONLINE",
     "SYSTEM 02 // THE BUILDER",
     "REQUEST A QUOTE",
     "3D ENGINE // BOOTING",
-    "experience.css?v=701",
-    "experience.js?v=701"
+    "experience.css?v=710",
+    "experience.js?v=710"
   ]) {
     if (!html.includes(marker)) fail("HTML marker missing: " + marker);
   }
@@ -69,6 +69,11 @@ if (exists("experience/experience.js")) {
     "tunnelGroup",
     "archiveCores",
     "portalRings",
+    "makeTradeCoreMachine",
+    "makeMorseMachine",
+    "makeEtteMachine",
+    "cameraTarget",
+    "setupPointer",
     "3D ENGINE // ONLINE"
   ]) {
     if (!js.includes(marker)) fail("JS marker missing: " + marker);
@@ -81,4 +86,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("\nICHARLES V7.0.1 SAFETY + 3D VISIBILITY QA PASS\n");
+console.log("\nICHARLES V7.1 CINEMATIC CORE QA PASS\n");

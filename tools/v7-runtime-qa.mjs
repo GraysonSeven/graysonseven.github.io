@@ -71,6 +71,7 @@ fs.mkdirSync(outputDir, { recursive: true });
 const failures = [];
 const consoleErrors = [];
 const pageErrors = [];
+const networkErrors = [];
 let server = null;
 let browser = null;
 let report = null;
@@ -93,6 +94,9 @@ try {
     if (message.type() === "error") consoleErrors.push(message.text());
   });
   page.on("pageerror", error => pageErrors.push(error.message));
+  page.on("response", response => {
+    if (response.status() >= 400) networkErrors.push(response.status() + " " + response.url());
+  });
 
   await page.goto(baseUrl, { waitUntil: "networkidle", timeout: 30000 });
   await page.waitForFunction(() => window.__V7_DEBUG__?.ready === true, null, { timeout: 20000 });
@@ -125,13 +129,16 @@ try {
   assert(first.webgl === true, "WebGL context is not reported ready");
   assert(!first.error, "V7 debug reported an error: " + (first.error || "unknown"));
   assert(second.frames > first.frames, "Render frames are not increasing (" + first.frames + " -> " + second.frames + ")");
-  assert(first.objects >= 40, "Expected a substantial 3D scene, found only " + first.objects + " objects");
+  assert(first.version === "7.1.0", "Expected V7.1.0 debug version, found " + first.version);
+  assert(first.objects >= 80, "Expected a substantial V7.1 3D scene, found only " + first.objects + " objects");
+  assert(first.machines === 3, "Expected exactly three project machine rigs, found " + first.machines);
   assert(layers.canvasZ > layers.worldZ, "Canvas z-index " + layers.canvasZ + " is not above world " + layers.worldZ);
   assert(layers.storyZ > layers.canvasZ, "Story z-index " + layers.storyZ + " is not above canvas " + layers.canvasZ);
   assert(layers.canvasOpacity > 0, "Canvas is visually transparent by CSS opacity");
   assert(layers.engineState === "online" && /ONLINE/.test(layers.engineText), "3D ENGINE // ONLINE indicator is missing");
   assert(layers.fallbackHidden === true, "3D fallback is visible despite successful initialization");
   assert(layers.canvasSize[0] > 0 && layers.canvasSize[1] > 0, "Canvas has zero render size");
+  assert(networkErrors.length === 0, "Unexpected HTTP errors: " + networkErrors.join(", "));
 
   const shots = [];
   for (const entry of checkpoints) {
@@ -172,6 +179,7 @@ try {
     checkpoints: shots,
     pageErrors,
     consoleErrors,
+    networkErrors,
     failures
   };
 } catch (error) {
@@ -183,6 +191,7 @@ try {
     checkedAt: new Date().toISOString(),
     pageErrors,
     consoleErrors,
+    networkErrors,
     failures
   };
 } finally {

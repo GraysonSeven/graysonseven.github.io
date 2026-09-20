@@ -7,6 +7,7 @@ import 'app_constants.dart';
 import 'app_settings_store.dart';
 import 'community_store.dart';
 import 'progress_store.dart';
+import 'review_exchange_store.dart';
 import 'update_store.dart';
 import 'workspace_store.dart';
 
@@ -18,12 +19,14 @@ Future<void> main() async {
   final settings = AppSettingsStore();
   final updates = UpdateStore(currentVersion: clientboundVersion);
   final workspace = WorkspaceStore();
+  final reviewExchange = ReviewExchangeStore();
 
   await Future.wait([
     progress.load(),
     community.load(),
     settings.load(),
     workspace.load(),
+    reviewExchange.load(),
   ]);
 
   runApp(
@@ -33,6 +36,7 @@ Future<void> main() async {
       settings: settings,
       updates: updates,
       workspace: workspace,
+      reviewExchange: reviewExchange,
       appVersion: clientboundVersion,
     ),
   );

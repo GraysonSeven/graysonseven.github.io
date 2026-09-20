@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:clientbound/progress_store.dart';
+import 'package:clientbound/review_exchange_store.dart';
 import 'package:clientbound/review_page.dart';
 import 'package:clientbound/workspace_schema.dart';
 import 'package:clientbound/workspace_store.dart';
@@ -102,8 +103,10 @@ void main() {
 
     final progress = ProgressStore();
     final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
     await progress.load();
     await workspace.load();
+    await reviewExchange.load();
 
     await progress.submitForReview(
       1,
@@ -118,6 +121,7 @@ void main() {
           body: ReviewPage(
             progress: progress,
             workspace: workspace,
+            reviewExchange: reviewExchange,
             appVersion: '0.7.0+7',
           ),
         ),

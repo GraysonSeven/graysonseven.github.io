@@ -9,6 +9,7 @@ import 'backup_download.dart';
 import 'backup_service.dart';
 import 'community_store.dart';
 import 'progress_store.dart';
+import 'review_exchange_store.dart';
 import 'update_store.dart';
 import 'workspace_store.dart';
 
@@ -20,6 +21,7 @@ class SettingsPage extends StatelessWidget {
     required this.settings,
     required this.updates,
     required this.workspace,
+    required this.reviewExchange,
     required this.appVersion,
   });
 
@@ -28,6 +30,7 @@ class SettingsPage extends StatelessWidget {
   final AppSettingsStore settings;
   final UpdateStore updates;
   final WorkspaceStore workspace;
+  final ReviewExchangeStore reviewExchange;
   final String appVersion;
 
   @override
@@ -37,6 +40,7 @@ class SettingsPage extends StatelessWidget {
       community: community,
       settings: settings,
       workspace: workspace,
+      reviewExchange: reviewExchange,
       appVersion: appVersion,
     );
 
@@ -66,6 +70,7 @@ class SettingsPage extends StatelessWidget {
             community: community,
             settings: settings,
             workspace: workspace,
+            reviewExchange: reviewExchange,
           ),
           _Section(
             title: 'Version & updates',
@@ -190,7 +195,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Progress, structured module workspaces, tasks, notes, review feedback, settings, and Practice Board activity are stored locally. Course PDFs open from the free Clientbound GitHub Pages deployment.',
+                'Progress, structured module workspaces, tasks, notes, review feedback, imported review-exchange packages, settings, and Practice Board activity are stored locally. Course PDFs open from the free Clientbound GitHub Pages deployment.',
                 style: TextStyle(color: Colors.white60, height: 1.5),
               ),
             ],
@@ -411,7 +416,7 @@ class SettingsPage extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: const Text('Reset local learning data?'),
         content: const Text(
-          'This removes module progress, structured workspaces, notes, tasks, review feedback, and local Practice Board posts. This cannot be undone without a backup.',
+          'This removes module progress, structured workspaces, notes, tasks, review feedback, imported review-exchange packages, and local Practice Board posts. This cannot be undone without a backup.',
         ),
         actions: [
           TextButton(
@@ -430,6 +435,7 @@ class SettingsPage extends StatelessWidget {
     await progress.reset();
     await workspace.reset();
     await community.resetToSeed();
+    await reviewExchange.reset();
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Local learning data reset.')),
@@ -444,12 +450,14 @@ class _RecoveryWarnings extends StatelessWidget {
     required this.community,
     required this.settings,
     required this.workspace,
+    required this.reviewExchange,
   });
 
   final ProgressStore progress;
   final CommunityStore community;
   final AppSettingsStore settings;
   final WorkspaceStore workspace;
+  final ReviewExchangeStore reviewExchange;
 
   @override
   Widget build(BuildContext context) {
@@ -458,6 +466,7 @@ class _RecoveryWarnings extends StatelessWidget {
       if (community.recoveryWarning != null) community.recoveryWarning!,
       if (settings.recoveryWarning != null) settings.recoveryWarning!,
       if (workspace.recoveryWarning != null) workspace.recoveryWarning!,
+      if (reviewExchange.recoveryWarning != null) reviewExchange.recoveryWarning!,
     ];
     if (warnings.isEmpty) return const SizedBox.shrink();
 

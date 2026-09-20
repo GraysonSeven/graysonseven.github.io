@@ -26,6 +26,7 @@ for (const rel of [
   "assets/v7/iko-archive-world-dark.webp",
   "assets/v7/iko-archive-world-light.webp",
   "assets/vendor/v7/three.module.min.js",
+  "assets/vendor/v7/three.core.min.js",
   "assets/vendor/v7/gsap.min.js",
   "assets/vendor/v7/ScrollTrigger.min.js",
   "V7_SAFETY_POINT.json"

@@ -14,6 +14,9 @@ $deployDir = Join-Path $tempRoot 'site'
 $archive = Join-Path $tempRoot 'site.zip'
 $preQa = Join-Path $tempRoot 'predeploy-runtime'
 $prodQa = Join-Path $tempRoot 'production-runtime'
+$nodeModulesPath = Join-Path $repoRoot 'node_modules'
+$playwrightPath = Join-Path $nodeModulesPath 'playwright-core'
+$createdTemporaryNodeModules = $false
 
 function Invoke-NativeChecked {
   param(
@@ -123,9 +126,14 @@ try {
     Invoke-NativeChecked node '.\tools\v7-foundation-qa.mjs'
     Invoke-NativeChecked node '.\tools\site-qa.mjs'
 
-    if (!(Test-Path -LiteralPath (Join-Path $repoRoot 'node_modules\playwright-core'))) {
+    if (!(Test-Path -LiteralPath $playwrightPath)) {
+      if (Test-Path -LiteralPath $nodeModulesPath) {
+        throw 'Pre-existing node_modules is present without playwright-core. Remove or manage it before release QA so the deployment script does not mutate unrelated local dependencies.'
+      }
+
       Write-Host 'Installing temporary Playwright Core dependency...'
       Invoke-NativeChecked npm install --no-save --package-lock=false playwright-core@1.55.0
+      $createdTemporaryNodeModules = $true
     }
 
     Write-Host 'Running local Microsoft Edge release-candidate QA...'
@@ -209,6 +217,10 @@ try {
   Write-Host 'Public /: unchanged'
 }
 finally {
+  if ($createdTemporaryNodeModules -and (Test-Path -LiteralPath $nodeModulesPath)) {
+    Remove-Item -LiteralPath $nodeModulesPath -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   if (Test-Path -LiteralPath $tempRoot) {
     Remove-Item -LiteralPath $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
   }

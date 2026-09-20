@@ -22,6 +22,9 @@ void main() {
     expect(source, contains('Paste backup JSON'));
     expect(source, contains('BackupFileService.saveBackup'));
     expect(source, contains('BackupFileService.pickBackupText'));
+    expect(source, contains('Restore this backup?'));
+    expect(source, contains("decoded['appVersion']"));
+    expect(source, contains("decoded['exportedAt']"));
   });
 
   test('backup file service keeps JSON-only local boundary', () {

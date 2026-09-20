@@ -64,7 +64,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     final json = backup.createBackupJson();
@@ -116,7 +116,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -157,7 +157,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     await expectLater(
@@ -201,7 +201,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
     final json = backup.createBackupJson();
 
@@ -243,7 +243,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -319,7 +319,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
     final json = backup.createBackupJson();
 
@@ -369,7 +369,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     final decoded =
@@ -401,7 +401,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     ).createBackupJson();
     expect(persisted, contains('Original progress note'));
     expect(persisted, isNot(contains('Mutated by bad restore')));

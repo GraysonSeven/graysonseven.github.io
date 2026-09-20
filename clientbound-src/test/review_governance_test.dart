@@ -117,7 +117,7 @@ void main() {
     );
 
     final package = ReviewPackageBuilder.build(
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
       module: courseModules[1],
       submission: current!,
       history: progress.reviewSubmissionsFor(2),
@@ -125,7 +125,7 @@ void main() {
 
     expect(package.data['format'], 'clientbound-review-package');
     expect(package.data['packageSchemaVersion'], 1);
-    expect(package.data['clientboundVersion'], '0.9.0+9');
+    expect(package.data['clientboundVersion'], '1.0.0+10');
 
     final module = package.data['module'] as Map<String, dynamic>;
     expect(module['id'], 2);

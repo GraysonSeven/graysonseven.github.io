@@ -1,0 +1,81 @@
+name: iCharles V7 Cloudflare Production Verify
+
+on:
+  push:
+    branches:
+      - v7-cloudflare-prod-run-267834dc
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-verify:
+    name: Verify Cloudflare hidden V7 in Edge
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout accepted main commit
+        uses: actions/checkout@v4
+        with:
+          ref: 267834dcd5d4f9c7c97a49ffed6b6b30f00d0096
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Probe production hidden route
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $stamp = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+          $experience = Invoke-WebRequest -UseBasicParsing -Uri "https://icharles.pages.dev/experience/?qa=$stamp" -Headers @{ 'Cache-Control'='no-cache' }
+          if ($experience.StatusCode -ne 200) {
+            throw "Hidden route returned HTTP $($experience.StatusCode)"
+          }
+
+          if (-not $experience.Content.Contains('data-v7-version="7.4.0"')) {
+            $version = if ($experience.Content -match 'data-v7-version="([^"]+)"') { $Matches[1] } else { '<missing>' }
+            throw "Cloudflare hidden route is not accepted V7.4.0. Observed version: $version"
+          }
+
+          if (-not $experience.Content.Contains('noindex,nofollow,noarchive')) {
+            throw 'Production hidden route lost its noindex boundary.'
+          }
+
+          $root = Invoke-WebRequest -UseBasicParsing -Uri "https://icharles.pages.dev/?qa=$stamp" -Headers @{ 'Cache-Control'='no-cache' }
+          if ($root.Content.Contains('data-v7-home="production"')) {
+            throw 'Public Home is already V7; hidden-route-only gate boundary was crossed unexpectedly.'
+          }
+
+          Write-Host 'Production probe: accepted hidden V7.4.0 is present and public Home remains unchanged.'
+
+      - name: Install Playwright Core
+        shell: pwsh
+        run: npm install --no-save --package-lock=false playwright-core@1.55.0
+
+      - name: Production Edge runtime
+        shell: pwsh
+        run: node .\tools\v7-runtime-qa.mjs --channel=msedge --base=https://icharles.pages.dev/experience/ --output=artifacts\v7-production-runtime
+
+      - name: Production reduced motion and WebGL fallback
+        shell: pwsh
+        run: node .\tools\v7-resilience-qa.mjs --channel=msedge --base=https://icharles.pages.dev/experience/ --output=artifacts\v7-production-resilience
+
+      - name: Production theme contract
+        shell: pwsh
+        run: node .\tools\v7-theme-contract-qa.mjs --channel=msedge --origin=https://icharles.pages.dev --output=artifacts\v7-production-theme
+
+      - name: Upload production verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-cloudflare-production-verification-267834dc
+          path: |
+            artifacts/v7-production-runtime
+            artifacts/v7-production-resilience
+            artifacts/v7-production-theme
+          if-no-files-found: warn

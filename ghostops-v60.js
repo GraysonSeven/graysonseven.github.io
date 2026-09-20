@@ -11,6 +11,7 @@
   if (home) body.classList.add("v60-ghostops-home");
 
   const storageKey = "icharles-ui-theme";
+  const isInAppLocked = () => root.dataset.inAppBrowser === "1" && root.dataset.visualQa !== "1";
   const getTheme = () => root.dataset.uiTheme === "light" ? "light" : "dark";
 
   const themeAssets = {
@@ -30,8 +31,10 @@
 
   const syncControls = theme => {
     document.querySelectorAll(".v60-theme-toggle").forEach(button => {
+      const locked = isInAppLocked();
+      button.disabled = locked;
       button.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
-      button.setAttribute("aria-label", `Switch to ${theme === "light" ? "dark" : "light"} theme`);
+      button.setAttribute("aria-label", locked ? "Dark theme locked in in-app browser" : `Switch to ${theme === "light" ? "dark" : "light"} theme`);
       button.dataset.theme = theme;
       const label = button.querySelector(".v60-theme-label");
       if (label) label.textContent = theme.toUpperCase();
@@ -39,6 +42,10 @@
   };
 
   const applyTheme = (theme, persist = true) => {
+    if (isInAppLocked()) {
+      theme = "dark";
+      persist = false;
+    }
     theme = theme === "light" ? "light" : "dark";
     root.dataset.uiTheme = theme;
     root.style.colorScheme = theme;
@@ -63,6 +70,7 @@
       </span>
       <span class="v60-theme-label">${getTheme().toUpperCase()}</span>`;
     button.addEventListener("click", () => {
+      if (isInAppLocked()) return;
       applyTheme(getTheme() === "dark" ? "light" : "dark", true);
     });
     return button;

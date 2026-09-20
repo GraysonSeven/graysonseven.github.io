@@ -6,14 +6,18 @@ on:
       - main
     paths:
       - "tools/Deploy-V7-Hidden-Cloudflare.ps1"
+      - "tools/Deploy-V7-Public-Cloudflare.ps1"
       - "tools/v7-release-tooling-qa.mjs"
+      - "tools/v7-public-release-tooling-qa.mjs"
       - ".github/workflows/v7-release-tooling-qa.yml"
   push:
     branches:
       - main
     paths:
       - "tools/Deploy-V7-Hidden-Cloudflare.ps1"
+      - "tools/Deploy-V7-Public-Cloudflare.ps1"
       - "tools/v7-release-tooling-qa.mjs"
+      - "tools/v7-public-release-tooling-qa.mjs"
       - ".github/workflows/v7-release-tooling-qa.yml"
   workflow_dispatch:
 
@@ -22,7 +26,7 @@ permissions:
 
 jobs:
   release-tooling:
-    name: Guard hidden-route release tooling
+    name: Guard V7 Cloudflare release tooling
     runs-on: windows-latest
     timeout-minutes: 6
 
@@ -40,19 +44,28 @@ jobs:
         run: |
           $tokens = $null
           $errors = $null
-          [System.Management.Automation.Language.Parser]::ParseFile(
-            (Resolve-Path '.\tools\Deploy-V7-Hidden-Cloudflare.ps1'),
-            [ref]$tokens,
-            [ref]$errors
-          ) | Out-Null
+          foreach ($script in @(
+            '.\tools\Deploy-V7-Hidden-Cloudflare.ps1',
+            '.\tools\Deploy-V7-Public-Cloudflare.ps1'
+          )) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              (Resolve-Path $script),
+              [ref]$tokens,
+              [ref]$errors
+            ) | Out-Null
 
-          if ($errors.Count -gt 0) {
-            $errors | ForEach-Object { Write-Error $_.Message }
-            throw "PowerShell parser found $($errors.Count) error(s)."
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error "$script : $($_.Message)" }
+              throw "PowerShell parser found $($errors.Count) error(s) in $script."
+            }
           }
 
-          Write-Host 'PowerShell syntax: PASS'
+          Write-Host 'PowerShell syntax: PASS (hidden + public release tools)'
 
       - name: Verify release invariants
         shell: pwsh
-        run: node .\tools\v7-release-tooling-qa.mjs
+        run: |
+          node .\tools\v7-release-tooling-qa.mjs
+          node .\tools\v7-public-release-tooling-qa.mjs

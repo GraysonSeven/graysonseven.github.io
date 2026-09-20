@@ -625,9 +625,9 @@ function setupTimeline() {
     .to(rings[1].rotation, { z: -0.82, duration: 1 }, 0);
 
   timeline
-    .to(coreGroup.position, { x: 3.05, y: 0.55, z: -2.0, duration: 0.95 }, 0.92)
-    .to(coreGroup.scale, { x: 0.48, y: 0.48, z: 0.48, duration: 0.95 }, 0.92)
-    .to(ikoSprite.material, { opacity: 0.24, duration: 0.62 }, 1.04)
+    .to(coreGroup.position, { x: 4.05, y: 1.05, z: -2.35, duration: 0.95 }, 0.92)
+    .to(coreGroup.scale, { x: 0.34, y: 0.34, z: 0.34, duration: 0.95 }, 0.92)
+    .to(ikoSprite.material, { opacity: 0.13, duration: 0.62 }, 1.04)
     .to(coreCrystal.material, { opacity: 0.04, duration: 0.62 }, 1.04)
     .to(camera.position, { x: -0.45, y: 0.05, z: 7.15, duration: 0.95 }, 0.92)
     .to(cameraTarget, { x: -1.15, y: -0.05, z: -0.25, duration: 0.95 }, 0.92);
@@ -637,19 +637,19 @@ function setupTimeline() {
     .fromTo(humanRig.position, { x: -2.0 }, { x: -1.55, duration: 0.7 }, 1.05)
     .to(humanRig.rotation, { y: 0.08, z: -0.025, duration: 0.7 }, 1.05);
 
-  fadeGroup(timeline, humanRig, 0.04, 2.04, 0.48);
+  fadeGroup(timeline, humanRig, 0, 1.86, 0.34);
   timeline
-    .to(humanRig.position, { x: -2.45, z: -2.0, duration: 0.5 }, 2.04)
+    .to(humanRig.position, { x: -2.65, z: -2.4, duration: 0.46 }, 1.86)
     .to(coreGroup.position, { x: 3.55, y: 2.15, z: -3.15, duration: 0.62 }, 2.0)
     .to(coreGroup.scale, { x: 0.24, y: 0.24, z: 0.24, duration: 0.62 }, 2.0)
     .to(ikoSprite.material, { opacity: 0.62, duration: 0.5 }, 2.0)
     .to(camera.position, { x: 0.55, y: 0.25, z: 7.8, duration: 0.82 }, 2.0)
     .to(cameraTarget, { x: 0.65, y: 0, z: -1.0, duration: 0.82 }, 2.0);
 
-  fadeGroup(timeline, archiveGroup, 1, 2.16, 0.62);
+  fadeGroup(timeline, archiveGroup, 1, 1.98, 0.58);
   timeline
-    .fromTo(archiveGroup.scale, { x: 0.76, y: 0.76, z: 0.76 }, { x: 1, y: 1, z: 1, duration: 0.7 }, 2.16)
-    .to(archiveGroup.rotation, { y: -0.18, x: 0.035, duration: 0.85 }, 2.2);
+    .fromTo(archiveGroup.scale, { x: 0.76, y: 0.76, z: 0.76 }, { x: 1, y: 1, z: 1, duration: 0.7 }, 1.98)
+    .to(archiveGroup.rotation, { y: -0.18, x: 0.035, duration: 0.85 }, 2.02);
 
   fadeGroup(timeline, archiveGroup, 0.04, 3.03, 0.45);
   fadeGroup(timeline, processGroup, 1, 3.08, 0.58);

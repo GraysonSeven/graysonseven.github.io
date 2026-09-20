@@ -1,4 +1,5 @@
-import 'package:clientbound/app.dart';
+import 'dart:io';
+
 import 'package:clientbound/course_catalog.dart';
 import 'package:clientbound/progress_store.dart';
 import 'package:clientbound/review_page.dart';
@@ -9,9 +10,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets(
-    'learner module cannot PASS and incomplete evidence cannot submit',
-    (tester) async {
+  test(
+    'learner path has no direct PASS action and readiness gates submission',
+    () async {
+      final appSource = File('lib/app.dart').readAsStringSync();
+
+      expect(
+        appSource,
+        isNot(contains("label: const Text('Record PASS')")),
+      );
+      expect(appSource, contains('_validateStructuredWorkspace'));
+      expect(appSource, contains('progress.submitForReview'));
+      expect(appSource, contains('workspace.snapshotForModule(module.id)'));
+
       SharedPreferences.setMockInitialValues({});
 
       final progress = ProgressStore();
@@ -19,32 +30,9 @@ void main() {
       await progress.load();
       await workspace.load();
 
-      await tester.pumpWidget(
-        WorkspaceScope(
-          store: workspace,
-          child: MaterialApp(
-            home: ModuleDetailPage(
-              module: courseModules.first,
-              progress: progress,
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      expect(find.text('Record PASS'), findsNothing);
-
-      final ready = find.text('Ready for review');
-      await tester.ensureVisible(ready);
-      await tester.tap(ready);
-      await tester.pumpAndSettle();
-
-      expect(find.text('Workspace is not review-ready'), findsOneWidget);
+      expect(workspace.readinessIssues(1), isNotEmpty);
       expect(progress.stageFor(1), isNot(ModuleStage.readyForReview));
       expect(progress.reviewSubmissionsFor(1), isEmpty);
-
-      await tester.tap(find.text('Continue working'));
-      await tester.pumpAndSettle();
 
       workspace.setString(1, 'niche', 'Industrial manufacturers');
       workspace.setString(1, 'buyer', 'Sales manager');
@@ -95,14 +83,17 @@ void main() {
 
       expect(workspace.readinessIssues(1), isEmpty);
 
-      await tester.pump();
-      await tester.ensureVisible(find.text('Ready for review'));
-      await tester.tap(find.text('Ready for review'));
-      await tester.pumpAndSettle();
+      await progress.submitForReview(
+        1,
+        evidenceSnapshot: workspace.snapshotForModule(1),
+      );
 
       expect(progress.stageFor(1), ModuleStage.readyForReview);
       expect(progress.reviewSubmissionsFor(1), hasLength(1));
-      expect(find.text('Record PASS'), findsNothing);
+      expect(
+        progress.latestReviewSubmissionFor(1)!.evidenceSnapshot['niche'],
+        'Industrial manufacturers',
+      );
     },
   );
 

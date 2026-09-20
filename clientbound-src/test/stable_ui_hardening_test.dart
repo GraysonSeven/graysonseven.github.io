@@ -37,4 +37,24 @@ void main() {
     expect(source, contains('onPressed: _confirmResetState'));
   });
 
+
+  test('onboarding explains learner and instructor review responsibilities', () {
+    final source = File('lib/onboarding_page.dart').readAsStringSync();
+
+    expect(source, contains('Learners submit. Instructors decide.'));
+    expect(source, contains('Review Exchange moves the package and decision'));
+    expect(source, contains('save and restore a Clientbound backup file'));
+    expect(source, contains('SingleChildScrollView'));
+    expect(source, contains('minHeight: constraints.maxHeight - 24'));
+  });
+
+
+  test('review exchange surfaces the trust and privacy boundary', () {
+    final source = File('lib/review_exchange_page.dart').readAsStringSync();
+
+    expect(source, contains('does not authenticate who created a decision'));
+    expect(source, contains('real learner evidence and notes'));
+    expect(source, contains('trusted channel'));
+  });
+
 }

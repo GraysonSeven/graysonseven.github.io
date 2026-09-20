@@ -35,6 +35,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
           'Modules move from Not started to In progress to Ready for review. PASS means the real deliverable met its quality gate.',
     ),
     (
+      icon: Icons.swap_horiz_rounded,
+      eyebrow: 'HOW REVIEW WORKS',
+      title: 'Learners submit. Instructors decide.',
+      body:
+          'Submit a real deliverable when it is review-ready. An instructor records PASS or REVISE in Review. If you use different devices, Review Exchange moves the package and decision as local JSON files.',
+    ),
+    (
       icon: Icons.lock_outline_rounded,
       eyebrow: 'YOUR DATA',
       title: 'Your work stays local by default.',
@@ -46,7 +53,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       eyebrow: 'OWN YOUR WORK',
       title: 'Back up before it matters.',
       body:
-          'Settings includes Clientbound backup export and restore. Use it before browser resets, device changes, or major experiments.',
+          'Settings can save and restore a Clientbound backup file on Web or Android. Use it before browser resets, device changes, or major experiments.',
     ),
   ];
 
@@ -76,60 +83,73 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           setState(() => _index = value),
                       itemBuilder: (context, index) {
                         final step = _steps[index];
-                        return Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 74,
-                                height: 74,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withValues(alpha: .13),
-                                  borderRadius: BorderRadius.circular(22),
-                                ),
-                                child: Icon(
-                                  step.icon,
-                                  size: 34,
-                                  color:
-                                      Theme.of(context).colorScheme.primary,
+                        return LayoutBuilder(
+                          builder: (context, constraints) =>
+                              SingleChildScrollView(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight - 24,
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 74,
+                                      height: 74,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withValues(alpha: .13),
+                                        borderRadius: BorderRadius.circular(22),
+                                      ),
+                                      child: Icon(
+                                        step.icon,
+                                        size: 34,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 26),
+                                    Text(
+                                      step.eyebrow,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 1.15,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      step.title,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 34,
+                                        height: 1.08,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 14),
+                                    Text(
+                                      step.body,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        height: 1.55,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 26),
-                              Text(
-                                step.eyebrow,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.15,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                step.title,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 34,
-                                  height: 1.08,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              Text(
-                                step.body,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  height: 1.55,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         );
                       },

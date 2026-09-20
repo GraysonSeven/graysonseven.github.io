@@ -12,13 +12,14 @@ const coarsePointer = matchMedia("(pointer: coarse)").matches;
 const mobile = innerWidth < 700;
 
 const debug = window.__V7_DEBUG__ = {
-  version: "7.2.0",
+  version: "7.3.0",
   ready: false,
   frames: 0,
   webgl: false,
   error: null,
   objects: 0,
   machines: 0,
+  forgePanels: 0,
   reducedMotion: reduced,
   fallback: false,
   canvasZ: null,
@@ -47,6 +48,7 @@ const archiveCores = [];
 const projectMachines = [];
 const processNodes = [];
 const portalRings = [];
+const forgePanels = [];
 const cameraTarget = { x: 0, y: 0, z: 0 };
 const pointerTarget = { x: 0, y: 0 };
 const pointer = { x: 0, y: 0 };
@@ -465,6 +467,48 @@ function makeForgeRig() {
     rig.add(pin);
   }
 
+  const panelSpecs = [
+    [-1.35, 0.78, -0.12, 1.35, 0.72, C.cyan],
+    [0.2, 0.92, -0.22, 1.4, 0.82, C.violet],
+    [1.55, 0.55, -0.34, 1.15, 0.68, C.magenta],
+    [0.35, -0.78, -0.2, 2.35, 0.72, C.cyan]
+  ];
+
+  panelSpecs.forEach(([x, y, z, width, height, color], index) => {
+    const panel = new THREE.Group();
+    const shell = makeWireBox(width, height, 0.12, color, 0.32);
+    panel.add(shell);
+
+    const topRail = new THREE.Mesh(
+      new THREE.BoxGeometry(width * 0.72, 0.018, 0.025),
+      additive(color, 0.24)
+    );
+    topRail.position.set(-width * 0.08, height * 0.22, 0.08);
+    panel.add(topRail);
+
+    for (let row = 0; row < 3; row++) {
+      const line = new THREE.Mesh(
+        new THREE.BoxGeometry(width * (0.42 + row * 0.12), 0.012, 0.02),
+        additive(index % 2 ? C.magenta : C.cyan, 0.16)
+      );
+      line.position.set(-width * 0.08, height * (0.04 - row * 0.15), 0.08);
+      panel.add(line);
+    }
+
+    panel.position.set(x, y, z);
+    panel.rotation.y = (index - 1.5) * 0.07;
+    rig.add(panel);
+    forgePanels.push(panel);
+  });
+
+  const launchCore = new THREE.Mesh(
+    new THREE.OctahedronGeometry(0.32, 0),
+    standard(0x0b2530, C.green, 0.58, 1.12)
+  );
+  launchCore.position.set(0.05, -1.72, -0.05);
+  launchCore.userData.launchCore = true;
+  rig.add(launchCore);
+
   return rig;
 }
 
@@ -715,6 +759,7 @@ async function init() {
   worldRig.add(processGroup);
 
   forgeGroup = makeForgeRig();
+  debug.forgePanels = forgePanels.length;
   forgeGroup.position.set(1.7, 0, -1.15);
   forgeGroup.scale.setScalar(0.9);
   setGroupFactor(forgeGroup, 0);
@@ -975,6 +1020,11 @@ function animate() {
 
     portalRings.forEach((ring, index) => {
       ring.rotation.z += (index % 2 ? -1 : 1) * 0.00038 * (index + 1);
+    });
+
+    forgePanels.forEach((panel, index) => {
+      panel.position.z += Math.sin(time * 0.55 + index * 0.8) * 0.0007;
+      panel.rotation.y += (index % 2 ? -1 : 1) * 0.00012;
     });
 
     particlePoints.rotation.y = time * 0.007;

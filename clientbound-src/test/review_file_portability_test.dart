@@ -62,9 +62,9 @@ void main() {
     final source =
         File('lib/review_exchange_file_service.dart').readAsStringSync();
 
-    expect(source, contains("allowedExtensions: const <String>['json']"));
-    expect(source, contains("type: FileType.custom"));
-    expect(source, contains("withData: true"));
+    expect(source, contains('allowedExtensions: const <String>[\'json\']'));
+    expect(source, contains('type: FileType.custom'));
+    expect(source, contains('withData: true'));
     expect(source, isNot(contains('http://')));
     expect(source, isNot(contains('https://')));
   });

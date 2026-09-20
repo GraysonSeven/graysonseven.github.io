@@ -199,25 +199,45 @@ async function testWebGLFallback() {
     assert(pageErrors.length === 0, "fallback: page errors: " + pageErrors.join(" | "));
     assert(networkErrors.length === 0, "fallback: HTTP errors: " + networkErrors.join(" | "));
 
-    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    const quoteLocator = page.locator('a[href="/contact/"]');
+    await quoteLocator.scrollIntoViewIfNeeded();
     await page.waitForTimeout(180);
     const final = await page.evaluate(() => {
       const quote = document.querySelector('a[href="/contact/"]');
       const work = document.querySelector('a[href="/portfolio/"]');
       const quoteRect = quote?.getBoundingClientRect();
+      const centerX = quoteRect ? quoteRect.left + quoteRect.width / 2 : -1;
+      const centerY = quoteRect ? quoteRect.top + quoteRect.height / 2 : -1;
+      const hit = centerX >= 0 && centerY >= 0 ? document.elementFromPoint(centerX, centerY) : null;
       return {
-        quoteVisible: Boolean(quoteRect && quoteRect.width > 0 && quoteRect.height > 0),
+        quoteVisible: Boolean(quoteRect && quoteRect.width > 0 && quoteRect.height > 0 && quoteRect.top < innerHeight && quoteRect.bottom > 0),
+        quoteUnobstructed: Boolean(quote && hit && (hit === quote || quote.contains(hit))),
         quoteHref: quote?.getAttribute("href") || "",
         workHref: work?.getAttribute("href") || ""
       };
     });
 
-    assert(final.quoteVisible, "fallback: request quote CTA is not usable at final scene");
+    assert(final.quoteVisible, "fallback: request quote CTA is not visible at final scene");
+    assert(final.quoteUnobstructed, "fallback: request quote CTA is visually obstructed");
     assert(final.quoteHref === "/contact/", "fallback: request quote route changed");
     assert(final.workHref === "/portfolio/", "fallback: portfolio route changed");
+    await page.screenshot({ path: path.join(dir, "fallback-final-cta.png"), fullPage: false });
 
-    await page.screenshot({ path: path.join(dir, "fallback-final.png"), fullPage: false });
-    return { state, final, pageErrors, networkErrors };
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(180);
+    const notice = await page.evaluate(() => {
+      const panel = document.querySelector(".v7-fallback");
+      const rect = panel?.getBoundingClientRect();
+      return {
+        visible: Boolean(rect && rect.width > 0 && rect.height > 0 && rect.top < innerHeight && rect.bottom > 0),
+        position: panel ? getComputedStyle(panel).position : ""
+      };
+    });
+    assert(notice.visible, "fallback: notice is not reachable at page end");
+    assert(notice.position === "relative", "fallback: notice should be in normal flow, found " + notice.position);
+    await page.screenshot({ path: path.join(dir, "fallback-notice.png"), fullPage: false });
+
+    return { state, final, notice, pageErrors, networkErrors };
   } finally {
     await context.close();
   }

@@ -11,6 +11,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: clientbound-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-clientbound:
     runs-on: ubuntu-latest

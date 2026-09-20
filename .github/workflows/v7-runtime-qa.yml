@@ -8,6 +8,7 @@ on:
       - "experience/**"
       - "tools/v7-foundation-qa.mjs"
       - "tools/v7-runtime-qa.mjs"
+      - "tools/v7-resilience-qa.mjs"
       - ".github/workflows/v7-runtime-qa.yml"
       - "assets/iko-prime/identity/iko-prime-logo-locked.png"
       - "assets/vendor/v7/**"
@@ -18,6 +19,7 @@ on:
       - "experience/**"
       - "tools/v7-foundation-qa.mjs"
       - "tools/v7-runtime-qa.mjs"
+      - "tools/v7-resilience-qa.mjs"
       - ".github/workflows/v7-runtime-qa.yml"
       - "assets/iko-prime/identity/iko-prime-logo-locked.png"
       - "assets/vendor/v7/**"
@@ -46,6 +48,7 @@ jobs:
         run: |
           node --check .\experience\experience.js
           node --check .\tools\v7-runtime-qa.mjs
+          node --check .\tools\v7-resilience-qa.mjs
           node .\tools\v7-foundation-qa.mjs
           node .\tools\site-qa.mjs
 
@@ -57,10 +60,16 @@ jobs:
         shell: pwsh
         run: node .\tools\v7-runtime-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-runtime
 
+      - name: Qualify reduced motion and WebGL fallback
+        shell: pwsh
+        run: node .\tools\v7-resilience-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-resilience
+
       - name: Upload V7 runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: v7-edge-runtime-evidence
-          path: artifacts/v7-runtime
+          path: |
+            artifacts/v7-runtime
+            artifacts/v7-resilience
           if-no-files-found: warn

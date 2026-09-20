@@ -38,13 +38,13 @@ if (exists("experience/index.html")) {
   const html = read("experience/index.html");
   for (const marker of [
     "noindex,nofollow,noarchive",
-    "data-v7-version=\"7.1.0\"",
+    "data-v7-version=\"7.1.1\"",
     "SYSTEM 01 // IKO ONLINE",
     "SYSTEM 02 // THE BUILDER",
     "REQUEST A QUOTE",
     "3D ENGINE // BOOTING",
-    "experience.css?v=710",
-    "experience.js?v=710"
+    "experience.css?v=711",
+    "experience.js?v=711"
   ]) {
     if (!html.includes(marker)) fail("HTML marker missing: " + marker);
   }
@@ -57,6 +57,8 @@ if (exists("experience/experience.css")) {
   if (!/\.v7-story\{[^}]*z-index:10/.test(css)) fail("HTML story must be z-index 10");
   if (!/body\{[^}]*background:transparent/.test(css)) fail("Body must expose the WebGL canvas");
   if (!css.includes(".v7-engine")) fail("3D engine runtime badge styling missing");
+  if (!css.includes('html[data-v7-render="fallback"] #v7-canvas')) fail("WebGL fallback canvas state missing");
+  if (!css.includes('html[data-v7-motion="reduced"]')) fail("Reduced-motion render state styling missing");
 }
 
 if (exists("experience/experience.js")) {
@@ -74,6 +76,10 @@ if (exists("experience/experience.js")) {
     "makeEtteMachine",
     "cameraTarget",
     "setupPointer",
+    "setupSceneStateTracking",
+    "renderOnce",
+    "v7Render",
+    "v7Motion",
     "3D ENGINE // ONLINE"
   ]) {
     if (!js.includes(marker)) fail("JS marker missing: " + marker);
@@ -86,4 +92,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("\nICHARLES V7.1 CINEMATIC CORE QA PASS\n");
+console.log("\nICHARLES V7.1.1 RESILIENCE QA PASS\n");

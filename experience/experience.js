@@ -35,7 +35,7 @@ const C = {
 };
 
 let renderer, scene, camera, clock, worldRig;
-let coreGroup, coreCrystal, innerCore, crystalWire, shardGroup, tunnelGroup;
+let coreGroup, coreCrystal, innerCore, crystalWire, shardGroup, tunnelGroup, ikoSprite;
 let humanRig, humanSourceSprite, operatorSprite;
 let archiveGroup, processGroup, forgeGroup, portalGroup;
 let particlePoints, grid;

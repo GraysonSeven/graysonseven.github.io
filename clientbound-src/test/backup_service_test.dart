@@ -59,7 +59,7 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.6.0+6',
+      appVersion: '0.7.0+7',
     );
 
     final json = backup.createBackupJson();
@@ -108,7 +108,7 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.6.0+6',
+      appVersion: '0.7.0+7',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -146,7 +146,7 @@ void main() {
       community: community,
       settings: settings,
       workspace: workspace,
-      appVersion: '0.6.0+6',
+      appVersion: '0.7.0+7',
     );
 
     await expectLater(
@@ -156,4 +156,94 @@ void main() {
     expect(progress.notesFor(1), 'Keep me');
     expect(workspace.stringValue(1, 'niche'), 'Keep this too');
   });
+
+  test('schema 2 backup preserves review submission history', () async {
+    SharedPreferences.setMockInitialValues({});
+
+    final progress = ProgressStore();
+    final community = CommunityStore();
+    final settings = AppSettingsStore();
+    final workspace = WorkspaceStore();
+    await progress.load();
+    await community.load();
+    await settings.load();
+    await workspace.load();
+
+    await progress.setNotes(3, 'Outreach system review notes.');
+    await progress.toggleTask(3, 0);
+    await progress.submitForReview(
+      3,
+      evidenceSnapshot: <String, dynamic>{
+        'coldEmail': 'Short truthful first-touch email.',
+      },
+    );
+    await progress.returnForRevision(
+      3,
+      feedback: 'Make the CTA lower-friction.',
+    );
+
+    final backup = BackupService(
+      progress: progress,
+      community: community,
+      settings: settings,
+      workspace: workspace,
+      appVersion: '0.7.0+7',
+    );
+    final json = backup.createBackupJson();
+
+    await progress.reset();
+    expect(progress.reviewSubmissionsFor(3), isEmpty);
+
+    await backup.restoreBackupJson(json);
+
+    final history = progress.reviewSubmissionsFor(3);
+    expect(history, hasLength(1));
+    expect(history.single.decision, ReviewDecision.revise);
+    expect(history.single.reviewerFeedback, 'Make the CTA lower-friction.');
+    expect(history.single.learnerNotesSnapshot, contains('review notes'));
+    expect(history.single.completedTaskIndexes, <int>[0]);
+  });
+
+  test('V0.6 schema 2 backup without review history remains restorable',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+
+    final progress = ProgressStore();
+    final community = CommunityStore();
+    final settings = AppSettingsStore();
+    final workspace = WorkspaceStore();
+    await progress.load();
+    await community.load();
+    await settings.load();
+    await workspace.load();
+
+    final legacyProgress =
+        Map<String, dynamic>.from(progress.exportData())
+          ..remove('reviewSubmissions');
+
+    final backup = BackupService(
+      progress: progress,
+      community: community,
+      settings: settings,
+      workspace: workspace,
+      appVersion: '0.7.0+7',
+    );
+
+    final legacy = jsonEncode(<String, dynamic>{
+      'format': 'clientbound-backup',
+      'schemaVersion': 2,
+      'appVersion': '0.6.0+6',
+      'exportedAt': '2026-09-20T00:00:00Z',
+      'progress': legacyProgress,
+      'community': community.exportData(),
+      'settings': settings.exportData(),
+      'workspace': workspace.exportData(),
+    });
+
+    await backup.restoreBackupJson(legacy);
+
+    expect(progress.reviewSubmissionsFor(1), isEmpty);
+    expect(progress.recoveryWarning, isNull);
+  });
+
 }

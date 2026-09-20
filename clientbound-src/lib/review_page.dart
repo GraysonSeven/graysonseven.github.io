@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'course_catalog.dart';
 import 'progress_store.dart';
+import 'review_package.dart';
+import 'workspace_store.dart';
 
 class ReviewPage extends StatelessWidget {
-  const ReviewPage({super.key, required this.progress});
+  const ReviewPage({
+    super.key,
+    required this.progress,
+    required this.workspace,
+    required this.appVersion,
+  });
 
   final ProgressStore progress;
+  final WorkspaceStore workspace;
+  final String appVersion;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +56,7 @@ class ReviewPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              'This local workspace models the PASS / REVISE process without any paid backend. A module should reach this queue only when its real deliverable is ready.',
+              'This is the local reviewer boundary for PASS / REVISE decisions. It does not claim secure multi-user authorization; it keeps learner submission and reviewer decisions separate without a paid backend.',
               style: TextStyle(color: Colors.white60, height: 1.45),
             ),
             const SizedBox(height: 20),
@@ -61,20 +71,25 @@ class ReviewPage extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    'Nothing is ready for review yet. Complete a module deliverable and mark it Ready for review.',
+                    'Nothing is ready for review yet. Complete a module deliverable and submit it from the Classroom.',
                     style: TextStyle(color: Colors.white70, height: 1.45),
                   ),
                 ),
               )
             else
               for (final module in ready) ...[
-                _ReviewCard(module: module, progress: progress),
+                _ReviewCard(
+                  module: module,
+                  progress: progress,
+                  workspace: workspace,
+                  appVersion: appVersion,
+                ),
                 const SizedBox(height: 12),
               ],
             if (active.isNotEmpty) ...[
               const SizedBox(height: 16),
               Text(
-                'In progress',
+                'In progress / returned for revision',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w900,
                     ),
@@ -163,15 +178,32 @@ class _Metric extends StatelessWidget {
 }
 
 class _ReviewCard extends StatelessWidget {
-  const _ReviewCard({required this.module, required this.progress});
+  const _ReviewCard({
+    required this.module,
+    required this.progress,
+    required this.workspace,
+    required this.appVersion,
+  });
 
   final CourseModule module;
   final ProgressStore progress;
+  final WorkspaceStore workspace;
+  final String appVersion;
 
   @override
   Widget build(BuildContext context) {
-    final notes = progress.notesFor(module.id);
-    final tasks = progress.completedTaskCount(module.id);
+    final history = progress.reviewSubmissionsFor(module.id);
+    final submission = progress.latestReviewSubmissionFor(module.id);
+    final evidence = submission?.evidenceSnapshot ??
+        workspace.snapshotForModule(module.id);
+    final complete = submission != null
+        ? true
+        : workspace.readinessIssues(module.id).isEmpty;
+    final previousFeedback = history
+        .where((item) => item.reviewerFeedback.trim().isNotEmpty)
+        .toList();
+    final evidenceSummary = _evidenceSummary(evidence);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(18),
@@ -195,27 +227,97 @@ class _ReviewCard extends StatelessWidget {
                 fontWeight: FontWeight.w900,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 10,
+              runSpacing: 8,
+              children: [
+                _ReviewChip(
+                  icon: Icons.history_rounded,
+                  label: submission == null
+                      ? 'Legacy ready state'
+                      : 'Revision ${submission.revision}',
+                ),
+                _ReviewChip(
+                  icon: complete
+                      ? Icons.verified_outlined
+                      : Icons.error_outline_rounded,
+                  label: complete ? 'Complete' : 'Incomplete',
+                ),
+                _ReviewChip(
+                  icon: Icons.task_alt_outlined,
+                  label:
+                      '${progress.completedTaskCount(module.id)}/${module.taskSteps.length} tasks',
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
             Text(
-              'Tasks: $tasks/${module.taskSteps.length}',
+              submission == null
+                  ? 'Submission time: legacy V0.6 state — the current local evidence will be snapshotted before a reviewer decision.'
+                  : 'Submitted: ${submission.submittedAt.toLocal().toIso8601String()}',
               style: const TextStyle(color: Colors.white54),
             ),
-            if (notes.isNotEmpty) ...[
-              const SizedBox(height: 12),
+            const SizedBox(height: 10),
+            Text(
+              'Evidence: $evidenceSummary',
+              style: const TextStyle(color: Colors.white70),
+            ),
+            const SizedBox(height: 14),
+            const Text(
+              'Quality gate',
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              module.passGate,
+              style: const TextStyle(color: Colors.white70, height: 1.45),
+            ),
+            if (previousFeedback.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              const Text(
+                'Previous feedback',
+                style: TextStyle(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 5),
               Text(
-                notes,
-                maxLines: 5,
-                overflow: TextOverflow.ellipsis,
+                previousFeedback.last.reviewerFeedback,
                 style: const TextStyle(color: Colors.white70, height: 1.45),
               ),
             ],
-            const SizedBox(height: 14),
+            if (!complete) ...[
+              const SizedBox(height: 14),
+              Text(
+                'This legacy queue item is no longer complete in the current workspace. Return to the Classroom and resubmit before PASS.',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                  height: 1.45,
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
+                OutlinedButton.icon(
+                  onPressed: () => _copyPackage(
+                    context,
+                    asJson: false,
+                  ),
+                  icon: const Icon(Icons.copy_all_rounded),
+                  label: const Text('Copy Review Package'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () => _copyPackage(
+                    context,
+                    asJson: true,
+                  ),
+                  icon: const Icon(Icons.data_object_rounded),
+                  label: const Text('Copy JSON'),
+                ),
                 FilledButton.icon(
-                  onPressed: () => _pass(context),
+                  onPressed: complete ? () => _pass(context) : null,
                   icon: const Icon(Icons.check_circle_outline),
                   label: const Text('PASS'),
                 ),
@@ -232,7 +334,83 @@ class _ReviewCard extends StatelessWidget {
     );
   }
 
+  String _evidenceSummary(Map<String, dynamic> evidence) {
+    if (evidence.isEmpty) return 'no structured snapshot';
+    var textFields = 0;
+    var tableRows = 0;
+    for (final value in evidence.values) {
+      if (value is String && value.trim().isNotEmpty) {
+        textFields++;
+      } else if (value is List) {
+        tableRows += value.length;
+      }
+    }
+    return '$textFields text field(s), $tableRows table row(s)';
+  }
+
+  ReviewSubmission _packageSubmission() {
+    final existing = progress.latestReviewSubmissionFor(module.id);
+    if (existing != null) return existing;
+
+    final now = DateTime.now().toUtc().millisecondsSinceEpoch;
+    final completed = <int>[
+      for (var i = 0; i < module.taskSteps.length; i++)
+        if (progress.taskDone(module.id, i)) i,
+    ];
+
+    return ReviewSubmission(
+      id: 'legacy-preview-module-${module.id}-$now',
+      moduleId: module.id,
+      submittedAtMs: now,
+      revision: progress.reviewSubmissionsFor(module.id).length + 1,
+      evidenceSnapshot: workspace.snapshotForModule(module.id),
+      learnerNotesSnapshot: progress.notesFor(module.id),
+      completedTaskIndexes: completed,
+    );
+  }
+
+  ReviewPackage _package() {
+    final history = progress.reviewSubmissionsFor(module.id);
+    return ReviewPackageBuilder.build(
+      appVersion: appVersion,
+      module: module,
+      submission: _packageSubmission(),
+      history: history,
+    );
+  }
+
+  Future<void> _copyPackage(
+    BuildContext context, {
+    required bool asJson,
+  }) async {
+    final package = _package();
+    await Clipboard.setData(
+      ClipboardData(text: asJson ? package.json : package.markdown),
+    );
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          asJson
+              ? 'Review package JSON copied.'
+              : 'Review package Markdown copied.',
+        ),
+      ),
+    );
+  }
+
+  Future<void> _ensureAuditableSubmission() async {
+    if (progress.latestReviewSubmissionFor(module.id) != null) return;
+    await progress.submitForReview(
+      module.id,
+      evidenceSnapshot: workspace.snapshotForModule(module.id),
+    );
+  }
+
   Future<void> _pass(BuildContext context) async {
+    await _ensureAuditableSubmission();
+    if (!context.mounted) return;
+
     final controller = TextEditingController();
     final accepted = await _feedbackDialog(
       context,
@@ -248,6 +426,9 @@ class _ReviewCard extends StatelessWidget {
   }
 
   Future<void> _revise(BuildContext context) async {
+    await _ensureAuditableSubmission();
+    if (!context.mounted) return;
+
     final controller = TextEditingController(
       text: progress.feedbackFor(module.id),
     );
@@ -292,6 +473,43 @@ class _ReviewCard extends StatelessWidget {
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(action),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReviewChip extends StatelessWidget {
+  const _ReviewChip({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: .06),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.white12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 15, color: Colors.white60),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),

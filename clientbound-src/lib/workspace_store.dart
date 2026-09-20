@@ -170,6 +170,12 @@ class WorkspaceStore extends ChangeNotifier {
   bool isReadyForReview(int moduleId) =>
       readinessIssues(moduleId).isEmpty;
 
+  Map<String, dynamic> snapshotForModule(int moduleId) {
+    final module = _modules[moduleId];
+    if (module == null) return <String, dynamic>{};
+    return _cloneModule(module);
+  }
+
   Map<String, dynamic> exportData() => <String, dynamic>{
         'modules': <String, dynamic>{
           for (final entry in _modules.entries)

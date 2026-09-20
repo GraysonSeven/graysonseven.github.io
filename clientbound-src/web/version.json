@@ -1,6 +1,6 @@
 {
   "name": "Clientbound",
-  "version": "0.6.0+6",
+  "version": "0.7.0+7",
   "channel": "zero-cost-production",
   "web": "https://graysonseven.github.io/clientbound/"
 }

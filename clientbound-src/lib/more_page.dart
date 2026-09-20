@@ -63,7 +63,11 @@ class MorePage extends StatelessWidget {
             trailing: const Icon(Icons.arrow_forward_rounded),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                builder: (_) => ReviewPage(progress: progress),
+                builder: (_) => ReviewPage(
+                  progress: progress,
+                  workspace: workspace,
+                  appVersion: appVersion,
+                ),
               ),
             ),
           ),

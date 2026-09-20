@@ -64,7 +64,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     final json = backup.createBackupJson();
@@ -116,7 +116,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -157,7 +157,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     await expectLater(
@@ -201,7 +201,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
     final json = backup.createBackupJson();
 
@@ -243,7 +243,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
 
     final legacy = jsonEncode(<String, dynamic>{
@@ -319,7 +319,7 @@ void main() {
       settings: settings,
       workspace: workspace,
       reviewExchange: reviewExchange,
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
     );
     final json = backup.createBackupJson();
 
@@ -341,6 +341,70 @@ void main() {
       reviewExchange.records.single.decision?.feedback,
       'Add stronger contact proof.',
     );
+  });
+
+
+  test('failed late-stage restore rolls every store back to the pre-restore state',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+
+    final progress = ProgressStore();
+    final community = CommunityStore();
+    final settings = AppSettingsStore();
+    final workspace = WorkspaceStore();
+    final reviewExchange = ReviewExchangeStore();
+    await progress.load();
+    await community.load();
+    await settings.load();
+    await workspace.load();
+    await reviewExchange.load();
+
+    await progress.setNotes(2, 'Original progress note');
+    workspace.setString(2, 'industry', 'Original industry');
+    await workspace.flush();
+
+    final backup = BackupService(
+      progress: progress,
+      community: community,
+      settings: settings,
+      workspace: workspace,
+      reviewExchange: reviewExchange,
+      appVersion: '1.0.0+10',
+    );
+
+    final decoded =
+        jsonDecode(backup.createBackupJson()) as Map<String, dynamic>;
+    final changedProgress = Map<String, dynamic>.from(
+      decoded['progress'] as Map<String, dynamic>,
+    );
+    changedProgress['notes'] = <String, dynamic>{'2': 'Mutated by bad restore'};
+    decoded['progress'] = changedProgress;
+    decoded['workspace'] = <String, dynamic>{
+      'modules': <String, dynamic>{
+        '2': <String, dynamic>{
+          'leadResearch': <dynamic>['invalid table row'],
+        },
+      },
+    };
+
+    await expectLater(
+      backup.restoreBackupJson(jsonEncode(decoded)),
+      throwsA(isA<FormatException>()),
+    );
+
+    expect(progress.notesFor(2), 'Original progress note');
+    expect(workspace.stringValue(2, 'industry'), 'Original industry');
+
+    final persisted = BackupService(
+      progress: progress,
+      community: community,
+      settings: settings,
+      workspace: workspace,
+      reviewExchange: reviewExchange,
+      appVersion: '1.0.0+10',
+    ).createBackupJson();
+    expect(persisted, contains('Original progress note'));
+    expect(persisted, isNot(contains('Mutated by bad restore')));
   });
 
 }

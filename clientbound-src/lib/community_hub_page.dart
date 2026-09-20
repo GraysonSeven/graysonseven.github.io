@@ -170,8 +170,8 @@ class _CommunityHubPageState extends State<CommunityHubPage> {
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: const Text('New local community post'),
-          content: SizedBox(
-            width: 520,
+          content: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 520),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

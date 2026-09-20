@@ -1,6 +1,8 @@
 Clientbound public build mirror
 Canonical repository: GraysonSeven/First-Client-Sales-System
-Canonical commit: 67783889862fa97da772c83683b5586cf1224423
+Canonical commit: 099295ac9df42bd2aca708c65140a4c45fc610c1
 Mirror purpose: free public CI/build/hosting only
-Release candidate: 0.9.0+9
+Release candidate: 1.0.0+10
+Qualified RC run: 35515338800
+Flutter toolchain: 3.47.5
 Production URL: https://graysonseven.github.io/clientbound/

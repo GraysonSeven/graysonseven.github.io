@@ -909,6 +909,33 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
     setState(() => _notesSaveState = 'Saved locally');
   }
 
+  Future<void> _confirmResetState() async {
+    final accepted = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Reset module state?'),
+        content: const Text(
+          'This changes the module back to Not started. '
+          'Your structured workspace and notes are kept.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Reset state'),
+          ),
+        ],
+      ),
+    );
+
+    if (accepted == true) {
+      await progress.setStage(module.id, ModuleStage.notStarted);
+    }
+  }
+
   Future<bool> _validateStructuredWorkspace(
     WorkspaceStore workspace,
   ) async {
@@ -923,8 +950,8 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Workspace is not review-ready'),
-        content: SizedBox(
-          width: 620,
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 620),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1280,10 +1307,7 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () => progress.setStage(
-                                    module.id,
-                                    ModuleStage.notStarted,
-                                  ),
+                                  onPressed: _confirmResetState,
                                   child: const Text('Reset state'),
                                 ),
                               ],

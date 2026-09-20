@@ -44,7 +44,7 @@ class ReviewExchangePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Text(
-              'Exchange files are trust-based local JSON. Clientbound verifies package structure and exact submission identity, but it does not authenticate who created a decision.',
+              'Exchange files are trust-based local JSON. Clientbound verifies package structure and exact submission identity, but it does not authenticate who created a decision. Review files can contain real learner evidence and notes, so share them only through a trusted channel.',
               style: TextStyle(color: Colors.white60, height: 1.45),
             ),
             const SizedBox(height: 18),
@@ -219,8 +219,8 @@ class ReviewExchangePage extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),
-        content: SizedBox(
-          width: 680,
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 680),
           child: TextField(
             controller: controller,
             minLines: 10,
@@ -383,8 +383,8 @@ class _ImportedReviewCard extends StatelessWidget {
         title: Text(
           'Module ${package.moduleId} · Revision ${package.revision}',
         ),
-        content: SizedBox(
-          width: 760,
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
           child: SingleChildScrollView(
             child: SelectableText(
               'SUBMISSION ID\n${package.submissionId}\n\n'

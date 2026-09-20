@@ -25,7 +25,7 @@ void main() {
     );
 
     final outbound = ReviewPackageBuilder.build(
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
       module: courseModules[1],
       submission: submission!,
       history: learner.reviewSubmissionsFor(2),
@@ -175,7 +175,7 @@ void main() {
       evidenceSnapshot: <String, dynamic>{'niche': 'Manufacturing'},
     );
     final package = ReviewPackageBuilder.build(
-      appVersion: '0.9.0+9',
+      appVersion: '1.0.0+10',
       module: courseModules.first,
       submission: submission!,
       history: learner.reviewSubmissionsFor(1),

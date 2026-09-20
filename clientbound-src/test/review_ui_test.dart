@@ -20,7 +20,7 @@ void main() {
       );
       expect(appSource, contains('_validateStructuredWorkspace'));
       expect(appSource, contains('progress.submitForReview'));
-      expect(appSource, contains('workspace.snapshotForModule(module.id)'));
+      expect(appSource, contains('snapshotForModule(module.id)'));
 
       SharedPreferences.setMockInitialValues({});
 

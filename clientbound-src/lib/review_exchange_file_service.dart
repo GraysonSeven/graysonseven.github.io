@@ -9,20 +9,14 @@ class ReviewExchangeFileService {
   static Future<String?> pickJsonText({
     String dialogTitle = 'Choose Clientbound review JSON',
   }) async {
-    final result = await FilePicker.pickFiles(
+    final file = await FilePicker.pickFile(
       dialogTitle: dialogTitle,
       type: FileType.custom,
       allowedExtensions: const <String>['json'],
-      allowMultiple: false,
-      withData: true,
     );
-    if (result == null || result.files.isEmpty) return null;
+    if (file == null) return null;
 
-    final file = result.files.single;
-    final bytes = file.bytes;
-    if (bytes == null) {
-      throw const FormatException('Selected review file could not be read.');
-    }
+    final bytes = await file.readAsBytes();
 
     try {
       return utf8.decode(bytes);
@@ -41,6 +35,7 @@ class ReviewExchangeFileService {
       fileName: filename,
       type: FileType.custom,
       allowedExtensions: const <String>['json'],
+      mimeType: 'application/json',
       bytes: Uint8List.fromList(utf8.encode(contents)),
     );
     return saved != null;

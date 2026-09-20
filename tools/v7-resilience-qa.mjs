@@ -29,6 +29,20 @@ function assert(condition, message) {
   if (!condition) failures.push(message);
 }
 
+async function captureScreenshot(page, file) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      await page.screenshot({ path: file, fullPage: false, timeout: 15000 });
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2) await page.waitForTimeout(650);
+    }
+  }
+  throw new Error("Screenshot capture failed twice for " + path.basename(file) + ": " + (lastError?.message || lastError));
+}
+
 function startServer(root) {
   const server = http.createServer((req, res) => {
     try {

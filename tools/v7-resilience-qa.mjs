@@ -82,7 +82,7 @@ async function testReducedMotion() {
     await page.waitForTimeout(900);
     const second = await page.evaluate(() => ({ ...window.__V7_DEBUG__ }));
 
-    assert(first.debug.version === "7.2.0", "reduced-motion: wrong V7 version " + first.debug.version);
+    assert(first.debug.version === "7.3.0", "reduced-motion: wrong V7 version " + first.debug.version);
     assert(first.debug.reducedMotion === true, "reduced-motion: debug flag is false");
     assert(first.debug.webgl === true, "reduced-motion: WebGL did not initialize");
     assert(first.debug.fallback === false, "reduced-motion: fallback activated unexpectedly");

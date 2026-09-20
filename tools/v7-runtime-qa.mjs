@@ -143,9 +143,10 @@ async function qualifyProfile(profile) {
     assert(first.webgl === true, prefix + "WebGL context is not ready");
     assert(!first.error, prefix + "debug error: " + (first.error || "unknown"));
     assert(second.frames > first.frames, prefix + "render frames are not increasing");
-    assert(first.version === "7.2.0", prefix + "expected V7.2.0, found " + first.version);
+    assert(first.version === "7.3.0", prefix + "expected V7.3.0, found " + first.version);
     assert(first.objects >= 80, prefix + "scene density fell below 80 objects");
     assert(first.machines === 5, prefix + "expected five project machines");
+    assert(first.forgePanels === 4, prefix + "expected four forge interface panels");
     assert(layout.canvasZ > layout.worldZ, prefix + "canvas is not above world");
     assert(layout.storyZ > layout.canvasZ, prefix + "story is not above canvas");
     assert(layout.canvasOpacity > 0, prefix + "canvas opacity is zero");

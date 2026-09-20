@@ -38,17 +38,20 @@ if (exists("experience/index.html")) {
   const html = read("experience/index.html");
   for (const marker of [
     "noindex,nofollow,noarchive",
-    "data-v7-version=\"7.2.0\"",
+    "data-v7-version=\"7.3.0\"",
     "SYSTEM 01 // IKO ONLINE",
     "SYSTEM 02 // THE BUILDER",
     "SYSTEM 03 // THINGS I BUILT",
     "IKO KNOW IT",
     "GHOST OPS",
     "ACTIVE DEVELOPMENT",
+    "PRIVATE PREVIEW",
+    "AGREE SCOPE",
+    "ENTER WEBSITE STUDIO",
     "REQUEST A QUOTE",
     "3D ENGINE // BOOTING",
-    "experience.css?v=720",
-    "experience.js?v=720"
+    "experience.css?v=730",
+    "experience.js?v=730"
   ]) {
     if (!html.includes(marker)) fail("HTML marker missing: " + marker);
   }
@@ -80,6 +83,8 @@ if (exists("experience/experience.js")) {
     "makeEtteMachine",
     "makeIkoKnowItMachine",
     "makeGhostOpsMachine",
+    "forgePanels",
+    "launchCore",
     "cameraTarget",
     "setupPointer",
     "setupSceneStateTracking",
@@ -98,4 +103,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("\nICHARLES V7.2 FIVE-WORLD ARCHIVE QA PASS\n");
+console.log("\nICHARLES V7.3 FORGE CONVERSION QA PASS\n");

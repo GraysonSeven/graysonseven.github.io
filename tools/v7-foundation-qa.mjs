@@ -1,8 +1,83 @@
-import fs from "node:fs";import path from "node:path";import crypto from "node:crypto";
-const root=process.cwd(),f=[];const x=m=>f.push(m),e=p=>fs.existsSync(path.join(root,p)),r=p=>fs.readFileSync(path.join(root,p),"utf8");
-const locked="assets/iko-prime/identity/iko-prime-logo-locked.png";
-if(!e(locked))x("Locked Iko missing");else{const s=crypto.createHash("sha256").update(fs.readFileSync(path.join(root,locked))).digest("hex").toUpperCase();if(s!=="DDA9E772F1267325918D3608273124BD21A507B57BB49A9E2148EBFF0CBBB5FD")x("Locked Iko changed: "+s)}
-for(const p of ["experience/index.html","experience/experience.css","experience/experience.js","assets/v7/charles-profile-source.webp","assets/v7/charles-operator-v7.webp","assets/v7/iko-archive-world-dark.webp","assets/v7/iko-archive-world-light.webp","assets/vendor/v7/three.module.min.js","assets/vendor/v7/gsap.min.js","assets/vendor/v7/ScrollTrigger.min.js","V7_SAFETY_POINT.json"])if(!e(p))x("Missing "+p);
-if(e("experience/index.html")){const h=r("experience/index.html");for(const m of ['noindex,nofollow,noarchive','SYSTEM 01 // IKO ONLINE','SYSTEM 02 // THE BUILDER','REQUEST A QUOTE'])if(!h.includes(m))x("HTML marker "+m)}
-if(e("experience/experience.js")){const j=r("experience/experience.js");for(const m of ['import * as THREE','ScrollTrigger','charles-operator-v7.webp','TorusGeometry','archiveGroup','portalGroup'])if(!j.includes(m))x("JS marker "+m)}
-if(f.length){console.error("\nV7 QA FAIL\n"+f.map(v=>"- "+v).join("\n"));process.exit(1)}console.log("\nICHARLES V7.0 SAFETY + 3D FOUNDATION QA PASS\n");
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
+
+const root = process.cwd();
+const failures = [];
+const fail = message => failures.push(message);
+const exists = rel => fs.existsSync(path.join(root, rel));
+const read = rel => fs.readFileSync(path.join(root, rel), "utf8");
+const lockedIko = "assets/iko-prime/identity/iko-prime-logo-locked.png";
+
+if (!exists(lockedIko)) {
+  fail("Locked Iko missing");
+} else {
+  const actual = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, lockedIko))).digest("hex").toUpperCase();
+  const expected = "DDA9E772F1267325918D3608273124BD21A507B57BB49A9E2148EBFF0CBBB5FD";
+  if (actual !== expected) fail("Locked Iko changed: " + actual);
+}
+
+for (const rel of [
+  "experience/index.html",
+  "experience/experience.css",
+  "experience/experience.js",
+  "assets/v7/charles-profile-source.webp",
+  "assets/v7/charles-operator-v7.webp",
+  "assets/v7/iko-archive-world-dark.webp",
+  "assets/v7/iko-archive-world-light.webp",
+  "assets/vendor/v7/three.module.min.js",
+  "assets/vendor/v7/gsap.min.js",
+  "assets/vendor/v7/ScrollTrigger.min.js",
+  "V7_SAFETY_POINT.json"
+]) {
+  if (!exists(rel)) fail("Missing " + rel);
+}
+
+if (exists("experience/index.html")) {
+  const html = read("experience/index.html");
+  for (const marker of [
+    "noindex,nofollow,noarchive",
+    "data-v7-version=\"7.0.1\"",
+    "SYSTEM 01 // IKO ONLINE",
+    "SYSTEM 02 // THE BUILDER",
+    "REQUEST A QUOTE",
+    "3D ENGINE // BOOTING",
+    "experience.css?v=701",
+    "experience.js?v=701"
+  ]) {
+    if (!html.includes(marker)) fail("HTML marker missing: " + marker);
+  }
+}
+
+if (exists("experience/experience.css")) {
+  const css = read("experience/experience.css");
+  if (!/\.v7-world\{[^}]*z-index:0/.test(css)) fail("World plate must be z-index 0");
+  if (!/#v7-canvas\{[^}]*z-index:2/.test(css)) fail("WebGL canvas must be z-index 2");
+  if (!/\.v7-story\{[^}]*z-index:10/.test(css)) fail("HTML story must be z-index 10");
+  if (!/body\{[^}]*background:transparent/.test(css)) fail("Body must expose the WebGL canvas");
+  if (!css.includes(".v7-engine")) fail("3D engine runtime badge styling missing");
+}
+
+if (exists("experience/experience.js")) {
+  const js = read("experience/experience.js");
+  for (const marker of [
+    "window.__V7_DEBUG__",
+    "IcosahedronGeometry",
+    "OctahedronGeometry",
+    "TetrahedronGeometry",
+    "tunnelGroup",
+    "archiveCores",
+    "portalRings",
+    "3D ENGINE // ONLINE"
+  ]) {
+    if (!js.includes(marker)) fail("JS marker missing: " + marker);
+  }
+}
+
+if (failures.length) {
+  console.error("\nV7 QA FAIL\n");
+  failures.forEach(message => console.error("- " + message));
+  process.exit(1);
+}
+
+console.log("\nICHARLES V7.0.1 SAFETY + 3D VISIBILITY QA PASS\n");

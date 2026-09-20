@@ -12,7 +12,7 @@ const coarsePointer = matchMedia("(pointer: coarse)").matches;
 const mobile = innerWidth < 700;
 
 const debug = window.__V7_DEBUG__ = {
-  version: "7.1.1",
+  version: "7.2.0",
   ready: false,
   frames: 0,
   webgl: false,
@@ -257,6 +257,119 @@ function makeEtteMachine() {
   rig.add(axis);
 
   rig.userData.kind = "ette";
+  return rig;
+}
+
+
+function makeIkoKnowItMachine() {
+  const rig = new THREE.Group();
+
+  const brainCore = new THREE.Mesh(
+    new THREE.DodecahedronGeometry(0.38, 0),
+    standard(0x24163f, C.violet, 0.7, 1.08)
+  );
+  rig.add(brainCore);
+
+  const nodePositions = [
+    [-0.78, 0.58, 0.06],
+    [0.02, 0.88, -0.08],
+    [0.82, 0.5, 0.04],
+    [0.82, -0.52, -0.1],
+    [0.02, -0.92, 0.05],
+    [-0.82, -0.48, -0.05]
+  ];
+
+  nodePositions.forEach((position, index) => {
+    const node = new THREE.Mesh(
+      new THREE.OctahedronGeometry(index % 2 === 0 ? 0.13 : 0.1, 0),
+      standard(0x131a38, index % 2 ? C.cyan : C.magenta, 0.66, 1.05)
+    );
+    node.position.set(...position);
+    rig.add(node);
+
+    const link = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(...position)
+      ]),
+      lineMaterial(index % 2 ? C.cyan : C.violet, 0.34)
+    );
+    rig.add(link);
+  });
+
+  const questionRing = new THREE.Mesh(
+    new THREE.TorusGeometry(1.08, 0.018, 6, 96),
+    additive(C.magenta, 0.34)
+  );
+  questionRing.rotation.x = Math.PI / 2.7;
+  questionRing.rotation.y = 0.25;
+  rig.add(questionRing);
+
+  const decisionRing = new THREE.Mesh(
+    new THREE.TorusGeometry(0.78, 0.014, 6, 84),
+    additive(C.cyan, 0.3)
+  );
+  decisionRing.rotation.x = Math.PI / 2;
+  decisionRing.rotation.z = 0.5;
+  rig.add(decisionRing);
+
+  rig.userData.kind = "iko-know-it";
+  rig.userData.status = "active-development";
+  return rig;
+}
+
+function makeGhostOpsMachine() {
+  const rig = new THREE.Group();
+  const frame = makeWireBox(1.9, 1.55, 0.9, C.magenta, 0.42);
+  rig.add(frame);
+
+  const stages = [
+    [-0.66, 0.48, 0.08],
+    [-0.32, 0.18, 0.02],
+    [0.02, -0.1, 0.08],
+    [0.36, -0.4, 0.02],
+    [0.7, -0.68, 0.08]
+  ];
+
+  stages.forEach((position, index) => {
+    const node = new THREE.Mesh(
+      new THREE.BoxGeometry(0.28, 0.18, 0.12),
+      standard(0x321126, index === stages.length - 1 ? C.green : C.magenta, 0.72, 0.92)
+    );
+    node.position.set(...position);
+    rig.add(node);
+
+    if (index < stages.length - 1) {
+      const next = stages[index + 1];
+      const link = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(...position),
+          new THREE.Vector3(...next)
+        ]),
+        lineMaterial(C.cyan, 0.3)
+      );
+      rig.add(link);
+    }
+  });
+
+  for (let i = 0; i < 3; i++) {
+    const rail = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 0.018, 0.02),
+      additive(i === 1 ? C.cyan : C.magenta, 0.22)
+    );
+    rail.position.set(0, 0.62 - i * 0.62, -0.18);
+    rig.add(rail);
+  }
+
+  const ownerCore = new THREE.Mesh(
+    new THREE.OctahedronGeometry(0.22, 0),
+    standard(0x0b2530, C.cyan, 0.66, 1.0)
+  );
+  ownerCore.position.set(0.62, 0.52, -0.04);
+  rig.add(ownerCore);
+
+  rig.userData.kind = "ghost-ops";
+  rig.userData.status = "active-development";
   return rig;
 }
 
@@ -567,22 +680,30 @@ async function init() {
   scene.add(grid);
 
   archiveGroup = new THREE.Group();
-  archiveGroup.position.set(0.75, 0.05, -1.25);
+  archiveGroup.position.set(0.7, 0, -1.35);
 
   const tradeMachine = makeTradeCoreMachine();
-  tradeMachine.position.set(-1.45, 0.62, 0.05);
-  tradeMachine.scale.setScalar(0.92);
+  tradeMachine.position.set(-1.85, 0.9, 0.02);
+  tradeMachine.scale.setScalar(0.74);
 
   const morseMachine = makeMorseMachine();
-  morseMachine.position.set(1.45, 0.72, -0.35);
-  morseMachine.scale.setScalar(0.84);
+  morseMachine.position.set(0.05, 1.1, -0.32);
+  morseMachine.scale.setScalar(0.72);
 
   const etteMachine = makeEtteMachine();
-  etteMachine.position.set(0.55, -1.42, -0.15);
-  etteMachine.scale.setScalar(0.86);
+  etteMachine.position.set(1.95, 0.82, -0.12);
+  etteMachine.scale.setScalar(0.7);
 
-  archiveGroup.add(tradeMachine, morseMachine, etteMachine);
-  projectMachines.push(tradeMachine, morseMachine, etteMachine);
+  const ikoMachine = makeIkoKnowItMachine();
+  ikoMachine.position.set(-1.15, -1.15, -0.18);
+  ikoMachine.scale.setScalar(0.74);
+
+  const ghostMachine = makeGhostOpsMachine();
+  ghostMachine.position.set(1.25, -1.18, -0.3);
+  ghostMachine.scale.setScalar(0.72);
+
+  archiveGroup.add(tradeMachine, morseMachine, etteMachine, ikoMachine, ghostMachine);
+  projectMachines.push(tradeMachine, morseMachine, etteMachine, ikoMachine, ghostMachine);
   debug.machines = projectMachines.length;
   setGroupFactor(archiveGroup, 0);
   worldRig.add(archiveGroup);

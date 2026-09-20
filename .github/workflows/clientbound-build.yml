@@ -71,8 +71,31 @@ jobs:
           rm -rf build .dart_tool android
           flutter create . --platforms android --org com.icharles --project-name clientbound
           sed -i 's/android:label="clientbound"/android:label="Clientbound"/' android/app/src/main/AndroidManifest.xml
-          mkdir -p android/app/src/main/res/drawable-nodpi
-          cp web/icons/Icon-512.png android/app/src/main/res/drawable-nodpi/clientbound_launcher.png
+          mkdir -p android/app/src/main/res/drawable
+          cat > android/app/src/main/res/drawable/clientbound_launcher.xml <<'XML'
+          <vector xmlns:android="http://schemas.android.com/apk/res/android"
+              android:width="108dp"
+              android:height="108dp"
+              android:viewportWidth="108"
+              android:viewportHeight="108">
+            <path
+                android:fillColor="#07111F"
+                android:pathData="M0,0h108v108h-108z"/>
+            <path
+                android:fillColor="@android:color/transparent"
+                android:strokeColor="#6EA8FE"
+                android:strokeWidth="10"
+                android:strokeLineCap="round"
+                android:pathData="M70,27 C61,21 49,20 39,24 C24,30 17,46 20,61 C23,77 38,88 54,87 C61,87 67,85 72,82"/>
+            <path
+                android:fillColor="@android:color/transparent"
+                android:strokeColor="#50D890"
+                android:strokeWidth="7"
+                android:strokeLineCap="round"
+                android:strokeLineJoin="round"
+                android:pathData="M52,54 L88,54 M88,54 L76,42 M88,54 L76,66"/>
+          </vector>
+          XML
           sed -i 's#android:icon="@mipmap/ic_launcher"#android:icon="@drawable/clientbound_launcher"#' android/app/src/main/AndroidManifest.xml
           flutter pub get
           flutter build apk --release --target-platform android-arm64

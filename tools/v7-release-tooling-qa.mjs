@@ -25,7 +25,7 @@ if (!fs.existsSync(scriptPath)) {
     "v7-runtime-qa.mjs",
     "v7-resilience-qa.mjs",
     "v7-theme-contract-qa.mjs",
-    "git -C $repoRoot archive",
+    "Invoke-NativeChecked -FilePath git -Arguments @(\'-C\', $repoRoot, \'archive\', \'--format=zip\', \'HEAD\', \'-o\', $archive)",
     "wrangler@latest pages deploy",
     "--project-name $ProjectName",
     "--branch main",
@@ -39,6 +39,10 @@ if (!fs.existsSync(scriptPath)) {
 
   if (/reset\s+--hard/i.test(ps1)) fail("Release script must not hard-reset the shared repository");
   if (/git\s+clean\s+-[a-z]*f/i.test(ps1)) fail("Release script must not git-clean the shared repository");
+  if (/Invoke-NativeChecked\\s+git[^\\n]*\\barchive\\b[^\\n]*\\s-o\\s/i.test(ps1)) {
+    fail("git archive must pass -o through the explicit -Arguments array to avoid PowerShell parameter binding");
+  }
+
   if (/pages\s+deploy[\s\S]*experience[\\/]/i.test(ps1)) {
     fail("Release script appears to deploy only experience/ instead of an exact full committed tree");
   }

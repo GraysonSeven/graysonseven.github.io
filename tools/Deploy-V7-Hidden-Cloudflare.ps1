@@ -138,7 +138,7 @@ try {
   }
 
   Write-Host 'Building exact committed-tree deployment archive...'
-  Invoke-NativeChecked git -C $repoRoot archive --format=zip HEAD -o $archive
+  Invoke-NativeChecked -FilePath git -Arguments @('-C', $repoRoot, 'archive', '--format=zip', 'HEAD', '-o', $archive)
   Expand-Archive -LiteralPath $archive -DestinationPath $deployDir -Force
 
   $deployedExperience = Join-Path $deployDir 'experience\index.html'

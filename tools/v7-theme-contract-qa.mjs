@@ -132,13 +132,14 @@ async function inAppStaysDark() {
     assert(/locked/i.test(experienceState.v7Button?.aria || ""), "in-app experience theme control does not explain the lock");
 
     await page.goto(homeUrl, { waitUntil: "networkidle", timeout: 30000 });
-    await page.waitForSelector(".v60-theme-toggle", { timeout: 15000 });
+    await page.waitForSelector("#v7-theme, .v60-theme-toggle", { timeout: 15000 });
     const homeState = await page.evaluate(() => {
-      const button = document.querySelector(".v60-theme-toggle");
+      const button = document.querySelector("#v7-theme, .v60-theme-toggle");
       return {
         theme: document.documentElement.dataset.uiTheme || "",
         inApp: document.documentElement.dataset.inAppBrowser || "",
         stored: localStorage.getItem("icharles-ui-theme"),
+        control: button?.id === "v7-theme" ? "v7" : button?.classList.contains("v60-theme-toggle") ? "v60" : "",
         disabled: Boolean(button?.disabled),
         aria: button?.getAttribute("aria-label") || ""
       };

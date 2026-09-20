@@ -199,12 +199,12 @@ async function testWebGLFallback() {
     assert(pageErrors.length === 0, "fallback: page errors: " + pageErrors.join(" | "));
     assert(networkErrors.length === 0, "fallback: HTTP errors: " + networkErrors.join(" | "));
 
-    const quoteLocator = page.locator('a[href="/contact/"]');
+    const quoteLocator = page.locator('.v7-final-actions a[href="/contact/"]');
     await quoteLocator.scrollIntoViewIfNeeded();
     await page.waitForTimeout(180);
     const final = await page.evaluate(() => {
-      const quote = document.querySelector('a[href="/contact/"]');
-      const work = document.querySelector('a[href="/portfolio/"]');
+      const quote = document.querySelector('.v7-final-actions a[href="/contact/"]');
+      const work = document.querySelector('.v7-final-actions a[href="/portfolio/"]');
       const quoteRect = quote?.getBoundingClientRect();
       const centerX = quoteRect ? quoteRect.left + quoteRect.width / 2 : -1;
       const centerY = quoteRect ? quoteRect.top + quoteRect.height / 2 : -1;

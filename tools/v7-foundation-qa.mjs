@@ -39,8 +39,25 @@ for (const rel of [
 
 if (exists("index.html")) {
   const home = read("index.html");
-  if (home.includes("data-v7-experience")) fail("Public Home was replaced by experimental V7 markup");
-  if (!home.includes('/ghostops-theme-boot-v60.js?v=2')) fail("Public Home theme bootstrap cache version not advanced");
+  const isV7ProductionHome = home.includes('data-v7-home="production"');
+
+  if (isV7ProductionHome) {
+    for (const marker of [
+      'data-v7-experience',
+      'data-v7-version="7.4.0"',
+      '/ghostops-theme-boot-v60.js?v=740',
+      '/experience/experience.css?v=740',
+      '/experience/experience.js?v=740',
+      'PROJECT INQUIRIES // OPEN'
+    ]) {
+      if (!home.includes(marker)) fail("V7 production Home marker missing: " + marker);
+    }
+    if (home.includes("noindex")) fail("V7 production Home must remain indexable");
+    if (home.includes("EXPERIMENTAL BUILD")) fail("V7 production Home still exposes experimental status");
+  } else {
+    if (home.includes("data-v7-experience")) fail("Public Home was replaced by experimental V7 markup");
+    if (!home.includes('/ghostops-theme-boot-v60.js?v=2')) fail("Public Home theme bootstrap cache version not advanced");
+  }
 }
 
 if (exists("sitemap.xml") && read("sitemap.xml").includes("/experience/")) {
@@ -111,15 +128,6 @@ if (exists("experience/experience.js")) {
   }
 }
 
-if (failures.length) {
-  console.error("\nV7 QA FAIL\n");
-  failures.forEach(message => console.error("- " + message));
-  process.exit(1);
-}
-
-console.log("\nICHARLES V7.4 FINAL THEME CONTRACT QA PASS\n");
-
-
 if (exists("ghostops-theme-boot-v60.js")) {
   const boot = read("ghostops-theme-boot-v60.js");
   for (const marker of ["FBAN", "FBAV", "FB_IAB", "inAppBrowser", "visualQa"]) {
@@ -132,3 +140,11 @@ if (exists("ghostops-v60.js")) {
   if (!publicTheme.includes("isInAppLocked")) fail("Public in-app theme lock missing");
   if (!publicTheme.includes("Dark theme locked in in-app browser")) fail("Public in-app lock accessibility label missing");
 }
+
+if (failures.length) {
+  console.error("\nV7 QA FAIL\n");
+  failures.forEach(message => console.error("- " + message));
+  process.exit(1);
+}
+
+console.log("\nICHARLES V7.4 FINAL THEME CONTRACT QA PASS\n");

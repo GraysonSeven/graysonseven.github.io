@@ -251,11 +251,29 @@ for (const p of [
   if (!exists(p)) continue;
   const html = read(p);
   const header = html.match(/<header\b[\s\S]*?<\/header>/i)?.[0] || "";
-  for (const href of canonicalNavHrefs) {
-    if (!header.includes(href)) fail(`Native canonical navigation missing ${href} in ${p}`);
+  const isV7ProductionHome = p === "index.html" && html.includes('data-v7-home="production"');
+
+  if (isV7ProductionHome) {
+    for (const href of ['href="/"','href="/portfolio/"','href="/website-studio/"','href="/contact/"']) {
+      if (!header.includes(href)) fail(`V7 Home essential navigation missing ${href}`);
+    }
+    for (const marker of [
+      '/experience/experience.css?v=740',
+      '/experience/experience.js?v=740',
+      'PROJECT INQUIRIES // OPEN',
+      '3D ENGINE // BOOTING'
+    ]) {
+      if (!html.includes(marker)) fail(`V7 Home production marker missing: ${marker}`);
+    }
+    if (html.includes("noindex")) fail("V7 production Home must remain indexable.");
+  } else {
+    for (const href of canonicalNavHrefs) {
+      if (!header.includes(href)) fail(`Native canonical navigation missing ${href} in ${p}`);
+    }
+    if (!html.includes("/visual-system-v47.css?v=2")) fail(`V4.8 visual CSS cache version missing from ${p}`);
+    if (!html.includes("/v4.js?v=7")) fail(`V4.8 v4.js cache version missing from ${p}`);
   }
-  if (!html.includes("/visual-system-v47.css?v=2")) fail(`V4.8 visual CSS cache version missing from ${p}`);
-  if (!html.includes("/v4.js?v=7")) fail(`V4.8 v4.js cache version missing from ${p}`);
+
   if (html.includes("readability-v46.css")) fail(`Old readability stylesheet tag remains in ${p}`);
 }
 

@@ -1,0 +1,74 @@
+name: iCharles V7 Home Promotion QA
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "index.html"
+      - "experience/**"
+      - "ghostops-theme-boot-v60.js"
+      - "tools/site-qa.mjs"
+      - "tools/v7-home-promotion-qa.mjs"
+      - "tools/v7-runtime-qa.mjs"
+      - "tools/v7-resilience-qa.mjs"
+      - "tools/v7-theme-contract-qa.mjs"
+      - ".github/workflows/v7-home-promotion-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  home-promotion:
+    name: Qualify V7 public Home candidate
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Static promotion safety
+        shell: pwsh
+        run: |
+          node --check .\experience\experience.js
+          node --check .\tools\v7-home-promotion-qa.mjs
+          node --check .\tools\v7-runtime-qa.mjs
+          node --check .\tools\v7-resilience-qa.mjs
+          node --check .\tools\v7-theme-contract-qa.mjs
+          node .\tools\v7-home-promotion-qa.mjs
+          node .\tools\v7-foundation-qa.mjs
+          node .\tools\site-qa.mjs
+
+      - name: Install Playwright Core
+        shell: pwsh
+        run: npm install --no-save --package-lock=false playwright-core@1.55.0
+
+      - name: Qualify root Home in Microsoft Edge
+        shell: pwsh
+        run: node .\tools\v7-runtime-qa.mjs --channel=msedge --serve-root=. --base=http://127.0.0.1:4173/ --output=artifacts\v7-home-runtime
+
+      - name: Qualify root reduced motion and WebGL fallback
+        shell: pwsh
+        run: node .\tools\v7-resilience-qa.mjs --channel=msedge --serve-root=. --base=http://127.0.0.1:4174/ --output=artifacts\v7-home-resilience
+
+      - name: Qualify root and preview theme contract
+        shell: pwsh
+        run: node .\tools\v7-theme-contract-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-home-theme
+
+      - name: Upload Home candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-home-promotion-evidence
+          path: |
+            artifacts/v7-home-runtime
+            artifacts/v7-home-resilience
+            artifacts/v7-home-theme
+          if-no-files-found: warn

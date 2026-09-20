@@ -12,7 +12,7 @@ const coarsePointer = matchMedia("(pointer: coarse)").matches;
 const mobile = innerWidth < 700;
 
 const debug = window.__V7_DEBUG__ = {
-  version: "7.3.0",
+  version: "7.4.0",
   ready: false,
   frames: 0,
   webgl: false,
@@ -948,14 +948,27 @@ function setupPointer() {
 }
 
 const themeButton = document.getElementById("v7-theme");
+const isInAppThemeLocked = () =>
+  document.documentElement.dataset.inAppBrowser === "1" &&
+  document.documentElement.dataset.visualQa !== "1";
+
 function syncTheme() {
   const theme = document.documentElement.dataset.uiTheme === "light" ? "light" : "dark";
-  if (themeButton) themeButton.textContent = theme.toUpperCase();
+  if (themeButton) {
+    const locked = isInAppThemeLocked();
+    themeButton.textContent = theme.toUpperCase();
+    themeButton.disabled = locked;
+    themeButton.setAttribute(
+      "aria-label",
+      locked ? "Dark theme locked in in-app browser" : `Switch to ${theme === "light" ? "dark" : "light"} theme`
+    );
+  }
   if (scene) scene.fog.color.set(theme === "light" ? 0xeef7fd : 0x02070d);
   if (reduced && debug.ready) renderOnce();
 }
 
 themeButton?.addEventListener("click", () => {
+  if (isInAppThemeLocked()) return;
   const next = document.documentElement.dataset.uiTheme === "light" ? "dark" : "light";
   document.documentElement.dataset.uiTheme = next;
   document.documentElement.style.colorScheme = next;

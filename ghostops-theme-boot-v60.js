@@ -1,21 +1,27 @@
 (() => {
   "use strict";
+  const root = document.documentElement;
   const params = new URLSearchParams(location.search);
   const qaTheme = params.get("vqa-theme");
-  let theme = qaTheme === "dark" || qaTheme === "light" ? qaTheme : null;
+  const qaForced = qaTheme === "dark" || qaTheme === "light";
+  const inApp = /FBAN|FBAV|FB_IAB|Messenger|Instagram/i.test(navigator.userAgent || "");
+  let theme = qaForced ? qaTheme : null;
 
-  if (!theme) {
+  if (!theme && !inApp) {
     try { theme = localStorage.getItem("icharles-ui-theme"); } catch (_) {}
   }
-  // Brand default: first visit always starts in DARK.
-  // A manually saved user choice still wins, and Visual QA can explicitly override it.
-  if (theme !== "dark" && theme !== "light") {
-    theme = "dark";
-  }
 
-  if (qaTheme === "dark" || qaTheme === "light") {
-    document.documentElement.dataset.visualQa = "1";
-  }
-  document.documentElement.dataset.uiTheme = theme;
-  document.documentElement.style.colorScheme = theme;
+  // Locked brand contract:
+  // - first visit defaults to DARK,
+  // - OS theme never chooses the site theme,
+  // - saved manual choice persists in normal browsers,
+  // - Facebook/Messenger/Instagram in-app browsers remain DARK,
+  // - explicit Visual QA overrides everything for deterministic testing.
+  if (!qaForced && inApp) theme = "dark";
+  if (theme !== "dark" && theme !== "light") theme = "dark";
+
+  if (qaForced) root.dataset.visualQa = "1";
+  if (inApp && !qaForced) root.dataset.inAppBrowser = "1";
+  root.dataset.uiTheme = theme;
+  root.style.colorScheme = theme;
 })();

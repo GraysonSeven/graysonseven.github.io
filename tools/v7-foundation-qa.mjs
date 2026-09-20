@@ -37,6 +37,16 @@ for (const rel of [
   if (!exists(rel)) fail("Missing " + rel);
 }
 
+if (exists("index.html")) {
+  const home = read("index.html");
+  if (home.includes("data-v7-experience")) fail("Public Home was replaced by experimental V7 markup");
+  if (!home.includes('/ghostops-theme-boot-v60.js?v=2')) fail("Public Home theme bootstrap cache version not advanced");
+}
+
+if (exists("sitemap.xml") && read("sitemap.xml").includes("/experience/")) {
+  fail("Hidden experimental /experience/ route leaked into sitemap.xml");
+}
+
 if (exists("experience/index.html")) {
   const html = read("experience/index.html");
   for (const marker of [

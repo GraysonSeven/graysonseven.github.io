@@ -1,0 +1,12 @@
+{
+    "version":  "7.0",
+    "created":  "2026-09-20T20:02:15.2575578+08:00",
+    "pre_v7_head":  "0a645e5e8d1bbcff56ecbcd2868fd38d9d12c3b1",
+    "pre_v7_tag":  "icharles-pre-v7-0a645e5e8d",
+    "bundle_file":  "iCharles_PRE_V7_FULL_0a645e5e8d.bundle",
+    "tree_zip":  "iCharles_PRE_V7_TREE_0a645e5e8d.zip",
+    "rollback_script":  "Rollback-iCharles-PRE-V7-0a645e5e8d.ps1",
+    "locked_iko_sha256":  "DDA9E772F1267325918D3608273124BD21A507B57BB49A9E2148EBFF0CBBB5FD",
+    "public_home_replaced":  false,
+    "experience_route":  "/experience/"
+}

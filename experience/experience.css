@@ -56,3 +56,8 @@ html[data-v7-motion="reduced"] .v7-engine[data-state="online"]{color:var(--cyan)
 }
 
 .v7-header a:focus-visible,.v7-header button:focus-visible,.v7-cta:focus-visible,.v7-ghost:focus-visible,.v7-project-deck a:focus-visible,.v7-fallback a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+html[data-v7-render="fallback"] body{padding-bottom:0}
+html[data-v7-render="fallback"] .v7-fallback{position:relative;left:auto;bottom:auto;transform:none;width:min(760px,calc(100% - 24px));margin:0 auto 70px;padding:14px 16px;z-index:25}
+html[data-v7-render="fallback"] .v7-fallback p{margin:8px 0 12px;max-width:620px}
+html[data-v7-render="fallback"] .v7-fallback a{display:inline-flex;padding:9px 11px;border:1px solid var(--line);font:700 8px Space Mono,monospace;color:var(--cyan)}

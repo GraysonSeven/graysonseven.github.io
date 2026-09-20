@@ -6,6 +6,7 @@ import 'progress_store.dart';
 import 'review_page.dart';
 import 'settings_page.dart';
 import 'update_store.dart';
+import 'workspace_store.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({
@@ -14,6 +15,7 @@ class MorePage extends StatelessWidget {
     required this.community,
     required this.settings,
     required this.updates,
+    required this.workspace,
     required this.appVersion,
   });
 
@@ -21,6 +23,7 @@ class MorePage extends StatelessWidget {
   final CommunityStore community;
   final AppSettingsStore settings;
   final UpdateStore updates;
+  final WorkspaceStore workspace;
   final String appVersion;
 
   @override
@@ -85,6 +88,7 @@ class MorePage extends StatelessWidget {
                   community: community,
                   settings: settings,
                   updates: updates,
+                  workspace: workspace,
                   appVersion: appVersion,
                 ),
               ),

@@ -8,6 +8,7 @@ import 'app_settings_store.dart';
 import 'community_store.dart';
 import 'progress_store.dart';
 import 'update_store.dart';
+import 'workspace_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,11 +17,13 @@ Future<void> main() async {
   final community = CommunityStore();
   final settings = AppSettingsStore();
   final updates = UpdateStore(currentVersion: clientboundVersion);
+  final workspace = WorkspaceStore();
 
   await Future.wait([
     progress.load(),
     community.load(),
     settings.load(),
+    workspace.load(),
   ]);
 
   runApp(
@@ -29,6 +32,7 @@ Future<void> main() async {
       community: community,
       settings: settings,
       updates: updates,
+      workspace: workspace,
       appVersion: clientboundVersion,
     ),
   );

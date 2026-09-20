@@ -8,6 +8,7 @@ import 'app_settings_store.dart';
 import 'community_hub_page.dart';
 import 'community_store.dart';
 import 'course_catalog.dart';
+import 'module_workspace_card.dart';
 import 'more_page.dart';
 import 'onboarding_page.dart';
 import 'progress_store.dart';
@@ -15,6 +16,8 @@ import 'review_page.dart';
 import 'settings_page.dart';
 import 'toolkit_page.dart';
 import 'update_store.dart';
+import 'workspace_schema.dart';
+import 'workspace_store.dart';
 
 const _ink = Color(0xFF07111F);
 const _panel = Color(0xFF0E1B2D);
@@ -44,6 +47,7 @@ class ClientboundApp extends StatelessWidget {
     required this.community,
     required this.settings,
     required this.updates,
+    required this.workspace,
     required this.appVersion,
   });
 
@@ -51,6 +55,7 @@ class ClientboundApp extends StatelessWidget {
   final CommunityStore community;
   final AppSettingsStore settings;
   final UpdateStore updates;
+  final WorkspaceStore workspace;
   final String appVersion;
 
   @override
@@ -63,36 +68,40 @@ class ClientboundApp extends StatelessWidget {
 
     return AnimatedBuilder(
       animation: settings,
-      builder: (context, _) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Clientbound',
-        theme: ThemeData(
-          useMaterial3: true,
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: _ink,
-          colorScheme: scheme,
-          cardTheme: const CardThemeData(
-            color: _panel,
-            elevation: 0,
-            margin: EdgeInsets.zero,
+      builder: (context, _) => WorkspaceScope(
+        store: workspace,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Clientbound',
+          theme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: _ink,
+            colorScheme: scheme,
+            cardTheme: const CardThemeData(
+              color: _panel,
+              elevation: 0,
+              margin: EdgeInsets.zero,
+            ),
+            inputDecorationTheme: const InputDecorationTheme(
+              filled: true,
+              fillColor: _panelSoft,
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+            ),
           ),
-          inputDecorationTheme: const InputDecorationTheme(
-            filled: true,
-            fillColor: _panelSoft,
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-          ),
+          home: settings.onboardingComplete
+              ? AppShell(
+                  progress: progress,
+                  community: community,
+                  settings: settings,
+                  updates: updates,
+                  workspace: workspace,
+                  appVersion: appVersion,
+                )
+              : OnboardingPage(
+                  onComplete: settings.completeOnboarding,
+                ),
         ),
-        home: settings.onboardingComplete
-            ? AppShell(
-                progress: progress,
-                community: community,
-                settings: settings,
-                updates: updates,
-                appVersion: appVersion,
-              )
-            : OnboardingPage(
-                onComplete: settings.completeOnboarding,
-              ),
       ),
     );
   }
@@ -105,6 +114,7 @@ class AppShell extends StatefulWidget {
     required this.community,
     required this.settings,
     required this.updates,
+    required this.workspace,
     required this.appVersion,
   });
 
@@ -112,6 +122,7 @@ class AppShell extends StatefulWidget {
   final CommunityStore community;
   final AppSettingsStore settings;
   final UpdateStore updates;
+  final WorkspaceStore workspace;
   final String appVersion;
 
   @override
@@ -192,6 +203,7 @@ class _AppShellState extends State<AppShell> {
               community: widget.community,
               settings: widget.settings,
               updates: widget.updates,
+              workspace: widget.workspace,
               appVersion: widget.appVersion,
             ),
           ];
@@ -206,12 +218,12 @@ class _AppShellState extends State<AppShell> {
               community: widget.community,
               settings: widget.settings,
               updates: widget.updates,
+              workspace: widget.workspace,
               appVersion: widget.appVersion,
             ),
           ];
 
-          final desktopIndex =
-              _index.clamp(0, desktopPages.length - 1);
+          final desktopIndex = _index.clamp(0, desktopPages.length - 1);
           final mobileIndex = _index >= 4 ? 4 : _index;
 
           return Scaffold(
@@ -879,6 +891,62 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
     setState(() => _notesSaveState = 'Saved locally');
   }
 
+  Future<bool> _validateStructuredWorkspace(
+    WorkspaceStore workspace,
+  ) async {
+    final issues = workspace.readinessIssues(module.id);
+    if (issues.isEmpty) {
+      await workspace.flush();
+      return true;
+    }
+
+    if (!mounted) return false;
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Workspace is not review-ready'),
+        content: SizedBox(
+          width: 620,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Complete the required structured evidence before moving this module forward.',
+                ),
+                const SizedBox(height: 14),
+                for (final issue in issues)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.error_outline_rounded,
+                          size: 18,
+                          color: _warning,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(child: Text(issue)),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Continue working'),
+          ),
+        ],
+      ),
+    );
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -892,6 +960,7 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
         builder: (context, _) {
           final stage = progress.stageFor(module.id);
           final stageColor = _stageColor(stage);
+          final workspace = WorkspaceScope.of(context);
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
             children: [
@@ -1060,6 +1129,10 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                         icon: Icons.verified_outlined,
                         body: module.passGate,
                       ),
+                      if (moduleWorkspaceDefinitions.containsKey(module.id)) ...[
+                        const SizedBox(height: 14),
+                        ModuleWorkspaceCard(moduleId: module.id),
+                      ],
                       const SizedBox(height: 14),
                       _Panel(
                         padding: const EdgeInsets.all(20),
@@ -1071,7 +1144,7 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                                 Icon(Icons.edit_note_rounded, color: _warning),
                                 SizedBox(width: 10),
                                 Text(
-                                  'My workspace',
+                                  'Scratch notes',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w900,
                                     fontSize: 18,
@@ -1081,7 +1154,7 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                             ),
                             const SizedBox(height: 8),
                             const Text(
-                              'Capture research, draft wording, questions, feedback, and the single biggest weakness here. Notes stay on this device/browser.',
+                              'Use this for free-form research, draft wording, questions, feedback, and the single biggest weakness. Structured module evidence belongs in the workspace above.',
                               style: TextStyle(
                                 color: Colors.white60,
                                 height: 1.45,
@@ -1166,18 +1239,30 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                                   label: const Text('Start / continue'),
                                 ),
                                 OutlinedButton.icon(
-                                  onPressed: () => progress.setStage(
-                                    module.id,
-                                    ModuleStage.readyForReview,
-                                  ),
+                                  onPressed: () async {
+                                    if (await _validateStructuredWorkspace(
+                                      workspace,
+                                    )) {
+                                      await progress.setStage(
+                                        module.id,
+                                        ModuleStage.readyForReview,
+                                      );
+                                    }
+                                  },
                                   icon: const Icon(Icons.rate_review_outlined),
                                   label: const Text('Ready for review'),
                                 ),
                                 FilledButton.icon(
-                                  onPressed: () => progress.setStage(
-                                    module.id,
-                                    ModuleStage.passed,
-                                  ),
+                                  onPressed: () async {
+                                    if (await _validateStructuredWorkspace(
+                                      workspace,
+                                    )) {
+                                      await progress.setStage(
+                                        module.id,
+                                        ModuleStage.passed,
+                                      );
+                                    }
+                                  },
                                   icon: const Icon(
                                     Icons.check_circle_outline,
                                   ),

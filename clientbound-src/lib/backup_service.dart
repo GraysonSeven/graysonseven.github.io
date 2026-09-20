@@ -3,20 +3,23 @@ import 'dart:convert';
 import 'app_settings_store.dart';
 import 'community_store.dart';
 import 'progress_store.dart';
+import 'workspace_store.dart';
 
 class BackupService {
   const BackupService({
     required this.progress,
     required this.community,
     required this.settings,
+    required this.workspace,
     required this.appVersion,
   });
 
-  static const schemaVersion = 1;
+  static const schemaVersion = 2;
 
   final ProgressStore progress;
   final CommunityStore community;
   final AppSettingsStore settings;
+  final WorkspaceStore workspace;
   final String appVersion;
 
   String createBackupJson() {
@@ -28,6 +31,7 @@ class BackupService {
       'progress': progress.exportData(),
       'community': community.exportData(),
       'settings': settings.exportData(),
+      'workspace': workspace.exportData(),
     };
     return const JsonEncoder.withIndent('  ').convert(payload);
   }
@@ -40,15 +44,24 @@ class BackupService {
     if (decoded['format'] != 'clientbound-backup') {
       throw const FormatException('This is not a Clientbound backup.');
     }
+
     final schema = decoded['schemaVersion'];
     if (schema is! int || schema < 1 || schema > schemaVersion) {
       throw FormatException('Unsupported backup schema: $schema.');
     }
+
     if (decoded['progress'] is! Map<String, dynamic> ||
         decoded['community'] is! Map<String, dynamic> ||
         decoded['settings'] is! Map<String, dynamic>) {
       throw const FormatException('Backup is missing required sections.');
     }
+
+    if (schema >= 2 && decoded['workspace'] is! Map<String, dynamic>) {
+      throw const FormatException(
+        'Backup is missing structured workspace data.',
+      );
+    }
+
     return decoded;
   }
 
@@ -71,9 +84,16 @@ class BackupService {
         Map<String, dynamic>.from(decoded['community'] as Map<String, dynamic>);
     final settingsData =
         Map<String, dynamic>.from(decoded['settings'] as Map<String, dynamic>);
+    final schema = decoded['schemaVersion'] as int;
+    final workspaceData = schema >= 2
+        ? Map<String, dynamic>.from(
+            decoded['workspace'] as Map<String, dynamic>,
+          )
+        : <String, dynamic>{'modules': <String, dynamic>{}};
 
     await progress.importData(progressData);
     await community.importData(communityData);
     await settings.importData(settingsData);
+    await workspace.importData(workspaceData);
   }
 }

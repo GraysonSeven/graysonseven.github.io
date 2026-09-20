@@ -1,0 +1,66 @@
+name: iCharles V7 Runtime QA
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "experience/**"
+      - "tools/v7-foundation-qa.mjs"
+      - "tools/v7-runtime-qa.mjs"
+      - ".github/workflows/v7-runtime-qa.yml"
+      - "assets/iko-prime/identity/iko-prime-logo-locked.png"
+      - "assets/vendor/v7/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "experience/**"
+      - "tools/v7-foundation-qa.mjs"
+      - "tools/v7-runtime-qa.mjs"
+      - ".github/workflows/v7-runtime-qa.yml"
+      - "assets/iko-prime/identity/iko-prime-logo-locked.png"
+      - "assets/vendor/v7/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  edge-runtime:
+    name: Microsoft Edge WebGL qualification
+    runs-on: windows-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Static safety checks
+        shell: pwsh
+        run: |
+          node --check .\experience\experience.js
+          node --check .\tools\v7-runtime-qa.mjs
+          node .\tools\v7-foundation-qa.mjs
+          node .\tools\site-qa.mjs
+
+      - name: Install Playwright Core
+        shell: pwsh
+        run: npm install --no-save --package-lock=false playwright-core@1.55.0
+
+      - name: Qualify real WebGL in Microsoft Edge
+        shell: pwsh
+        run: node .\tools\v7-runtime-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-runtime
+
+      - name: Upload V7 runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-edge-runtime-evidence
+          path: artifacts/v7-runtime
+          if-no-files-found: warn

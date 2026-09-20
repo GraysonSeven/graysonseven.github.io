@@ -1,4 +1,6 @@
-import 'dart:convert';\n\nimport 'package:clientbound/course_catalog.dart';
+import 'dart:convert';
+
+import 'package:clientbound/course_catalog.dart';
 import 'package:clientbound/progress_store.dart';
 import 'package:clientbound/review_exchange.dart';
 import 'package:clientbound/review_exchange_store.dart';

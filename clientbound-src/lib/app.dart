@@ -181,7 +181,11 @@ class _AppShellState extends State<AppShell> {
             }
             Navigator.of(context).push(
               MaterialPageRoute<void>(
-                builder: (_) => ReviewPage(progress: widget.progress),
+                builder: (_) => ReviewPage(
+                  progress: widget.progress,
+                  workspace: widget.workspace,
+                  appVersion: widget.appVersion,
+                ),
               ),
             );
           }
@@ -197,7 +201,11 @@ class _AppShellState extends State<AppShell> {
             CoursePage(progress: widget.progress),
             CommunityHubPage(store: widget.community),
             const ToolkitPage(),
-            ReviewPage(progress: widget.progress),
+            ReviewPage(
+              progress: widget.progress,
+              workspace: widget.workspace,
+              appVersion: widget.appVersion,
+            ),
             SettingsPage(
               progress: widget.progress,
               community: widget.community,
@@ -1219,7 +1227,7 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                             ),
                             const SizedBox(height: 8),
                             const Text(
-                              'Move the module to Ready for review when the real deliverable is complete. Record PASS only after instructor review; filling the worksheet alone is not a pass.',
+                              'Submit the module for review when the real deliverable is complete. Only the Review workspace can record PASS or REVISE; filling the worksheet alone is not a pass.',
                               style: TextStyle(
                                 color: Colors.white70,
                                 height: 1.5,
@@ -1239,34 +1247,27 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                                   label: const Text('Start / continue'),
                                 ),
                                 OutlinedButton.icon(
-                                  onPressed: () async {
-                                    if (await _validateStructuredWorkspace(
-                                      workspace,
-                                    )) {
-                                      await progress.setStage(
-                                        module.id,
-                                        ModuleStage.readyForReview,
-                                      );
-                                    }
-                                  },
+                                  onPressed: stage == ModuleStage.readyForReview ||
+                                          stage == ModuleStage.passed
+                                      ? null
+                                      : () async {
+                                          if (await _validateStructuredWorkspace(
+                                            workspace,
+                                          )) {
+                                            await _saveNotes();
+                                            await progress.submitForReview(
+                                              module.id,
+                                              evidenceSnapshot: workspace
+                                                  .snapshotForModule(module.id),
+                                            );
+                                          }
+                                        },
                                   icon: const Icon(Icons.rate_review_outlined),
-                                  label: const Text('Ready for review'),
-                                ),
-                                FilledButton.icon(
-                                  onPressed: () async {
-                                    if (await _validateStructuredWorkspace(
-                                      workspace,
-                                    )) {
-                                      await progress.setStage(
-                                        module.id,
-                                        ModuleStage.passed,
-                                      );
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.check_circle_outline,
+                                  label: Text(
+                                    stage == ModuleStage.readyForReview
+                                        ? 'Submitted for review'
+                                        : 'Ready for review',
                                   ),
-                                  label: const Text('Record PASS'),
                                 ),
                                 TextButton(
                                   onPressed: () => progress.setStage(

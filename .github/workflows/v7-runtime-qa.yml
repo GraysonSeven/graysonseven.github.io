@@ -9,6 +9,10 @@ on:
       - "tools/v7-foundation-qa.mjs"
       - "tools/v7-runtime-qa.mjs"
       - "tools/v7-resilience-qa.mjs"
+      - "tools/v7-theme-contract-qa.mjs"
+      - "ghostops-theme-boot-v60.js"
+      - "ghostops-v60.js"
+      - "index.html"
       - ".github/workflows/v7-runtime-qa.yml"
       - "assets/iko-prime/identity/iko-prime-logo-locked.png"
       - "assets/vendor/v7/**"
@@ -20,6 +24,10 @@ on:
       - "tools/v7-foundation-qa.mjs"
       - "tools/v7-runtime-qa.mjs"
       - "tools/v7-resilience-qa.mjs"
+      - "tools/v7-theme-contract-qa.mjs"
+      - "ghostops-theme-boot-v60.js"
+      - "ghostops-v60.js"
+      - "index.html"
       - ".github/workflows/v7-runtime-qa.yml"
       - "assets/iko-prime/identity/iko-prime-logo-locked.png"
       - "assets/vendor/v7/**"
@@ -49,6 +57,7 @@ jobs:
           node --check .\experience\experience.js
           node --check .\tools\v7-runtime-qa.mjs
           node --check .\tools\v7-resilience-qa.mjs
+          node --check .\tools\v7-theme-contract-qa.mjs
           node .\tools\v7-foundation-qa.mjs
           node .\tools\site-qa.mjs
 
@@ -64,6 +73,10 @@ jobs:
         shell: pwsh
         run: node .\tools\v7-resilience-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-resilience
 
+      - name: Qualify locked theme contract
+        shell: pwsh
+        run: node .\tools\v7-theme-contract-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-theme
+
       - name: Upload V7 runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -72,4 +85,5 @@ jobs:
           path: |
             artifacts/v7-runtime
             artifacts/v7-resilience
+            artifacts/v7-theme
           if-no-files-found: warn

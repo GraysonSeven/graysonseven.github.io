@@ -14,6 +14,152 @@ extension ModuleStageLabel on ModuleStage {
       };
 }
 
+enum ReviewDecision { pending, pass, revise }
+
+extension ReviewDecisionLabel on ReviewDecision {
+  String get label => switch (this) {
+        ReviewDecision.pending => 'Pending review',
+        ReviewDecision.pass => 'PASS',
+        ReviewDecision.revise => 'REVISE',
+      };
+}
+
+@immutable
+class ReviewSubmission {
+  const ReviewSubmission({
+    required this.id,
+    required this.moduleId,
+    required this.submittedAtMs,
+    required this.revision,
+    required this.evidenceSnapshot,
+    required this.learnerNotesSnapshot,
+    required this.completedTaskIndexes,
+    this.decision = ReviewDecision.pending,
+    this.reviewerFeedback = '',
+    this.reviewedAtMs,
+  });
+
+  final String id;
+  final int moduleId;
+  final int submittedAtMs;
+  final int revision;
+  final Map<String, dynamic> evidenceSnapshot;
+  final String learnerNotesSnapshot;
+  final List<int> completedTaskIndexes;
+  final ReviewDecision decision;
+  final String reviewerFeedback;
+  final int? reviewedAtMs;
+
+  DateTime get submittedAt =>
+      DateTime.fromMillisecondsSinceEpoch(submittedAtMs, isUtc: true);
+
+  DateTime? get reviewedAt => reviewedAtMs == null
+      ? null
+      : DateTime.fromMillisecondsSinceEpoch(reviewedAtMs!, isUtc: true);
+
+  ReviewSubmission copyWith({
+    ReviewDecision? decision,
+    String? reviewerFeedback,
+    int? reviewedAtMs,
+  }) {
+    return ReviewSubmission(
+      id: id,
+      moduleId: moduleId,
+      submittedAtMs: submittedAtMs,
+      revision: revision,
+      evidenceSnapshot: _cloneJsonMap(evidenceSnapshot),
+      learnerNotesSnapshot: learnerNotesSnapshot,
+      completedTaskIndexes: List<int>.from(completedTaskIndexes),
+      decision: decision ?? this.decision,
+      reviewerFeedback: reviewerFeedback ?? this.reviewerFeedback,
+      reviewedAtMs: reviewedAtMs ?? this.reviewedAtMs,
+    );
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
+        'moduleId': moduleId,
+        'submittedAtMs': submittedAtMs,
+        'revision': revision,
+        'evidenceSnapshot': _cloneJsonMap(evidenceSnapshot),
+        'learnerNotesSnapshot': learnerNotesSnapshot,
+        'completedTaskIndexes': List<int>.from(completedTaskIndexes),
+        'decision': decision.name,
+        'reviewerFeedback': reviewerFeedback,
+        'reviewedAtMs': reviewedAtMs,
+      };
+
+  factory ReviewSubmission.fromJson(Map<String, dynamic> data) {
+    final id = data['id'];
+    final moduleId = data['moduleId'];
+    final submittedAtMs = data['submittedAtMs'];
+    final revision = data['revision'];
+    final evidence = data['evidenceSnapshot'];
+    final notes = data['learnerNotesSnapshot'];
+    final taskIndexes = data['completedTaskIndexes'];
+    final decisionName = data['decision'];
+    final feedback = data['reviewerFeedback'];
+    final reviewedAtMs = data['reviewedAtMs'];
+
+    if (id is! String ||
+        id.trim().isEmpty ||
+        moduleId is! int ||
+        submittedAtMs is! int ||
+        revision is! int ||
+        revision < 1 ||
+        evidence is! Map ||
+        notes is! String ||
+        taskIndexes is! List ||
+        decisionName is! String ||
+        feedback is! String ||
+        (reviewedAtMs != null && reviewedAtMs is! int)) {
+      throw const FormatException('Review submission is invalid.');
+    }
+
+    final indexes = <int>[];
+    for (final value in taskIndexes) {
+      if (value is! int || value < 0) {
+        throw const FormatException('Review task snapshot is invalid.');
+      }
+      indexes.add(value);
+    }
+
+    ReviewDecision? decision;
+    for (final value in ReviewDecision.values) {
+      if (value.name == decisionName) {
+        decision = value;
+        break;
+      }
+    }
+    if (decision == null) {
+      throw const FormatException('Review decision is invalid.');
+    }
+
+    return ReviewSubmission(
+      id: id,
+      moduleId: moduleId,
+      submittedAtMs: submittedAtMs,
+      revision: revision,
+      evidenceSnapshot: _cloneJsonMap(
+        Map<String, dynamic>.from(evidence),
+      ),
+      learnerNotesSnapshot: notes,
+      completedTaskIndexes: indexes,
+      decision: decision,
+      reviewerFeedback: feedback,
+      reviewedAtMs: reviewedAtMs as int?,
+    );
+  }
+}
+
+Map<String, dynamic> _cloneJsonMap(Map<String, dynamic> value) {
+  final decoded = jsonDecode(jsonEncode(value));
+  if (decoded is! Map<String, dynamic>) {
+    throw const FormatException('Review evidence snapshot is invalid.');
+  }
+  return decoded;
+}
+
 class ProgressStore extends ChangeNotifier {
   static const _legacyCompletedKey = 'fcss_completed_modules_v1';
   static const _stageKey = 'clientbound_module_stages_v3';
@@ -21,12 +167,14 @@ class ProgressStore extends ChangeNotifier {
   static const _tasksKey = 'clientbound_module_tasks_v3';
   static const _feedbackKey = 'clientbound_review_feedback_v3';
   static const _touchedKey = 'clientbound_last_touched_v3';
+  static const _reviewSubmissionsKey = 'clientbound_review_submissions_v4';
 
   Map<int, ModuleStage> _stages = <int, ModuleStage>{};
   Map<int, String> _notes = <int, String>{};
   Map<int, Set<int>> _taskChecks = <int, Set<int>>{};
   Map<int, String> _feedback = <int, String>{};
   Map<int, int> _lastTouched = <int, int>{};
+  List<ReviewSubmission> _reviewSubmissions = <ReviewSubmission>[];
   String? _recoveryWarning;
 
   Set<int> get completed => _stages.entries
@@ -112,6 +260,7 @@ class ProgressStore extends ChangeNotifier {
     final feedbackRaw = prefs.getString(_feedbackKey);
     final touchedRaw = prefs.getString(_touchedKey);
     final tasksRaw = prefs.getString(_tasksKey);
+    final reviewSubmissionsRaw = prefs.getString(_reviewSubmissionsKey);
 
     try {
       _notes = _decodeStringMap(notesRaw);
@@ -149,6 +298,20 @@ class ProgressStore extends ChangeNotifier {
       _taskChecks = <int, Set<int>>{};
     }
 
+    try {
+      _reviewSubmissions = _decodeReviewSubmissions(reviewSubmissionsRaw);
+    } catch (_) {
+      recovered = true;
+      if (reviewSubmissionsRaw != null) {
+        await _preserveCorrupt(
+          prefs,
+          'review_submissions',
+          reviewSubmissionsRaw,
+        );
+      }
+      _reviewSubmissions = <ReviewSubmission>[];
+    }
+
     if (recovered) {
       _recoveryWarning =
           'Clientbound recovered from damaged local learning data. A preserved copy was kept locally for diagnosis.';
@@ -178,6 +341,8 @@ class ProgressStore extends ChangeNotifier {
           for (final entry in _lastTouched.entries)
             '${entry.key}': entry.value,
         },
+        'reviewSubmissions':
+            _reviewSubmissions.map((item) => item.toJson()).toList(),
       };
 
   Future<void> importData(Map<String, dynamic> data) async {
@@ -186,23 +351,74 @@ class ProgressStore extends ChangeNotifier {
     final tasksRaw = jsonEncode(data['tasks'] ?? <String, dynamic>{});
     final feedbackRaw = jsonEncode(data['feedback'] ?? <String, dynamic>{});
     final touchedRaw = jsonEncode(data['lastTouched'] ?? <String, dynamic>{});
+    final reviewSubmissionsRaw =
+        jsonEncode(data['reviewSubmissions'] ?? <dynamic>[]);
 
     final stages = _decodeStages(stagesRaw);
     final notes = _decodeStringMap(notesRaw);
     final tasks = _decodeSetMap(tasksRaw);
     final feedback = _decodeStringMap(feedbackRaw);
     final touched = _decodeIntMap(touchedRaw);
+    final reviewSubmissions =
+        _decodeReviewSubmissions(reviewSubmissionsRaw);
 
     _stages = stages;
     _notes = notes;
     _taskChecks = tasks;
     _feedback = feedback;
     _lastTouched = touched;
+    _reviewSubmissions = reviewSubmissions;
     _recoveryWarning = null;
 
     final prefs = await SharedPreferences.getInstance();
     await _saveAll(prefs);
     notifyListeners();
+  }
+
+  List<ReviewSubmission> reviewSubmissionsFor(int moduleId) {
+    return _reviewSubmissions
+        .where((item) => item.moduleId == moduleId)
+        .map(
+          (item) => ReviewSubmission.fromJson(item.toJson()),
+        )
+        .toList(growable: false);
+  }
+
+  ReviewSubmission? latestReviewSubmissionFor(int moduleId) {
+    final items = _reviewSubmissions
+        .where((item) => item.moduleId == moduleId)
+        .toList();
+    if (items.isEmpty) return null;
+    items.sort((a, b) => a.revision.compareTo(b.revision));
+    return ReviewSubmission.fromJson(items.last.toJson());
+  }
+
+  Future<ReviewSubmission?> submitForReview(
+    int moduleId, {
+    required Map<String, dynamic> evidenceSnapshot,
+  }) async {
+    if (!_validModule(moduleId)) return null;
+
+    final revision = reviewSubmissionsFor(moduleId).length + 1;
+    final now = DateTime.now().toUtc().millisecondsSinceEpoch;
+    final tasks = (_taskChecks[moduleId]?.toList() ?? <int>[])..sort();
+
+    final submission = ReviewSubmission(
+      id: 'module-$moduleId-r$revision-$now',
+      moduleId: moduleId,
+      submittedAtMs: now,
+      revision: revision,
+      evidenceSnapshot: _cloneJsonMap(evidenceSnapshot),
+      learnerNotesSnapshot: notesFor(moduleId),
+      completedTaskIndexes: tasks,
+    );
+
+    _reviewSubmissions.add(submission);
+    _stages[moduleId] = ModuleStage.readyForReview;
+    _touch(moduleId);
+    notifyListeners();
+    await _persist();
+    return ReviewSubmission.fromJson(submission.toJson());
   }
 
   Future<void> setStage(int moduleId, ModuleStage stage) async {
@@ -261,9 +477,15 @@ class ProgressStore extends ChangeNotifier {
 
   Future<void> recordPass(int moduleId, {String feedback = ''}) async {
     if (!_validModule(moduleId)) return;
+    final normalizedFeedback = feedback.trim();
+    _recordReviewDecision(
+      moduleId,
+      decision: ReviewDecision.pass,
+      feedback: normalizedFeedback,
+    );
     _stages[moduleId] = ModuleStage.passed;
-    if (feedback.trim().isNotEmpty) {
-      _feedback[moduleId] = feedback.trim();
+    if (normalizedFeedback.isNotEmpty) {
+      _feedback[moduleId] = normalizedFeedback;
     }
     _touch(moduleId);
     notifyListeners();
@@ -275,13 +497,62 @@ class ProgressStore extends ChangeNotifier {
     required String feedback,
   }) async {
     if (!_validModule(moduleId)) return;
-    _stages[moduleId] = ModuleStage.inProgress;
-    _feedback[moduleId] = feedback.trim().isEmpty
+    final normalizedFeedback = feedback.trim().isEmpty
         ? 'Revise the current deliverable and resubmit for review.'
         : feedback.trim();
+    _recordReviewDecision(
+      moduleId,
+      decision: ReviewDecision.revise,
+      feedback: normalizedFeedback,
+    );
+    _stages[moduleId] = ModuleStage.inProgress;
+    _feedback[moduleId] = normalizedFeedback;
     _touch(moduleId);
     notifyListeners();
     await _persist();
+  }
+
+  void _recordReviewDecision(
+    int moduleId, {
+    required ReviewDecision decision,
+    required String feedback,
+  }) {
+    final now = DateTime.now().toUtc().millisecondsSinceEpoch;
+    var index = -1;
+    for (var i = _reviewSubmissions.length - 1; i >= 0; i--) {
+      final item = _reviewSubmissions[i];
+      if (item.moduleId == moduleId &&
+          item.decision == ReviewDecision.pending) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index == -1) {
+      final revision = reviewSubmissionsFor(moduleId).length + 1;
+      final tasks = (_taskChecks[moduleId]?.toList() ?? <int>[])..sort();
+      _reviewSubmissions.add(
+        ReviewSubmission(
+          id: 'module-$moduleId-r$revision-legacy-$now',
+          moduleId: moduleId,
+          submittedAtMs: now,
+          revision: revision,
+          evidenceSnapshot: const <String, dynamic>{},
+          learnerNotesSnapshot: notesFor(moduleId),
+          completedTaskIndexes: tasks,
+          decision: decision,
+          reviewerFeedback: feedback,
+          reviewedAtMs: now,
+        ),
+      );
+      return;
+    }
+
+    _reviewSubmissions[index] = _reviewSubmissions[index].copyWith(
+      decision: decision,
+      reviewerFeedback: feedback,
+      reviewedAtMs: now,
+    );
   }
 
   Future<void> reset() async {
@@ -290,6 +561,7 @@ class ProgressStore extends ChangeNotifier {
     _taskChecks = <int, Set<int>>{};
     _feedback = <int, String>{};
     _lastTouched = <int, int>{};
+    _reviewSubmissions = <ReviewSubmission>[];
     _recoveryWarning = null;
     notifyListeners();
 
@@ -300,6 +572,7 @@ class ProgressStore extends ChangeNotifier {
       _tasksKey,
       _feedbackKey,
       _touchedKey,
+      _reviewSubmissionsKey,
       _legacyCompletedKey,
       'clientbound_module_stages_v2',
       'clientbound_module_notes_v2',
@@ -328,6 +601,41 @@ class ProgressStore extends ChangeNotifier {
       _touchedKey,
       jsonEncode(exportData()['lastTouched']),
     );
+    await prefs.setString(
+      _reviewSubmissionsKey,
+      jsonEncode(exportData()['reviewSubmissions']),
+    );
+  }
+
+  List<ReviewSubmission> _decodeReviewSubmissions(String? raw) {
+    if (raw == null || raw.isEmpty) return <ReviewSubmission>[];
+    final decoded = jsonDecode(raw);
+    if (decoded is! List) {
+      throw const FormatException('Review submission history is invalid.');
+    }
+
+    final result = <ReviewSubmission>[];
+    final revisionsByModule = <int, int>{};
+    for (final value in decoded) {
+      if (value is! Map) {
+        throw const FormatException('Review submission entry is invalid.');
+      }
+      final submission = ReviewSubmission.fromJson(
+        Map<String, dynamic>.from(value),
+      );
+      if (!_validModule(submission.moduleId)) {
+        continue;
+      }
+      final previousRevision = revisionsByModule[submission.moduleId] ?? 0;
+      if (submission.revision <= previousRevision) {
+        throw const FormatException(
+          'Review submission revisions are invalid.',
+        );
+      }
+      revisionsByModule[submission.moduleId] = submission.revision;
+      result.add(submission);
+    }
+    return result;
   }
 
   Map<int, ModuleStage> _decodeStages(String raw) {

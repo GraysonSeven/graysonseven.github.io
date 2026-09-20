@@ -1,0 +1,58 @@
+name: iCharles V7 Release Tooling QA
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "tools/Deploy-V7-Hidden-Cloudflare.ps1"
+      - "tools/v7-release-tooling-qa.mjs"
+      - ".github/workflows/v7-release-tooling-qa.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "tools/Deploy-V7-Hidden-Cloudflare.ps1"
+      - "tools/v7-release-tooling-qa.mjs"
+      - ".github/workflows/v7-release-tooling-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-tooling:
+    name: Guard hidden-route release tooling
+    runs-on: windows-latest
+    timeout-minutes: 6
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Parse PowerShell release tool
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path '.\tools\Deploy-V7-Hidden-Cloudflare.ps1'),
+            [ref]$tokens,
+            [ref]$errors
+          ) | Out-Null
+
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            throw "PowerShell parser found $($errors.Count) error(s)."
+          }
+
+          Write-Host 'PowerShell syntax: PASS'
+
+      - name: Verify release invariants
+        shell: pwsh
+        run: node .\tools\v7-release-tooling-qa.mjs

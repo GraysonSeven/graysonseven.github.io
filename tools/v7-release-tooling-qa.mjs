@@ -30,7 +30,10 @@ if (!fs.existsSync(scriptPath)) {
     "--project-name $ProjectName",
     "--branch main",
     "icharles.pages.dev/experience/",
-    "Public /: unchanged"
+    "Public /: unchanged",
+    "$createdTemporaryNodeModules = $false",
+    "Pre-existing node_modules is present without playwright-core",
+    "Remove-Item -LiteralPath $nodeModulesPath -Recurse -Force"
   ];
 
   for (const marker of required) {
@@ -41,6 +44,10 @@ if (!fs.existsSync(scriptPath)) {
   if (/git\s+clean\s+-[a-z]*f/i.test(ps1)) fail("Release script must not git-clean the shared repository");
   if (/Invoke-NativeChecked\\s+git[^\\n]*\\barchive\\b[^\\n]*\\s-o\\s/i.test(ps1)) {
     fail("git archive must pass -o through the explicit -Arguments array to avoid PowerShell parameter binding");
+  }
+
+  if (/npm\s+install[^\n]*playwright-core/i.test(ps1) && !/createdTemporaryNodeModules/i.test(ps1)) {
+    fail("Temporary Playwright install must be tracked for cleanup");
   }
 
   if (/pages\s+deploy[\s\S]*experience[\\/]/i.test(ps1)) {

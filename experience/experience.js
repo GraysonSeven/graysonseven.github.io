@@ -599,6 +599,17 @@ async function init() {
   setGroupFactor(forgeGroup, 0);
   worldRig.add(forgeGroup);
 
+  if (reduced) {
+    coreGroup.position.set(mobile ? 1.75 : 3.05, 0.15, -1.55);
+    coreGroup.scale.setScalar(mobile ? 0.46 : 0.58);
+    ikoSprite.material.opacity = 0.52;
+    coreCrystal.material.opacity = 0.035;
+    crystalWire.material.opacity = 0.24;
+    rings.forEach(ring => { ring.material.opacity *= 0.58; });
+    shardGroup.children.forEach(shard => { shard.material.opacity *= 0.48; });
+    tunnelRings.forEach(ring => { ring.material.opacity *= 0.55; });
+  }
+
   document.documentElement.dataset.v7Motion = reduced ? "reduced" : "full";
   setupTimeline();
   setupSceneStateTracking();

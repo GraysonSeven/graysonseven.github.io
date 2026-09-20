@@ -1,9 +1,6 @@
 name: iCharles V7 Cloudflare Production Run
 
 on:
-  push:
-    branches:
-      - v7-cloudflare-prod-run-267834dc
   workflow_dispatch:
 
 permissions:

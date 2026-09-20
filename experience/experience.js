@@ -12,13 +12,15 @@ const coarsePointer = matchMedia("(pointer: coarse)").matches;
 const mobile = innerWidth < 700;
 
 const debug = window.__V7_DEBUG__ = {
-  version: "7.1.0",
+  version: "7.1.1",
   ready: false,
   frames: 0,
   webgl: false,
   error: null,
   objects: 0,
   machines: 0,
+  reducedMotion: reduced,
+  fallback: false,
   canvasZ: null,
   worldZ: null,
   storyZ: null,
@@ -92,6 +94,10 @@ function fail(error) {
   const message = error instanceof Error ? error.message : String(error);
   debug.error = message;
   debug.ready = false;
+  debug.webgl = false;
+  debug.fallback = true;
+  document.documentElement.dataset.v7Render = "fallback";
+  canvas.hidden = true;
   setEngine("error", "3D ENGINE // FALLBACK");
   if (fallback) fallback.hidden = false;
   console.error("V7 WebGL initialization failed:", error);
@@ -358,6 +364,7 @@ async function init() {
       powerPreference: "high-performance"
     });
     debug.webgl = Boolean(renderer.getContext());
+    document.documentElement.dataset.v7Render = "webgl";
   } catch (error) {
     fail(error);
     return;
@@ -592,14 +599,84 @@ async function init() {
   setGroupFactor(forgeGroup, 0);
   worldRig.add(forgeGroup);
 
+  document.documentElement.dataset.v7Motion = reduced ? "reduced" : "full";
   setupTimeline();
+  setupSceneStateTracking();
   setupPointer();
   resize();
   syncDebugLayers();
   scene.traverse(() => { debug.objects += 1; });
   debug.ready = true;
-  setEngine("online", "3D ENGINE // ONLINE");
-  animate();
+  if (reduced) {
+    setEngine("online", "3D ENGINE // STATIC");
+    renderOnce();
+  } else {
+    setEngine("online", "3D ENGINE // ONLINE");
+    animate();
+  }
+}
+
+
+function setActiveScene(section, index) {
+  if (!section) return;
+  debug.activeScene = section.dataset.scene || String(index + 1);
+  document.querySelectorAll(".v7-rail-left span").forEach((element, railIndex) => {
+    element.classList.toggle("is-active", index === railIndex);
+  });
+}
+
+function setupSceneStateTracking() {
+  const sections = [...document.querySelectorAll(".v7-scene")];
+  if (!sections.length) return;
+
+  if (gsap && ScrollTrigger && !reduced) {
+    sections.forEach((section, index) => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 55%",
+        end: "bottom 45%",
+        onToggle: self => {
+          if (self.isActive) setActiveScene(section, index);
+        }
+      });
+    });
+    return;
+  }
+
+  let scheduled = false;
+  const update = () => {
+    scheduled = false;
+    const viewportCenter = scrollY + innerHeight * 0.5;
+    let bestIndex = 0;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    sections.forEach((section, index) => {
+      const top = section.offsetTop;
+      const center = top + section.offsetHeight * 0.5;
+      const distance = Math.abs(center - viewportCenter);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestIndex = index;
+      }
+    });
+    setActiveScene(sections[bestIndex], bestIndex);
+  };
+
+  const queue = () => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(update);
+  };
+
+  addEventListener("scroll", queue, { passive: true });
+  addEventListener("resize", queue, { passive: true });
+  update();
+}
+
+function renderOnce() {
+  if (!renderer || !scene || !camera) return;
+  camera.lookAt(cameraTarget.x, cameraTarget.y, cameraTarget.z);
+  renderer.render(scene, camera);
+  debug.frames += 1;
 }
 
 function setupTimeline() {
@@ -678,20 +755,6 @@ function setupTimeline() {
     .to(camera.position, { x: 0, y: 0, z: 7.6, duration: 0.72 }, 5.0)
     .to(cameraTarget, { x: 0, y: 0, z: -0.8, duration: 0.72 }, 5.0);
 
-  document.querySelectorAll(".v7-scene").forEach((section, index) => {
-    ScrollTrigger.create({
-      trigger: section,
-      start: "top 55%",
-      end: "bottom 45%",
-      onToggle: self => {
-        if (!self.isActive) return;
-        debug.activeScene = section.dataset.scene || String(index + 1);
-        document.querySelectorAll(".v7-rail-left span").forEach((element, railIndex) => {
-          element.classList.toggle("is-active", index === railIndex);
-        });
-      }
-    });
-  });
 }
 
 function setupPointer() {
@@ -712,6 +775,7 @@ function syncTheme() {
   const theme = document.documentElement.dataset.uiTheme === "light" ? "light" : "dark";
   if (themeButton) themeButton.textContent = theme.toUpperCase();
   if (scene) scene.fog.color.set(theme === "light" ? 0xeef7fd : 0x02070d);
+  if (reduced && debug.ready) renderOnce();
 }
 
 themeButton?.addEventListener("click", () => {
@@ -730,6 +794,7 @@ function resize() {
   renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 700 ? 1.15 : 1.55));
   renderer.setSize(innerWidth, innerHeight, false);
   syncDebugLayers();
+  if (reduced && debug.ready) renderOnce();
 }
 addEventListener("resize", resize, { passive: true });
 

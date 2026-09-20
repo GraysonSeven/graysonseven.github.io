@@ -29,7 +29,10 @@ for (const rel of [
   "assets/vendor/v7/three.core.min.js",
   "assets/vendor/v7/gsap.min.js",
   "assets/vendor/v7/ScrollTrigger.min.js",
-  "V7_SAFETY_POINT.json"
+  "V7_SAFETY_POINT.json",
+  "ghostops-theme-boot-v60.js",
+  "ghostops-v60.js",
+  "tools/v7-theme-contract-qa.mjs"
 ]) {
   if (!exists(rel)) fail("Missing " + rel);
 }
@@ -38,7 +41,7 @@ if (exists("experience/index.html")) {
   const html = read("experience/index.html");
   for (const marker of [
     "noindex,nofollow,noarchive",
-    "data-v7-version=\"7.3.0\"",
+    "data-v7-version=\"7.4.0\"",
     "SYSTEM 01 // IKO ONLINE",
     "SYSTEM 02 // THE BUILDER",
     "SYSTEM 03 // THINGS I BUILT",
@@ -50,8 +53,8 @@ if (exists("experience/index.html")) {
     "ENTER WEBSITE STUDIO",
     "REQUEST A QUOTE",
     "3D ENGINE // BOOTING",
-    "experience.css?v=730",
-    "experience.js?v=730"
+    "experience.css?v=740",
+    "experience.js?v=740"
   ]) {
     if (!html.includes(marker)) fail("HTML marker missing: " + marker);
   }
@@ -91,7 +94,8 @@ if (exists("experience/experience.js")) {
     "renderOnce",
     "v7Render",
     "v7Motion",
-    "3D ENGINE // ONLINE"
+    "3D ENGINE // ONLINE",
+    "isInAppThemeLocked"
   ]) {
     if (!js.includes(marker)) fail("JS marker missing: " + marker);
   }
@@ -103,4 +107,18 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("\nICHARLES V7.3 FORGE CONVERSION QA PASS\n");
+console.log("\nICHARLES V7.4 FINAL THEME CONTRACT QA PASS\n");
+
+
+if (exists("ghostops-theme-boot-v60.js")) {
+  const boot = read("ghostops-theme-boot-v60.js");
+  for (const marker of ["FBAN", "FBAV", "FB_IAB", "inAppBrowser", "visualQa"]) {
+    if (!boot.includes(marker)) fail("Theme boot marker missing: " + marker);
+  }
+}
+
+if (exists("ghostops-v60.js")) {
+  const publicTheme = read("ghostops-v60.js");
+  if (!publicTheme.includes("isInAppLocked")) fail("Public in-app theme lock missing");
+  if (!publicTheme.includes("Dark theme locked in in-app browser")) fail("Public in-app lock accessibility label missing");
+}

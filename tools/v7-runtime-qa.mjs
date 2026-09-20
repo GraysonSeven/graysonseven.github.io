@@ -125,7 +125,9 @@ try {
   assert(first.webgl === true, "WebGL context is not reported ready");
   assert(!first.error, "V7 debug reported an error: " + (first.error || "unknown"));
   assert(second.frames > first.frames, "Render frames are not increasing (" + first.frames + " -> " + second.frames + ")");
-  assert(first.objects >= 40, "Expected a substantial 3D scene, found only " + first.objects + " objects");
+  assert(first.version === "7.1.0", "Expected V7.1.0 debug version, found " + first.version);
+  assert(first.objects >= 80, "Expected a substantial V7.1 3D scene, found only " + first.objects + " objects");
+  assert(first.machines === 3, "Expected exactly three project machine rigs, found " + first.machines);
   assert(layers.canvasZ > layers.worldZ, "Canvas z-index " + layers.canvasZ + " is not above world " + layers.worldZ);
   assert(layers.storyZ > layers.canvasZ, "Story z-index " + layers.storyZ + " is not above canvas " + layers.canvasZ);
   assert(layers.canvasOpacity > 0, "Canvas is visually transparent by CSS opacity");

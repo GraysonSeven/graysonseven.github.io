@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'course_catalog.dart';
 import 'progress_store.dart';
+import 'review_exchange_file_service.dart';
 import 'review_exchange_page.dart';
 import 'review_exchange_store.dart';
 import 'review_package.dart';
@@ -336,6 +337,11 @@ class _ReviewCard extends StatelessWidget {
                   icon: const Icon(Icons.data_object_rounded),
                   label: const Text('Copy JSON'),
                 ),
+                OutlinedButton.icon(
+                  onPressed: () => _savePackageFile(context),
+                  icon: const Icon(Icons.download_outlined),
+                  label: const Text('Save package file'),
+                ),
                 FilledButton.icon(
                   onPressed: complete ? () => _pass(context) : null,
                   icon: const Icon(Icons.check_circle_outline),
@@ -417,6 +423,36 @@ class _ReviewCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _savePackageFile(BuildContext context) async {
+    final package = _package();
+    final submission = _packageSubmission();
+    try {
+      final saved = await ReviewExchangeFileService.saveJson(
+        contents: package.json,
+        filename: ReviewExchangeFileService.packageFilename(
+          moduleId: module.id,
+          revision: submission.revision,
+        ),
+        dialogTitle: 'Save learner review package',
+      );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            saved
+                ? 'Review package file saved.'
+                : 'Review package save canceled.',
+          ),
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not save review package: $error')),
+      );
+    }
   }
 
   Future<void> _ensureAuditableSubmission() async {

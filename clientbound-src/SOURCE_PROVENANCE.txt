@@ -1,6 +1,6 @@
 Clientbound public build mirror
 Canonical repository: GraysonSeven/First-Client-Sales-System
-Canonical commit: 686d1561523d57b8da669fe78ce03e39cb587979
+Canonical commit: 67783889862fa97da772c83683b5586cf1224423
 Mirror purpose: free public CI/build/hosting only
-Release candidate: 0.8.0+8
+Release candidate: 0.9.0+9
 Production URL: https://graysonseven.github.io/clientbound/

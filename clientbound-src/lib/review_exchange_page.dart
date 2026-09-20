@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'progress_store.dart';
 import 'review_exchange.dart';
+import 'review_exchange_file_service.dart';
 import 'review_exchange_store.dart';
 
 class ReviewExchangePage extends StatelessWidget {
@@ -52,14 +53,24 @@ class ReviewExchangePage extends StatelessWidget {
               runSpacing: 10,
               children: [
                 FilledButton.icon(
-                  onPressed: () => _importLearnerPackage(context),
-                  icon: const Icon(Icons.move_to_inbox_outlined),
-                  label: const Text('Import learner package'),
+                  onPressed: () => _importLearnerPackageFile(context),
+                  icon: const Icon(Icons.file_open_outlined),
+                  label: const Text('Import package file'),
                 ),
                 OutlinedButton.icon(
+                  onPressed: () => _importDecisionFile(context),
+                  icon: const Icon(Icons.file_open_outlined),
+                  label: const Text('Import decision file'),
+                ),
+                TextButton.icon(
+                  onPressed: () => _importLearnerPackage(context),
+                  icon: const Icon(Icons.content_paste_rounded),
+                  label: const Text('Paste package JSON'),
+                ),
+                TextButton.icon(
                   onPressed: () => _importDecision(context),
-                  icon: const Icon(Icons.assignment_turned_in_outlined),
-                  label: const Text('Import reviewer decision'),
+                  icon: const Icon(Icons.content_paste_go_rounded),
+                  label: const Text('Paste decision JSON'),
                 ),
               ],
             ),
@@ -76,7 +87,7 @@ class ReviewExchangePage extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(18),
                   child: Text(
-                    'No imported learner packages yet. Paste the JSON copied from a learner submission.',
+                    'No imported learner packages yet. Import a Clientbound review JSON file or paste the package JSON.',
                     style: TextStyle(color: Colors.white70, height: 1.45),
                   ),
                 ),
@@ -93,6 +104,53 @@ class ReviewExchangePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _importLearnerPackageFile(BuildContext context) async {
+    try {
+      final raw = await ReviewExchangeFileService.pickJsonText(
+        dialogTitle: 'Choose learner review package',
+      );
+      if (raw == null) return;
+      final package = await store.importReviewPackage(raw);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Imported Module ${package.moduleId}, revision ${package.revision} from file.',
+          ),
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Review package file rejected: $error')),
+      );
+    }
+  }
+
+  Future<void> _importDecisionFile(BuildContext context) async {
+    try {
+      final raw = await ReviewExchangeFileService.pickJsonText(
+        dialogTitle: 'Choose reviewer decision',
+      );
+      if (raw == null) return;
+      final decision = ReviewDecisionPackage.parse(raw);
+      await progress.applyExternalReviewDecision(decision);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Module ${decision.moduleId} revision ${decision.revision}: ${decision.decision.label}.',
+          ),
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Review decision file rejected: $error')),
+      );
+    }
   }
 
   Future<void> _importLearnerPackage(BuildContext context) async {
@@ -231,6 +289,14 @@ class _ImportedReviewCard extends StatelessWidget {
               'Submitted ${package.submittedAt.toLocal().toIso8601String()}',
               style: const TextStyle(color: Colors.white54),
             ),
+            const SizedBox(height: 4),
+            Text(
+              'Source ${package.clientboundVersion} · Submission ${package.submissionId}',
+              style: const TextStyle(
+                color: Colors.white38,
+                fontSize: 12,
+              ),
+            ),
             const SizedBox(height: 12),
             Text(
               package.qualityGate,
@@ -282,12 +348,18 @@ class _ImportedReviewCard extends StatelessWidget {
                   icon: const Icon(Icons.replay_rounded),
                   label: const Text('REVISE'),
                 ),
-                if (decision != null)
+                if (decision != null) ...[
+                  OutlinedButton.icon(
+                    onPressed: () => _saveDecisionFile(context, decision),
+                    icon: const Icon(Icons.download_outlined),
+                    label: const Text('Save decision file'),
+                  ),
                   OutlinedButton.icon(
                     onPressed: () => _copyDecision(context, decision),
                     icon: const Icon(Icons.copy_all_rounded),
                     label: const Text('Copy decision JSON'),
                   ),
+                ],
                 TextButton.icon(
                   onPressed: () => store.remove(package.submissionId),
                   icon: const Icon(Icons.delete_outline_rounded),
@@ -315,6 +387,8 @@ class _ImportedReviewCard extends StatelessWidget {
           width: 760,
           child: SingleChildScrollView(
             child: SelectableText(
+              'SUBMISSION ID\n${package.submissionId}\n\n'
+              'SOURCE VERSION\n${package.clientboundVersion}\n\n'
               'DELIVERABLE\n${package.deliverable}\n\n'
               'QUALITY GATE\n${package.qualityGate}\n\n'
               'SCRATCH NOTES\n${package.scratchNotes.trim().isEmpty ? '—' : package.scratchNotes.trim()}\n\n'
@@ -377,6 +451,38 @@ class _ImportedReviewCard extends StatelessWidget {
       );
     }
     controller.dispose();
+  }
+
+  Future<void> _saveDecisionFile(
+    BuildContext context,
+    ReviewDecisionPackage decision,
+  ) async {
+    try {
+      final saved = await ReviewExchangeFileService.saveJson(
+        contents: decision.json,
+        filename: ReviewExchangeFileService.decisionFilename(
+          moduleId: decision.moduleId,
+          revision: decision.revision,
+          decision: decision.decision.name,
+        ),
+        dialogTitle: 'Save reviewer decision',
+      );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            saved
+                ? 'Review decision file saved.'
+                : 'Review decision save canceled.',
+          ),
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not save review decision: $error')),
+      );
+    }
   }
 
   Future<void> _copyDecision(

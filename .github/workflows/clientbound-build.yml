@@ -48,7 +48,7 @@ jobs:
 
       - name: Install Flutter stable
         run: |
-          git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
+          git clone https://github.com/flutter/flutter.git --depth 1 -b 3.47.5 "$HOME/flutter"
           echo "$HOME/flutter/bin" >> "$GITHUB_PATH"
           "$HOME/flutter/bin/flutter" --version
 

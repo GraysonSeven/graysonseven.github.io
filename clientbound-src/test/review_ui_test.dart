@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:clientbound/course_catalog.dart';
 import 'package:clientbound/progress_store.dart';
 import 'package:clientbound/review_page.dart';
 import 'package:clientbound/workspace_schema.dart';

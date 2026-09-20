@@ -343,6 +343,34 @@ class SettingsPage extends StatelessWidget {
     try {
       final raw = await BackupFileService.pickBackupText();
       if (raw == null) return;
+      final decoded = backup.validate(raw);
+      if (!context.mounted) return;
+
+      final accepted = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Restore this backup?'),
+          content: Text(
+            'App version: ${decoded['appVersion'] ?? 'unknown'}\n'
+            'Exported: ${decoded['exportedAt'] ?? 'unknown'}\n\n'
+            'Restoring will replace the current local Clientbound data. '
+            'The current state will be rolled back automatically if the '
+            'restore fails validation.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Restore backup'),
+            ),
+          ],
+        ),
+      );
+      if (accepted != true) return;
+
       await backup.restoreBackupJson(raw);
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -379,8 +407,8 @@ class SettingsPage extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Paste Clientbound backup JSON'),
-        content: SizedBox(
-          width: 620,
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 620),
           child: TextField(
             controller: controller,
             minLines: 8,

@@ -219,8 +219,8 @@ class ReviewExchangePage extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),
-        content: SizedBox(
-          width: 680,
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 680),
           child: TextField(
             controller: controller,
             minLines: 10,
@@ -383,8 +383,8 @@ class _ImportedReviewCard extends StatelessWidget {
         title: Text(
           'Module ${package.moduleId} · Revision ${package.revision}',
         ),
-        content: SizedBox(
-          width: 760,
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
           child: SingleChildScrollView(
             child: SelectableText(
               'SUBMISSION ID\n${package.submissionId}\n\n'

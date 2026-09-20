@@ -54,3 +54,5 @@ html[data-v7-motion="reduced"] .v7-engine[data-state="online"]{color:var(--cyan)
   .v7-project-deck a:hover{transform:none!important}
   .v7-world{background-attachment:initial}
 }
+
+.v7-header a:focus-visible,.v7-header button:focus-visible,.v7-cta:focus-visible,.v7-ghost:focus-visible,.v7-project-deck a:focus-visible,.v7-fallback a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}

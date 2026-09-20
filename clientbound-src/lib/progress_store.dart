@@ -27,6 +27,7 @@ class ProgressStore extends ChangeNotifier {
   Map<int, Set<int>> _taskChecks = <int, Set<int>>{};
   Map<int, String> _feedback = <int, String>{};
   Map<int, int> _lastTouched = <int, int>{};
+  String? _recoveryWarning;
 
   Set<int> get completed => _stages.entries
       .where((entry) => entry.value == ModuleStage.passed)
@@ -48,6 +49,8 @@ class ProgressStore extends ChangeNotifier {
       .length;
 
   double get ratio => passedCount / 14;
+
+  String? get recoveryWarning => _recoveryWarning;
 
   bool isCompleted(int moduleId) => stageFor(moduleId) == ModuleStage.passed;
 
@@ -78,45 +81,127 @@ class ProgressStore extends ChangeNotifier {
 
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
+    var recovered = false;
 
-    final stageJson =
-        prefs.getString(_stageKey) ?? prefs.getString('clientbound_module_stages_v2');
-    if (stageJson != null && stageJson.isNotEmpty) {
-      final decoded = jsonDecode(stageJson) as Map<String, dynamic>;
-      _stages = <int, ModuleStage>{};
-      for (final entry in decoded.entries) {
-        final id = int.tryParse(entry.key);
-        final index = entry.value is int ? entry.value as int : null;
-        if (id != null &&
-            id >= 1 &&
-            id <= 14 &&
-            index != null &&
-            index >= 0 &&
-            index < ModuleStage.values.length) {
-          _stages[id] = ModuleStage.values[index];
-        }
+    final stageRaw =
+        prefs.getString(_stageKey) ??
+        prefs.getString('clientbound_module_stages_v2');
+
+    if (stageRaw != null && stageRaw.isNotEmpty) {
+      try {
+        _stages = _decodeStages(stageRaw);
+      } catch (_) {
+        recovered = true;
+        await _preserveCorrupt(prefs, 'stages', stageRaw);
+        _stages = <int, ModuleStage>{};
       }
     } else {
       final legacy =
           prefs.getStringList(_legacyCompletedKey) ?? const <String>[];
       for (final raw in legacy) {
         final id = int.tryParse(raw);
-        if (id != null && id >= 1 && id <= 14) {
+        if (id != null && _validModule(id)) {
           _stages[id] = ModuleStage.passed;
         }
       }
     }
 
-    _notes = _decodeStringMap(
-      prefs.getString(_notesKey) ?? prefs.getString('clientbound_module_notes_v2'),
-    );
-    _feedback = _decodeStringMap(prefs.getString(_feedbackKey));
-    _lastTouched = _decodeIntMap(prefs.getString(_touchedKey));
-    _taskChecks = _decodeSetMap(prefs.getString(_tasksKey));
+    final notesRaw =
+        prefs.getString(_notesKey) ??
+        prefs.getString('clientbound_module_notes_v2');
+    final feedbackRaw = prefs.getString(_feedbackKey);
+    final touchedRaw = prefs.getString(_touchedKey);
+    final tasksRaw = prefs.getString(_tasksKey);
 
-    if (_stages.isNotEmpty) {
-      await _saveAll(prefs);
+    try {
+      _notes = _decodeStringMap(notesRaw);
+    } catch (_) {
+      recovered = true;
+      if (notesRaw != null) await _preserveCorrupt(prefs, 'notes', notesRaw);
+      _notes = <int, String>{};
     }
+
+    try {
+      _feedback = _decodeStringMap(feedbackRaw);
+    } catch (_) {
+      recovered = true;
+      if (feedbackRaw != null) {
+        await _preserveCorrupt(prefs, 'feedback', feedbackRaw);
+      }
+      _feedback = <int, String>{};
+    }
+
+    try {
+      _lastTouched = _decodeIntMap(touchedRaw);
+    } catch (_) {
+      recovered = true;
+      if (touchedRaw != null) {
+        await _preserveCorrupt(prefs, 'touched', touchedRaw);
+      }
+      _lastTouched = <int, int>{};
+    }
+
+    try {
+      _taskChecks = _decodeSetMap(tasksRaw);
+    } catch (_) {
+      recovered = true;
+      if (tasksRaw != null) await _preserveCorrupt(prefs, 'tasks', tasksRaw);
+      _taskChecks = <int, Set<int>>{};
+    }
+
+    if (recovered) {
+      _recoveryWarning =
+          'Clientbound recovered from damaged local learning data. A preserved copy was kept locally for diagnosis.';
+    }
+
+    await _saveAll(prefs);
+    notifyListeners();
+  }
+
+  Map<String, dynamic> exportData() => <String, dynamic>{
+        'stages': <String, int>{
+          for (final entry in _stages.entries)
+            '${entry.key}': entry.value.index,
+        },
+        'notes': <String, String>{
+          for (final entry in _notes.entries) '${entry.key}': entry.value,
+        },
+        'tasks': <String, List<int>>{
+          for (final entry in _taskChecks.entries)
+            '${entry.key}': (entry.value.toList()..sort()),
+        },
+        'feedback': <String, String>{
+          for (final entry in _feedback.entries)
+            '${entry.key}': entry.value,
+        },
+        'lastTouched': <String, int>{
+          for (final entry in _lastTouched.entries)
+            '${entry.key}': entry.value,
+        },
+      };
+
+  Future<void> importData(Map<String, dynamic> data) async {
+    final stagesRaw = jsonEncode(data['stages'] ?? <String, dynamic>{});
+    final notesRaw = jsonEncode(data['notes'] ?? <String, dynamic>{});
+    final tasksRaw = jsonEncode(data['tasks'] ?? <String, dynamic>{});
+    final feedbackRaw = jsonEncode(data['feedback'] ?? <String, dynamic>{});
+    final touchedRaw = jsonEncode(data['lastTouched'] ?? <String, dynamic>{});
+
+    final stages = _decodeStages(stagesRaw);
+    final notes = _decodeStringMap(notesRaw);
+    final tasks = _decodeSetMap(tasksRaw);
+    final feedback = _decodeStringMap(feedbackRaw);
+    final touched = _decodeIntMap(touchedRaw);
+
+    _stages = stages;
+    _notes = notes;
+    _taskChecks = tasks;
+    _feedback = feedback;
+    _lastTouched = touched;
+    _recoveryWarning = null;
+
+    final prefs = await SharedPreferences.getInstance();
+    await _saveAll(prefs);
     notifyListeners();
   }
 
@@ -130,9 +215,7 @@ class ProgressStore extends ChangeNotifier {
     }
     _touch(moduleId);
     notifyListeners();
-
-    final prefs = await SharedPreferences.getInstance();
-    await _saveAll(prefs);
+    await _persist();
   }
 
   Future<void> setCompleted(int moduleId, bool value) {
@@ -156,9 +239,7 @@ class ProgressStore extends ChangeNotifier {
     }
     _touch(moduleId);
     notifyListeners();
-
-    final prefs = await SharedPreferences.getInstance();
-    await _saveAll(prefs);
+    await _persist();
   }
 
   Future<void> setNotes(int moduleId, String value) async {
@@ -169,14 +250,13 @@ class ProgressStore extends ChangeNotifier {
     } else {
       _notes[moduleId] = value;
     }
-    if (stageFor(moduleId) == ModuleStage.notStarted && value.trim().isNotEmpty) {
+    if (stageFor(moduleId) == ModuleStage.notStarted &&
+        value.trim().isNotEmpty) {
       _stages[moduleId] = ModuleStage.inProgress;
     }
     _touch(moduleId);
     notifyListeners();
-
-    final prefs = await SharedPreferences.getInstance();
-    await _saveAll(prefs);
+    await _persist();
   }
 
   Future<void> recordPass(int moduleId, {String feedback = ''}) async {
@@ -187,9 +267,7 @@ class ProgressStore extends ChangeNotifier {
     }
     _touch(moduleId);
     notifyListeners();
-
-    final prefs = await SharedPreferences.getInstance();
-    await _saveAll(prefs);
+    await _persist();
   }
 
   Future<void> returnForRevision(
@@ -203,9 +281,7 @@ class ProgressStore extends ChangeNotifier {
         : feedback.trim();
     _touch(moduleId);
     notifyListeners();
-
-    final prefs = await SharedPreferences.getInstance();
-    await _saveAll(prefs);
+    await _persist();
   }
 
   Future<void> reset() async {
@@ -214,6 +290,7 @@ class ProgressStore extends ChangeNotifier {
     _taskChecks = <int, Set<int>>{};
     _feedback = <int, String>{};
     _lastTouched = <int, int>{};
+    _recoveryWarning = null;
     notifyListeners();
 
     final prefs = await SharedPreferences.getInstance();
@@ -237,76 +314,111 @@ class ProgressStore extends ChangeNotifier {
     _lastTouched[moduleId] = DateTime.now().millisecondsSinceEpoch;
   }
 
+  Future<void> _persist() async {
+    final prefs = await SharedPreferences.getInstance();
+    await _saveAll(prefs);
+  }
+
   Future<void> _saveAll(SharedPreferences prefs) async {
-    await prefs.setString(
-      _stageKey,
-      jsonEncode(<String, int>{
-        for (final entry in _stages.entries)
-          '${entry.key}': entry.value.index,
-      }),
-    );
-    await prefs.setString(
-      _notesKey,
-      jsonEncode(<String, String>{
-        for (final entry in _notes.entries) '${entry.key}': entry.value,
-      }),
-    );
-    await prefs.setString(
-      _tasksKey,
-      jsonEncode(<String, List<int>>{
-        for (final entry in _taskChecks.entries)
-          '${entry.key}': (entry.value.toList()..sort()),
-      }),
-    );
-    await prefs.setString(
-      _feedbackKey,
-      jsonEncode(<String, String>{
-        for (final entry in _feedback.entries) '${entry.key}': entry.value,
-      }),
-    );
+    await prefs.setString(_stageKey, jsonEncode(exportData()['stages']));
+    await prefs.setString(_notesKey, jsonEncode(exportData()['notes']));
+    await prefs.setString(_tasksKey, jsonEncode(exportData()['tasks']));
+    await prefs.setString(_feedbackKey, jsonEncode(exportData()['feedback']));
     await prefs.setString(
       _touchedKey,
-      jsonEncode(<String, int>{
-        for (final entry in _lastTouched.entries)
-          '${entry.key}': entry.value,
-      }),
+      jsonEncode(exportData()['lastTouched']),
     );
+  }
+
+  Map<int, ModuleStage> _decodeStages(String raw) {
+    final decoded = jsonDecode(raw);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Module stages are invalid.');
+    }
+    final result = <int, ModuleStage>{};
+    for (final entry in decoded.entries) {
+      final id = int.tryParse(entry.key);
+      final index = entry.value is int ? entry.value as int : null;
+      if (id == null || !_validModule(id)) continue;
+      if (index == null ||
+          index < 0 ||
+          index >= ModuleStage.values.length) {
+        throw const FormatException('Module stage index is invalid.');
+      }
+      result[id] = ModuleStage.values[index];
+    }
+    return result;
   }
 
   Map<int, String> _decodeStringMap(String? raw) {
     if (raw == null || raw.isEmpty) return <int, String>{};
-    final decoded = jsonDecode(raw) as Map<String, dynamic>;
-    return <int, String>{
-      for (final entry in decoded.entries)
-        if (int.tryParse(entry.key) case final int id)
-          if (_validModule(id) && entry.value is String)
-            id: entry.value as String,
-    };
+    final decoded = jsonDecode(raw);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('String map is invalid.');
+    }
+    final result = <int, String>{};
+    for (final entry in decoded.entries) {
+      final id = int.tryParse(entry.key);
+      if (id == null || !_validModule(id)) continue;
+      if (entry.value is! String) {
+        throw const FormatException('String map value is invalid.');
+      }
+      result[id] = entry.value as String;
+    }
+    return result;
   }
 
   Map<int, int> _decodeIntMap(String? raw) {
     if (raw == null || raw.isEmpty) return <int, int>{};
-    final decoded = jsonDecode(raw) as Map<String, dynamic>;
-    return <int, int>{
-      for (final entry in decoded.entries)
-        if (int.tryParse(entry.key) case final int id)
-          if (_validModule(id) && entry.value is int)
-            id: entry.value as int,
-    };
+    final decoded = jsonDecode(raw);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Integer map is invalid.');
+    }
+    final result = <int, int>{};
+    for (final entry in decoded.entries) {
+      final id = int.tryParse(entry.key);
+      if (id == null || !_validModule(id)) continue;
+      if (entry.value is! int) {
+        throw const FormatException('Integer map value is invalid.');
+      }
+      result[id] = entry.value as int;
+    }
+    return result;
   }
 
   Map<int, Set<int>> _decodeSetMap(String? raw) {
     if (raw == null || raw.isEmpty) return <int, Set<int>>{};
-    final decoded = jsonDecode(raw) as Map<String, dynamic>;
+    final decoded = jsonDecode(raw);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Task map is invalid.');
+    }
     final result = <int, Set<int>>{};
     for (final entry in decoded.entries) {
       final id = int.tryParse(entry.key);
-      if (id == null || !_validModule(id) || entry.value is! List) continue;
-      result[id] = (entry.value as List)
-          .whereType<int>()
-          .where((index) => index >= 0)
-          .toSet();
+      if (id == null || !_validModule(id)) continue;
+      if (entry.value is! List) {
+        throw const FormatException('Task list is invalid.');
+      }
+      final values = <int>{};
+      for (final value in entry.value as List<dynamic>) {
+        if (value is! int || value < 0) {
+          throw const FormatException('Task index is invalid.');
+        }
+        values.add(value);
+      }
+      result[id] = values;
     }
     return result;
+  }
+
+  Future<void> _preserveCorrupt(
+    SharedPreferences prefs,
+    String section,
+    String raw,
+  ) {
+    return prefs.setString(
+      'clientbound_recovered_progress_${section}_${DateTime.now().millisecondsSinceEpoch}',
+      raw,
+    );
   }
 }

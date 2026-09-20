@@ -1,13 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_settings_store.dart';
 import 'community_hub_page.dart';
 import 'community_store.dart';
 import 'course_catalog.dart';
+import 'more_page.dart';
+import 'onboarding_page.dart';
 import 'progress_store.dart';
 import 'review_page.dart';
+import 'settings_page.dart';
 import 'toolkit_page.dart';
+import 'update_store.dart';
 
 const _ink = Color(0xFF07111F);
 const _panel = Color(0xFF0E1B2D);
@@ -35,10 +42,16 @@ class ClientboundApp extends StatelessWidget {
     super.key,
     required this.progress,
     required this.community,
+    required this.settings,
+    required this.updates,
+    required this.appVersion,
   });
 
   final ProgressStore progress;
   final CommunityStore community;
+  final AppSettingsStore settings;
+  final UpdateStore updates;
+  final String appVersion;
 
   @override
   Widget build(BuildContext context) {
@@ -47,26 +60,40 @@ class ClientboundApp extends StatelessWidget {
       brightness: Brightness.dark,
       surface: _panel,
     );
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Clientbound',
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: _ink,
-        colorScheme: scheme,
-        cardTheme: const CardThemeData(
-          color: _panel,
-          elevation: 0,
-          margin: EdgeInsets.zero,
+
+    return AnimatedBuilder(
+      animation: settings,
+      builder: (context, _) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Clientbound',
+        theme: ThemeData(
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: _ink,
+          colorScheme: scheme,
+          cardTheme: const CardThemeData(
+            color: _panel,
+            elevation: 0,
+            margin: EdgeInsets.zero,
+          ),
+          inputDecorationTheme: const InputDecorationTheme(
+            filled: true,
+            fillColor: _panelSoft,
+            border: OutlineInputBorder(borderSide: BorderSide.none),
+          ),
         ),
-        inputDecorationTheme: const InputDecorationTheme(
-          filled: true,
-          fillColor: _panelSoft,
-          border: OutlineInputBorder(borderSide: BorderSide.none),
-        ),
+        home: settings.onboardingComplete
+            ? AppShell(
+                progress: progress,
+                community: community,
+                settings: settings,
+                updates: updates,
+                appVersion: appVersion,
+              )
+            : OnboardingPage(
+                onComplete: settings.completeOnboarding,
+              ),
       ),
-      home: AppShell(progress: progress, community: community),
     );
   }
 }
@@ -76,10 +103,16 @@ class AppShell extends StatefulWidget {
     super.key,
     required this.progress,
     required this.community,
+    required this.settings,
+    required this.updates,
+    required this.appVersion,
   });
 
   final ProgressStore progress;
   final CommunityStore community;
+  final AppSettingsStore settings;
+  final UpdateStore updates;
+  final String appVersion;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -88,68 +121,140 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _index = 0;
 
-  static const _labels = ['Home', 'Classroom', 'Community', 'Toolkit', 'Review'];
-  static const _icons = [
+  static const _desktopLabels = <String>[
+    'Home',
+    'Classroom',
+    'Practice',
+    'Toolkit',
+    'Review',
+    'Settings',
+  ];
+
+  static const _desktopIcons = <IconData>[
     Icons.home_outlined,
     Icons.school_outlined,
     Icons.forum_outlined,
     Icons.folder_outlined,
     Icons.fact_check_outlined,
+    Icons.settings_outlined,
+  ];
+
+  static const _mobileLabels = <String>[
+    'Home',
+    'Learn',
+    'Practice',
+    'Toolkit',
+    'More',
+  ];
+
+  static const _mobileIcons = <IconData>[
+    Icons.home_outlined,
+    Icons.school_outlined,
+    Icons.forum_outlined,
+    Icons.folder_outlined,
+    Icons.more_horiz_rounded,
   ];
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.progress,
-      builder: (context, _) {
-        final pages = <Widget>[
-          HomePage(
+      builder: (context, _) => LayoutBuilder(
+        builder: (context, constraints) {
+          final wide = constraints.maxWidth >= 900;
+
+          void openReview() {
+            if (wide) {
+              setState(() => _index = 4);
+              return;
+            }
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => ReviewPage(progress: widget.progress),
+              ),
+            );
+          }
+
+          final home = HomePage(
             progress: widget.progress,
             onOpenCourse: () => setState(() => _index = 1),
-            onOpenReview: () => setState(() => _index = 4),
-          ),
-          CoursePage(progress: widget.progress),
-          CommunityHubPage(store: widget.community),
-          const ToolkitPage(),
-          ReviewPage(progress: widget.progress),
-        ];
+            onOpenReview: openReview,
+          );
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final wide = constraints.maxWidth >= 900;
-            return Scaffold(
-              body: SafeArea(
-                child: Row(
-                  children: [
-                    if (wide)
-                      _SideNav(
-                        index: _index,
-                        labels: _labels,
-                        icons: _icons,
-                        onSelected: (value) => setState(() => _index = value),
-                      ),
-                    Expanded(child: pages[_index]),
-                  ],
-                ),
+          final desktopPages = <Widget>[
+            home,
+            CoursePage(progress: widget.progress),
+            CommunityHubPage(store: widget.community),
+            const ToolkitPage(),
+            ReviewPage(progress: widget.progress),
+            SettingsPage(
+              progress: widget.progress,
+              community: widget.community,
+              settings: widget.settings,
+              updates: widget.updates,
+              appVersion: widget.appVersion,
+            ),
+          ];
+
+          final mobilePages = <Widget>[
+            home,
+            CoursePage(progress: widget.progress),
+            CommunityHubPage(store: widget.community),
+            const ToolkitPage(),
+            MorePage(
+              progress: widget.progress,
+              community: widget.community,
+              settings: widget.settings,
+              updates: widget.updates,
+              appVersion: widget.appVersion,
+            ),
+          ];
+
+          final desktopIndex =
+              _index.clamp(0, desktopPages.length - 1);
+          final mobileIndex = _index >= 4 ? 4 : _index;
+
+          return Scaffold(
+            body: SafeArea(
+              child: Row(
+                children: [
+                  if (wide)
+                    _SideNav(
+                      index: desktopIndex,
+                      labels: _desktopLabels,
+                      icons: _desktopIcons,
+                      onSelected: (value) =>
+                          setState(() => _index = value),
+                    ),
+                  Expanded(
+                    child: wide
+                        ? desktopPages[desktopIndex]
+                        : mobilePages[mobileIndex],
+                  ),
+                ],
               ),
-              bottomNavigationBar: wide
-                  ? null
-                  : NavigationBar(
-                      selectedIndex: _index,
-                      onDestinationSelected: (value) => setState(() => _index = value),
-                      destinations: List.generate(
-                        _labels.length,
-                        (i) => NavigationDestination(
-                          icon: Icon(_icons[i]),
-                          selectedIcon: Icon(_icons[i], color: _accent),
-                          label: _labels[i],
+            ),
+            bottomNavigationBar: wide
+                ? null
+                : NavigationBar(
+                    selectedIndex: mobileIndex,
+                    onDestinationSelected: (value) =>
+                        setState(() => _index = value),
+                    destinations: List.generate(
+                      _mobileLabels.length,
+                      (i) => NavigationDestination(
+                        icon: Icon(_mobileIcons[i]),
+                        selectedIcon: Icon(
+                          _mobileIcons[i],
+                          color: _accent,
                         ),
+                        label: _mobileLabels[i],
                       ),
                     ),
-            );
-          },
-        );
-      },
+                  ),
+          );
+        },
+      ),
     );
   }
 }
@@ -738,6 +843,8 @@ class ModuleDetailPage extends StatefulWidget {
 
 class _ModuleDetailPageState extends State<ModuleDetailPage> {
   late final TextEditingController _notesController;
+  Timer? _notesSaveTimer;
+  String _notesSaveState = 'Saved locally';
 
   CourseModule get module => widget.module;
   ProgressStore get progress => widget.progress;
@@ -750,16 +857,26 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
 
   @override
   void dispose() {
+    _notesSaveTimer?.cancel();
+    unawaited(progress.setNotes(module.id, _notesController.text));
     _notesController.dispose();
     super.dispose();
   }
 
+  void _scheduleNotesSave() {
+    _notesSaveTimer?.cancel();
+    setState(() => _notesSaveState = 'Saving…');
+    _notesSaveTimer = Timer(
+      const Duration(milliseconds: 650),
+      _saveNotes,
+    );
+  }
+
   Future<void> _saveNotes() async {
+    _notesSaveTimer?.cancel();
     await progress.setNotes(module.id, _notesController.text);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Module notes saved locally.')),
-    );
+    setState(() => _notesSaveState = 'Saved locally');
   }
 
   @override
@@ -975,17 +1092,41 @@ class _ModuleDetailPageState extends State<ModuleDetailPage> {
                               controller: _notesController,
                               minLines: 5,
                               maxLines: 10,
+                              onChanged: (_) => _scheduleNotesSave(),
                               decoration: const InputDecoration(
                                 hintText:
                                     'Write your working notes for this module...',
                                 alignLabelWithHint: true,
                               ),
                             ),
-                            const SizedBox(height: 12),
-                            OutlinedButton.icon(
-                              onPressed: _saveNotes,
-                              icon: const Icon(Icons.save_outlined),
-                              label: const Text('Save notes locally'),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Icon(
+                                  _notesSaveState == 'Saving…'
+                                      ? Icons.sync_rounded
+                                      : Icons.cloud_done_outlined,
+                                  size: 16,
+                                  color: Colors.white54,
+                                ),
+                                const SizedBox(width: 7),
+                                Text(
+                                  _notesSaveState,
+                                  style: const TextStyle(
+                                    color: Colors.white54,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const Spacer(),
+                                TextButton.icon(
+                                  onPressed: _saveNotes,
+                                  icon: const Icon(
+                                    Icons.save_outlined,
+                                    size: 17,
+                                  ),
+                                  label: const Text('Save now'),
+                                ),
+                              ],
                             ),
                           ],
                         ),

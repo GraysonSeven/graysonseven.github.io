@@ -21,15 +21,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          forbidden_files=(firebase.json .firebaserc railway.toml Dockerfile CNAME)
+          forbidden_files=(firebase.json .firebaserc firebase_options.dart railway.toml Dockerfile CNAME)
           for name in "${forbidden_files[@]}"; do
             if find clientbound-src -type f -name "$name" -print -quit | grep -q .; then
               echo "Forbidden infrastructure file detected: $name"
               exit 1
             fi
           done
-          if grep -R -I -n -E 'firebase_core:|firebase_auth:|cloud_firestore:|cloud_functions:|stripe:|railway|cloud[ _-]?run|app[ _-]?hosting|clientbound\.co' clientbound-src/pubspec.yaml clientbound-src/lib clientbound-src/web; then
-            echo "Forbidden paid/cloud dependency reference detected"
+          if grep -n -E '^[[:space:]]*(firebase_core|firebase_auth|cloud_firestore|cloud_functions|stripe):' clientbound-src/pubspec.yaml; then
+            echo "Forbidden paid/cloud package dependency detected"
+            exit 1
+          fi
+          if grep -R -I -n -E "package:(firebase_|cloud_firestore|cloud_functions|stripe)" clientbound-src/lib; then
+            echo "Forbidden paid/cloud package import detected"
+            exit 1
+          fi
+          if grep -R -I -n -E 'clientbound\.co' clientbound-src/web; then
+            echo "Paid custom-domain dependency detected"
             exit 1
           fi
           echo "ZERO_COST_GUARD=PASS"

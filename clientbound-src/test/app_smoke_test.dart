@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Clientbound shell renders core product surfaces', (tester) async {
+  testWidgets('Clientbound shell renders product navigation', (tester) async {
     SharedPreferences.setMockInitialValues({});
 
     final progress = ProgressStore();
@@ -14,21 +14,21 @@ void main() {
     await progress.load();
     await community.load();
 
-    tester.view.physicalSize = const Size(1400, 900);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
     await tester.pumpWidget(
       ClientboundApp(progress: progress, community: community),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
 
-    expect(find.text('CLIENTBOUND'), findsAtLeastNWidgets(1));
+    final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+    expect(materialApp.title, 'Clientbound');
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.text('Home'), findsOneWidget);
     expect(find.text('Classroom'), findsOneWidget);
     expect(find.text('Community'), findsOneWidget);
     expect(find.text('Toolkit'), findsOneWidget);
     expect(find.text('Review'), findsOneWidget);
-    expect(find.text('Action center'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
   });
 }

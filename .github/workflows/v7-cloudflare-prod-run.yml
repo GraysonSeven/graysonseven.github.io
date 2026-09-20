@@ -1,0 +1,187 @@
+name: iCharles V7 Cloudflare Production Run
+
+on:
+  push:
+    branches:
+      - v7-cloudflare-prod-run-267834dc
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-and-qualify:
+    name: Deploy accepted main and qualify Cloudflare
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout accepted main commit
+        uses: actions/checkout@v4
+        with:
+          ref: 267834dcd5d4f9c7c97a49ffed6b6b30f00d0096
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Resolve Cloudflare authentication
+        shell: pwsh
+        env:
+          CF_TOKEN_A: \${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_TOKEN_B: \${{ secrets.CF_API_TOKEN }}
+          CF_TOKEN_C: \${{ secrets.CLOUDFLARE_TOKEN }}
+          CF_TOKEN_D: \${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
+          CF_ACCOUNT_A: \${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_ACCOUNT_B: \${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $token = @($env:CF_TOKEN_A,$env:CF_TOKEN_B,$env:CF_TOKEN_C,$env:CF_TOKEN_D) |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Select-Object -First 1
+
+          if (-not $token) {
+            throw 'No usable Cloudflare API token is available in repository secrets.'
+          }
+
+          $account = @($env:CF_ACCOUNT_A,$env:CF_ACCOUNT_B) |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Select-Object -First 1
+
+          if (-not $account) {
+            $headers = @{ Authorization = "Bearer $token" }
+            $accounts = Invoke-RestMethod -Method Get -Uri 'https://api.cloudflare.com/client/v4/accounts?per_page=50' -Headers $headers
+            if (-not $accounts.success) { throw 'Cloudflare account enumeration failed.' }
+
+            $matches = @()
+            foreach ($item in $accounts.result) {
+              try {
+                $project = Invoke-RestMethod -Method Get -Uri "https://api.cloudflare.com/client/v4/accounts/$($item.id)/pages/projects/icharles" -Headers $headers
+                if ($project.success -and $project.result.name -eq 'icharles') {
+                  $matches += $item.id
+                }
+              } catch {
+                # Account does not contain the Pages project or token cannot read it.
+              }
+            }
+
+            if ($matches.Count -ne 1) {
+              throw "Unable to resolve exactly one Cloudflare account containing Pages project 'icharles'. Matches=$($matches.Count)"
+            }
+            $account = $matches[0]
+          }
+
+          "CLOUDFLARE_API_TOKEN=$token" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CLOUDFLARE_ACCOUNT_ID=$account" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          Write-Host "Cloudflare authentication resolved for Pages project icharles."
+
+      - name: Verify accepted release tree
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $head = git rev-parse HEAD
+          if ($head -ne '267834dcd5d4f9c7c97a49ffed6b6b30f00d0096') {
+            throw "Unexpected checkout: $head"
+          }
+
+          $iko = (Get-FileHash '.\assets\iko-prime\identity\iko-prime-logo-locked.png' -Algorithm SHA256).Hash.ToUpperInvariant()
+          if ($iko -ne 'DDA9E772F1267325918D3608273124BD21A507B57BB49A9E2148EBFF0CBBB5FD') {
+            throw "Locked Iko SHA mismatch: $iko"
+          }
+
+          $experience = Get-Content '.\experience\index.html' -Raw
+          if (-not $experience.Contains('data-v7-version="7.4.0"')) { throw 'Accepted V7.4.0 marker missing.' }
+          if (-not $experience.Contains('noindex,nofollow,noarchive')) { throw 'Hidden-route noindex marker missing.' }
+
+          $home = Get-Content '.\index.html' -Raw
+          if ($home.Contains('data-v7-home="production"')) { throw 'Public Home promotion leaked into accepted main.' }
+
+          node --check .\experience\experience.js
+          node .\tools\v7-foundation-qa.mjs
+          node .\tools\site-qa.mjs
+
+      - name: Install Playwright Core
+        shell: pwsh
+        run: npm install --no-save --package-lock=false playwright-core@1.55.0
+
+      - name: Predeploy Edge qualification
+        shell: pwsh
+        run: |
+          node .\tools\v7-runtime-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-predeploy-runtime
+          node .\tools\v7-resilience-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-predeploy-resilience
+          node .\tools\v7-theme-contract-qa.mjs --channel=msedge --serve-root=. --output=artifacts\v7-predeploy-theme
+
+      - name: Build exact committed tree
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Join-Path $env:RUNNER_TEMP 'icharles-accepted-main.zip'
+          $deploy = Join-Path $env:RUNNER_TEMP 'icharles-accepted-main'
+          git archive --format=zip HEAD -o $archive
+          if ($LASTEXITCODE -ne 0) { throw 'git archive failed' }
+          Expand-Archive -LiteralPath $archive -DestinationPath $deploy -Force
+          "DEPLOY_DIR=$deploy" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+          $iko = (Get-FileHash (Join-Path $deploy 'assets\iko-prime\identity\iko-prime-logo-locked.png') -Algorithm SHA256).Hash.ToUpperInvariant()
+          if ($iko -ne 'DDA9E772F1267325918D3608273124BD21A507B57BB49A9E2148EBFF0CBBB5FD') {
+            throw "Archive locked Iko SHA mismatch: $iko"
+          }
+
+      - name: Deploy accepted main to Cloudflare Pages production
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          npx --yes wrangler@latest pages deploy "$env:DEPLOY_DIR" --project-name icharles --branch main --commit-hash 267834dcd5d4f9c7c97a49ffed6b6b30f00d0096 --commit-message "V7 hidden experience production gate"
+          if ($LASTEXITCODE -ne 0) { throw "Wrangler deployment failed with exit code $LASTEXITCODE" }
+
+      - name: Wait for production V7.4 hidden route
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $deadline = (Get-Date).AddMinutes(5)
+          $ready = $false
+          do {
+            try {
+              $stamp = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+              $r = Invoke-WebRequest -UseBasicParsing -Uri "https://icharles.pages.dev/experience/?qa=$stamp" -Headers @{ 'Cache-Control'='no-cache' }
+              if ($r.StatusCode -eq 200 -and $r.Content.Contains('data-v7-version="7.4.0"') -and $r.Content.Contains('noindex,nofollow,noarchive')) {
+                $root = Invoke-WebRequest -UseBasicParsing -Uri "https://icharles.pages.dev/?qa=$stamp" -Headers @{ 'Cache-Control'='no-cache' }
+                if ($root.Content.Contains('data-v7-home="production"')) {
+                  throw 'Public Home was promoted unexpectedly during hidden-route gate.'
+                }
+                $ready = $true
+                break
+              }
+            } catch {
+              Write-Host "Probe not ready: $($_.Exception.Message)"
+            }
+            Start-Sleep -Seconds 10
+          } while ((Get-Date) -lt $deadline)
+
+          if (-not $ready) {
+            throw 'Cloudflare production did not expose accepted hidden V7.4.0 within five minutes.'
+          }
+          Write-Host 'Cloudflare hidden /experience/ now exposes accepted V7.4.0.'
+
+      - name: Production Microsoft Edge qualification
+        shell: pwsh
+        run: |
+          node .\tools\v7-runtime-qa.mjs --channel=msedge --base=https://icharles.pages.dev/experience/ --output=artifacts\v7-production-runtime
+          node .\tools\v7-resilience-qa.mjs --channel=msedge --base=https://icharles.pages.dev/experience/ --output=artifacts\v7-production-resilience
+          node .\tools\v7-theme-contract-qa.mjs --channel=msedge --origin=https://icharles.pages.dev --output=artifacts\v7-production-theme
+
+      - name: Upload production evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-cloudflare-production-evidence-267834dc
+          path: |
+            artifacts/v7-predeploy-runtime
+            artifacts/v7-predeploy-resilience
+            artifacts/v7-predeploy-theme
+            artifacts/v7-production-runtime
+            artifacts/v7-production-resilience
+            artifacts/v7-production-theme
+          if-no-files-found: warn

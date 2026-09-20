@@ -57,6 +57,12 @@ class ToolkitPage extends StatelessWidget {
       content:
           'Company · website · lane · contact · role · contact route · fit score · priority · status · first touch · last touch · next action · next-action date · source URL · reply/outcome · notes.',
     ),
+    (
+      title: 'Client Onboarding Checklist',
+      category: 'Delivery',
+      content:
+          'Commercial: scope, compensation, payment timing, duration.\nOffer/market: product, ICP, exclusions, geography, target roles, qualification rule.\nBoundaries: approved claims, pricing/technical escalation, authority limits.\nTools: CRM, dialer, email, calendar, lead source, reporting location.\nWorkflow: daily expectation, follow-up cadence, handoff, reporting, response-time expectations.',
+    ),
   ];
 
   @override

@@ -22,8 +22,10 @@ void main() {
 
     await store.toggleLike(userPost.id);
     await store.addComment(userPost.id, 'Needs one clear question.');
+    await store.toggleReported(userPost.id);
 
     expect(store.posts.first.liked, isTrue);
+    expect(store.posts.first.reported, isTrue);
     expect(store.posts.first.comments.single, contains('clear question'));
   });
 }

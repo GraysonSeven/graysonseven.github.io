@@ -13,6 +13,7 @@ class CommunityPost {
     required this.createdAt,
     List<String>? comments,
     this.liked = false,
+    this.reported = false,
   }) : comments = comments ?? <String>[];
 
   final String id;
@@ -23,6 +24,7 @@ class CommunityPost {
   final int createdAt;
   final List<String> comments;
   bool liked;
+  bool reported;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -33,6 +35,7 @@ class CommunityPost {
         'createdAt': createdAt,
         'comments': comments,
         'liked': liked,
+        'reported': reported,
       };
 
   static CommunityPost fromJson(Map<String, dynamic> json) => CommunityPost(
@@ -46,6 +49,7 @@ class CommunityPost {
             .whereType<String>()
             .toList(),
         liked: json['liked'] as bool? ?? false,
+        reported: json['reported'] as bool? ?? false,
       );
 }
 
@@ -115,6 +119,14 @@ class CommunityStore extends ChangeNotifier {
     final clean = comment.trim();
     if (post == null || clean.isEmpty) return;
     post.comments.add(clean);
+    notifyListeners();
+    await _persist();
+  }
+
+  Future<void> toggleReported(String id) async {
+    final post = _find(id);
+    if (post == null) return;
+    post.reported = !post.reported;
     notifyListeners();
     await _persist();
   }

@@ -66,6 +66,13 @@ class _CommunityHubPageState extends State<CommunityHubPage> {
                     Row(
                       children: [
                         Chip(label: Text(post.category)),
+                        if (post.reported) ...[
+                          const SizedBox(width: 8),
+                          const Chip(
+                            avatar: Icon(Icons.flag_outlined, size: 16),
+                            label: Text('Reported locally'),
+                          ),
+                        ],
                         const Spacer(),
                         Text(
                           post.author,
@@ -135,6 +142,11 @@ class _CommunityHubPageState extends State<CommunityHubPage> {
                           onPressed: () => _comment(post.id),
                           icon: const Icon(Icons.chat_bubble_outline_rounded),
                           label: Text('Comment ${post.comments.length}'),
+                        ),
+                        TextButton.icon(
+                          onPressed: () => widget.store.toggleReported(post.id),
+                          icon: const Icon(Icons.flag_outlined),
+                          label: Text(post.reported ? 'Unreport' : 'Report'),
                         ),
                       ],
                     ),

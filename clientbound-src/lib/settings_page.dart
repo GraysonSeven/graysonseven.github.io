@@ -307,7 +307,7 @@ class SettingsPage extends StatelessWidget {
   ) async {
     final json = backup.createBackupJson();
     final day =
-        DateTime.now().toUtc().toIso8601String().split("T").first;
+        DateTime.now().toUtc().toIso8601String().split('T').first;
     final filename = 'clientbound-backup-$day.json';
     final downloaded = await downloadBackupText(json, filename);
     if (!downloaded) {

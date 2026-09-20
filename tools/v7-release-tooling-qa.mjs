@@ -12,7 +12,8 @@ if (!fs.existsSync(scriptPath)) {
 } else {
   const ps1 = fs.readFileSync(scriptPath, "utf8");
   const required = [
-    "git status --porcelain",
+    "status --porcelain",
+    "Read-NativeText git -C $repoRoot",
     "fetch origin main",
     "branch --show-current",
     "rev-parse origin/main",

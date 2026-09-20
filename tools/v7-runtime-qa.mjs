@@ -71,6 +71,7 @@ fs.mkdirSync(outputDir, { recursive: true });
 const failures = [];
 const consoleErrors = [];
 const pageErrors = [];
+const networkErrors = [];
 let server = null;
 let browser = null;
 let report = null;
@@ -93,6 +94,9 @@ try {
     if (message.type() === "error") consoleErrors.push(message.text());
   });
   page.on("pageerror", error => pageErrors.push(error.message));
+  page.on("response", response => {
+    if (response.status() >= 400) networkErrors.push(response.status() + " " + response.url());
+  });
 
   await page.goto(baseUrl, { waitUntil: "networkidle", timeout: 30000 });
   await page.waitForFunction(() => window.__V7_DEBUG__?.ready === true, null, { timeout: 20000 });
@@ -134,6 +138,7 @@ try {
   assert(layers.engineState === "online" && /ONLINE/.test(layers.engineText), "3D ENGINE // ONLINE indicator is missing");
   assert(layers.fallbackHidden === true, "3D fallback is visible despite successful initialization");
   assert(layers.canvasSize[0] > 0 && layers.canvasSize[1] > 0, "Canvas has zero render size");
+  assert(networkErrors.length === 0, "Unexpected HTTP errors: " + networkErrors.join(", "));
 
   const shots = [];
   for (const entry of checkpoints) {
@@ -174,6 +179,7 @@ try {
     checkpoints: shots,
     pageErrors,
     consoleErrors,
+    networkErrors,
     failures
   };
 } catch (error) {
@@ -185,6 +191,7 @@ try {
     checkedAt: new Date().toISOString(),
     pageErrors,
     consoleErrors,
+    networkErrors,
     failures
   };
 } finally {

@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../lib/home_dashboard_model.dart';
-import '../lib/progress_store.dart';
-import '../lib/workspace_schema.dart';
-import '../lib/workspace_store.dart';
+import 'package:clientbound/home_dashboard_model.dart';
+import 'package:clientbound/progress_store.dart';
+import 'package:clientbound/workspace_schema.dart';
+import 'package:clientbound/workspace_store.dart';
 
 void main() {
   setUp(() {

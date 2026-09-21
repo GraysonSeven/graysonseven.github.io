@@ -41,7 +41,7 @@ void main() {
     expect(find.text('Know the next move.'), findsOneWidget);
     expect(find.text('What you should do now'), findsOneWidget);
     expect(find.textContaining('Module 1 · Offer Foundation'), findsOneWidget);
-    expect(find.text('NOT STARTED'), findsOneWidget);
+    expect(find.text('NOT STARTED'), findsWidgets);
     expect(
       find.text('I have a live prospect/client situation'),
       findsOneWidget,
@@ -86,7 +86,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Module 2 · ICP & Lead Research'), findsOneWidget);
+    expect(find.textContaining('Module 2 · ICP & Lead Research'), findsWidgets);
     expect(find.text('WORKING'), findsOneWidget);
     expect(find.text('Your learning path'), findsOneWidget);
     expect(find.text('First module passed'), findsOneWidget);

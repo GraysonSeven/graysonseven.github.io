@@ -35,6 +35,7 @@
   // Mobile navigation for older pages that did not have a menu button.
   document.querySelectorAll("header").forEach(header => {
     if (header.closest(".sample-site")) return;
+    if (document.documentElement.dataset.v7Nav === "shared") return;
     const nav = header.querySelector(":scope > nav.v4-unified-nav");
     if (!nav || header.querySelector(".menu-toggle,.v4-mobile-menu")) return;
     const button = document.createElement("button");
@@ -148,6 +149,7 @@
 (() => {
   const body = document.body;
   if (!body || document.querySelector(".v423-panel")) return;
+  if (document.documentElement.dataset.v7Nav === "shared") return;
 
   // Retire the old bottom-corner floating navigation controls.
   document.querySelectorAll(

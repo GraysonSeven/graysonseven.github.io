@@ -1,0 +1,47 @@
+name: iCharles V7.5 Mobile + Studio QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "website-studio/**"
+      - "assets/v7/v7-mobile-nav.*"
+      - "assets/v7/v7-inner-shell.css"
+      - "assets/v7/v7-studio-scene.js"
+      - "tools/v7-mobile-studio-qa.mjs"
+      - ".github/workflows/v7-mobile-studio-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: Mobile nav + Studio Forge Edge QA
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse JavaScript
+        shell: pwsh
+        run: |
+          node --check .\assets\v7\v7-mobile-nav.js
+          node --check .\assets\v7\v7-studio-scene.js
+          node --check .\tools\v7-mobile-studio-qa.mjs
+      - name: Install Playwright Core
+        shell: pwsh
+        run: npm install --no-save --package-lock=false playwright-core@1.55.0
+      - name: Run Microsoft Edge qualification
+        shell: pwsh
+        run: node .\tools\v7-mobile-studio-qa.mjs
+      - name: Upload V7.5 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-5-mobile-studio-evidence
+          path: artifacts/v7-5-mobile-studio
+          if-no-files-found: warn

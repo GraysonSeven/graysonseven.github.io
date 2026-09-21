@@ -21,7 +21,7 @@ void main() {
 
     expect(model.currentModule.id, 1);
     expect(model.status, HomeModuleStatus.notStarted);
-    expect(model.nextAction, contains('Primary market'));
+    expect(model.nextAction, contains('Target niche'));
     expect(model.pathModuleIds, <int>[1, 2]);
   });
 

@@ -38,3 +38,10 @@ jobs:
       - name: Run Microsoft Edge qualification
         shell: pwsh
         run: node .\tools\v7-mobile-studio-qa.mjs
+      - name: Upload V7.5 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-5-mobile-studio-evidence
+          path: artifacts/v7-5-mobile-studio
+          if-no-files-found: warn

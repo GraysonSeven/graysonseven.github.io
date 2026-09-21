@@ -5,6 +5,8 @@ import { chromium } from "playwright-core";
 
 const root=process.cwd();
 const failures=[];
+const evidence=path.join(root,"artifacts","v7-5-mobile-studio");
+fs.mkdirSync(evidence,{recursive:true});
 const assert=(c,m)=>{if(!c)failures.push(m)};
 
 for(const [file,markers] of Object.entries({
@@ -56,6 +58,7 @@ try{
   assert(homeLayer.canvas==="none","home: WebGL canvas can block taps");
   assert(homeLayer.overflow,"home: horizontal overflow at phone width");
   assert(homeLayer.bodyLocked,"home: body did not lock when drawer opened");
+  await home.screenshot({path:path.join(evidence,"home-phone-menu.png"),fullPage:false});
   await home.keyboard.press("Escape");
   assert(!(await home.locator(".v7-mobile-nav-layer").evaluate(el=>el.classList.contains("is-open"))),"home: Escape did not close drawer");
   await phone.close();
@@ -76,9 +79,18 @@ try{
   assert(state.canvasPointer==="none","studio: 3D canvas can block form interaction");
   assert(state.overflow,"studio: horizontal overflow at phone width");
   assert(state.toggleVisible,"studio: mobile menu missing");
+  await studio.screenshot({path:path.join(evidence,"studio-phone-forge.png"),fullPage:false});
   await studio.locator(".v7-mobile-nav-toggle").click();
   assert(await studio.locator(".v7-mobile-nav-layer.is-open").isVisible(),"studio: drawer did not open");
+  await studio.screenshot({path:path.join(evidence,"studio-phone-menu.png"),fullPage:false});
   await studioCtx.close();
+
+  const desktopCtx=await browser.newContext({viewport:{width:1440,height:1000}});
+  const desktop=await desktopCtx.newPage();
+  await desktop.goto("http://127.0.0.1:4190/website-studio/",{waitUntil:"networkidle",timeout:30000});
+  await desktop.waitForFunction(()=>window.__V7_PAGE_DEBUG__?.ready===true,{timeout:20000});
+  await desktop.screenshot({path:path.join(evidence,"studio-desktop-forge.png"),fullPage:false});
+  await desktopCtx.close();
 
   const reducedCtx=await browser.newContext({viewport:{width:1024,height:900},reducedMotion:"reduce"});
   const reducedPage=await reducedCtx.newPage();

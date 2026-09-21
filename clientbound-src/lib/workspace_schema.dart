@@ -11,11 +11,13 @@ class WorkspaceTableColumn {
     required this.key,
     required this.label,
     this.width = 170,
+    this.required = true,
   });
 
   final String key;
   final String label;
   final double width;
+  final bool required;
 }
 
 class WorkspaceFieldDefinition {
@@ -121,6 +123,7 @@ const moduleWorkspaceDefinitions = <int, ModuleWorkspaceDefinition>{
         label: 'Company-size rule',
         type: WorkspaceFieldType.shortText,
         help: 'A practical size signal such as employee range or operating footprint.',
+        required: true,
       ),
       WorkspaceFieldDefinition(
         key: 'targetRoles',
@@ -144,6 +147,9 @@ const moduleWorkspaceDefinitions = <int, ModuleWorkspaceDefinition>{
         expectedRows: 10,
         columns: [
           WorkspaceTableColumn(key: 'company', label: 'Company', width: 170),
+          WorkspaceTableColumn(key: 'website', label: 'Website', width: 220),
+          WorkspaceTableColumn(key: 'location', label: 'Location', width: 180),
+          WorkspaceTableColumn(key: 'sizeEvidence', label: 'Size evidence', width: 250),
           WorkspaceTableColumn(key: 'contact', label: 'Contact', width: 160),
           WorkspaceTableColumn(key: 'role', label: 'Role', width: 170),
           WorkspaceTableColumn(key: 'contactRoute', label: 'Contact route', width: 190),
@@ -152,7 +158,13 @@ const moduleWorkspaceDefinitions = <int, ModuleWorkspaceDefinition>{
           WorkspaceTableColumn(key: 'contactProof', label: 'Contact proof', width: 250),
           WorkspaceTableColumn(key: 'reasonProof', label: 'Reason proof', width: 270),
           WorkspaceTableColumn(key: 'source', label: 'Source URL', width: 240),
-          WorkspaceTableColumn(key: 'audit', label: 'Audit', width: 130),
+          WorkspaceTableColumn(key: 'audit', label: 'Audit result', width: 150),
+          WorkspaceTableColumn(
+            key: 'failReason',
+            label: 'Fail reason',
+            width: 240,
+            required: false,
+          ),
         ],
       ),
     ],

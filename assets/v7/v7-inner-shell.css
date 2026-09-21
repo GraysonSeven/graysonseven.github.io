@@ -39,3 +39,12 @@ html[data-ui-theme="light"] .v7-inner-world{background:
   .v7-inner-page .studio-intro-map{background:rgba(4,11,20,.82)}
 }
 @media(prefers-reduced-motion:reduce){.v7-inner-scan{opacity:.05}}
+
+/* V7.6 Studio phone protocol legibility */
+@media(max-width:620px){
+  .v7-inner-page .studio-intro-map{display:grid!important;grid-template-columns:1fr!important;gap:0!important;padding:14px!important}
+  .v7-inner-page .studio-intro-map article{display:grid!important;grid-template-columns:48px minmax(0,1fr)!important;gap:12px!important;min-width:0!important;padding:14px 0!important}
+  .v7-inner-page .studio-intro-map article>b{width:40px!important;height:40px!important}
+  .v7-inner-page .studio-intro-map article strong{font-size:14px!important;line-height:1.22!important;overflow-wrap:normal!important;word-break:normal!important}
+  .v7-inner-page .studio-intro-map article span{font-size:12px!important;line-height:1.42!important;overflow-wrap:normal!important;word-break:normal!important}
+}

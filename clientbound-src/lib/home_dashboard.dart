@@ -443,36 +443,39 @@ class _PathRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      onTap: () => onTap(module),
-      leading: CircleAvatar(
-        backgroundColor: current
-            ? _homeAccent.withValues(alpha: .16)
-            : Colors.white.withValues(alpha: .06),
-        child: Text(
-          '${module.id}',
-          style: TextStyle(
-            color: current ? _homeAccent : Colors.white70,
-            fontWeight: FontWeight.w900,
+    return Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        onTap: () => onTap(module),
+        leading: CircleAvatar(
+          backgroundColor: current
+              ? _homeAccent.withValues(alpha: .16)
+              : Colors.white.withValues(alpha: .06),
+          child: Text(
+            '${module.id}',
+            style: TextStyle(
+              color: current ? _homeAccent : Colors.white70,
+              fontWeight: FontWeight.w900,
+            ),
           ),
         ),
-      ),
-      title: Text(
-        module.title,
-        style: TextStyle(
-          fontWeight: current ? FontWeight.w900 : FontWeight.w700,
+        title: Text(
+          module.title,
+          style: TextStyle(
+            fontWeight: current ? FontWeight.w900 : FontWeight.w700,
+          ),
         ),
-      ),
-      subtitle: Text(
-        current ? 'CURRENT · ${stage.label}' : stage.label,
-        style: TextStyle(
-          color: current ? _homeAccent : Colors.white54,
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
+        subtitle: Text(
+          current ? 'CURRENT · ${stage.label}' : stage.label,
+          style: TextStyle(
+            color: current ? _homeAccent : Colors.white54,
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+          ),
         ),
+        trailing: const Icon(Icons.chevron_right_rounded),
       ),
-      trailing: const Icon(Icons.chevron_right_rounded),
     );
   }
 }

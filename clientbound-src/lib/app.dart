@@ -1100,37 +1100,6 @@ class _NumberedLine extends StatelessWidget {
   }
 }
 
-class _CommunityTeaser extends StatelessWidget {
-  const _CommunityTeaser();
-
-  @override
-  Widget build(BuildContext context) {
-    return const _Panel(
-      padding: EdgeInsets.all(22),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.groups_2_outlined, color: _warning, size: 34),
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Clientbound Community', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
-                SizedBox(height: 7),
-                Text(
-                  'A focused space for questions, wins, objection practice, anonymized outreach review, and instructor feedback.',
-                  style: TextStyle(color: Colors.white60, height: 1.45),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _PageFrame extends StatelessWidget {
   const _PageFrame({required this.child});
 

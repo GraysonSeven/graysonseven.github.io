@@ -8,6 +8,7 @@ import 'app_settings_store.dart';
 import 'community_hub_page.dart';
 import 'community_store.dart';
 import 'course_catalog.dart';
+import 'home_dashboard.dart';
 import 'module_workspace_card.dart';
 import 'more_page.dart';
 import 'onboarding_page.dart';
@@ -199,8 +200,10 @@ class _AppShellState extends State<AppShell> {
 
           final home = HomePage(
             progress: widget.progress,
+            workspace: widget.workspace,
             onOpenCourse: () => setState(() => _index = 1),
             onOpenReview: openReview,
+            onOpenToolkit: () => setState(() => _index = 3),
           );
 
           final desktopPages = <Widget>[
@@ -411,321 +414,27 @@ class HomePage extends StatelessWidget {
   const HomePage({
     super.key,
     required this.progress,
+    required this.workspace,
     required this.onOpenCourse,
     required this.onOpenReview,
+    required this.onOpenToolkit,
   });
 
   final ProgressStore progress;
+  final WorkspaceStore workspace;
   final VoidCallback onOpenCourse;
   final VoidCallback onOpenReview;
+  final VoidCallback onOpenToolkit;
 
   @override
   Widget build(BuildContext context) {
-    final next = courseModules[progress.nextModuleId - 1];
-    return _PageFrame(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _PageHeader(
-            eyebrow: 'CLIENTBOUND',
-            title: 'Learn sales. Win clients.',
-            subtitle: 'Build real sales skill through execution, proof, feedback, and live market experience.',
-          ),
-          const SizedBox(height: 24),
-          LayoutBuilder(
-            builder: (context, c) {
-              final stacked = c.maxWidth < 760;
-              if (stacked) {
-                return Column(
-                  children: [
-                    _ContinueCard(module: next, progress: progress),
-                    const SizedBox(height: 16),
-                    _ProgressCard(progress: progress),
-                  ],
-                );
-              }
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(flex: 2, child: _ContinueCard(module: next, progress: progress)),
-                  const SizedBox(width: 16),
-                  Expanded(child: _ProgressCard(progress: progress)),
-                ],
-              );
-            },
-          ),
-          const SizedBox(height: 18),
-          _ActionCenter(
-            progress: progress,
-            onOpenReview: onOpenReview,
-          ),
-          const SizedBox(height: 28),
-          Row(
-            children: [
-              const Expanded(
-                child: Text(
-                  'Your classroom',
-                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800),
-                ),
-              ),
-              TextButton(
-                onPressed: onOpenCourse,
-                child: const Text('View all 14 modules'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          _ModulePreview(progress: progress),
-          const SizedBox(height: 28),
-          const _CommunityTeaser(),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActionCenter extends StatelessWidget {
-  const _ActionCenter({
-    required this.progress,
-    required this.onOpenReview,
-  });
-
-  final ProgressStore progress;
-  final VoidCallback onOpenReview;
-
-  @override
-  Widget build(BuildContext context) {
-    final recent = progress.recentlyTouchedModuleIds;
-    final recentId = recent.isEmpty ? null : recent.first;
-    final recentTitle = recentId == null
-        ? 'No workspace activity yet'
-        : 'Module $recentId · ${courseModules[recentId - 1].title}';
-
-    return _Panel(
-      padding: const EdgeInsets.all(20),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final compact = constraints.maxWidth < 680;
-          final metrics = <Widget>[
-            _ActionMetric(
-              icon: Icons.play_circle_outline_rounded,
-              value: progress.activeCount,
-              label: 'Active',
-            ),
-            _ActionMetric(
-              icon: Icons.rate_review_outlined,
-              value: progress.readyForReviewCount,
-              label: 'Ready for review',
-            ),
-            _ActionMetric(
-              icon: Icons.history_rounded,
-              valueText: recentTitle,
-              label: 'Recent workspace',
-            ),
-          ];
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Action center',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 14),
-              if (compact)
-                Column(
-                  children: [
-                    for (final metric in metrics) ...[
-                      metric,
-                      const SizedBox(height: 10),
-                    ],
-                  ],
-                )
-              else
-                Row(
-                  children: [
-                    for (var i = 0; i < metrics.length; i++) ...[
-                      Expanded(child: metrics[i]),
-                      if (i != metrics.length - 1)
-                        const SizedBox(width: 10),
-                    ],
-                  ],
-                ),
-              if (progress.readyForReviewCount > 0) ...[
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  onPressed: onOpenReview,
-                  icon: const Icon(Icons.fact_check_outlined),
-                  label: Text(
-                    'Review ${progress.readyForReviewCount} ready module(s)',
-                  ),
-                ),
-              ],
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _ActionMetric extends StatelessWidget {
-  const _ActionMetric({
-    required this.icon,
-    this.value,
-    this.valueText,
-    required this.label,
-  });
-
-  final IconData icon;
-  final int? value;
-  final String? valueText;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: _panelSoft,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: _accent),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  valueText ?? '${value ?? 0}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.white54,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ContinueCard extends StatelessWidget {
-  const _ContinueCard({required this.module, required this.progress});
-
-  final CourseModule module;
-  final ProgressStore progress;
-
-  @override
-  Widget build(BuildContext context) {
-    final done = progress.completed.length == 14;
-    return _Panel(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            done ? 'CYCLE COMPLETE' : 'CONTINUE LEARNING',
-            style: const TextStyle(color: _accent, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 1.2),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            done ? 'Review your evidence and start the next cycle.' : 'Module ${module.id} · ${module.title}',
-            style: const TextStyle(fontSize: 25, height: 1.1, fontWeight: FontWeight.w900),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            done ? 'Keep what worked, change one weak point, and replenish the pipeline.' : module.tagline,
-            style: const TextStyle(color: Colors.white70, height: 1.45),
-          ),
-          const Spacer(),
-          const SizedBox(height: 20),
-          FilledButton.icon(
-            onPressed: () => _openModule(context, module, progress),
-            icon: const Icon(Icons.arrow_forward_rounded),
-            label: Text(done ? 'Open review module' : 'Open module'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProgressCard extends StatelessWidget {
-  const _ProgressCard({required this.progress});
-
-  final ProgressStore progress;
-
-  @override
-  Widget build(BuildContext context) {
-    final percent = (progress.ratio * 100).round();
-    return _Panel(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(Icons.track_changes_rounded, color: _success, size: 30),
-          const SizedBox(height: 18),
-          Text('$percent%', style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
-          const Text('Course PASS progress', style: TextStyle(color: Colors.white60)),
-          const SizedBox(height: 16),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              value: progress.ratio,
-              minHeight: 9,
-              backgroundColor: Colors.white10,
-              color: _success,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '${progress.passedCount} of 14 modules passed',
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ModulePreview extends StatelessWidget {
-  const _ModulePreview({required this.progress});
-
-  final ProgressStore progress;
-
-  @override
-  Widget build(BuildContext context) {
-    final visible = courseModules.take(4).toList();
-    return LayoutBuilder(
-      builder: (context, c) {
-        final columns = c.maxWidth >= 1000 ? 4 : c.maxWidth >= 620 ? 2 : 1;
-        final width = (c.maxWidth - ((columns - 1) * 14)) / columns;
-        return Wrap(
-          spacing: 14,
-          runSpacing: 14,
-          children: [
-            for (final module in visible)
-              SizedBox(width: width, child: _ModuleCard(module: module, progress: progress)),
-          ],
-        );
-      },
+    return HomeDashboard(
+      progress: progress,
+      workspace: workspace,
+      onOpenCourse: onOpenCourse,
+      onOpenReview: onOpenReview,
+      onOpenToolkit: onOpenToolkit,
+      onOpenModule: (module) => _openModule(context, module, progress),
     );
   }
 }

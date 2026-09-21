@@ -86,6 +86,16 @@ try{
     assert(state.debug.webgl===true&&!state.debug.fallback,route+" WebGL failed");
     assert(state.debug.objects>=12,route+" object count too low: "+state.debug.objects);
     assert(state.pointer==="none",route+" canvas can block interaction");
+    const legacy=await page.evaluate(()=>({
+      boot:Boolean(document.querySelector(".fx-boot")),
+      atmosphere:document.querySelector(".fx-atmosphere")?getComputedStyle(document.querySelector(".fx-atmosphere")).display:"absent",
+      ikoAtmosphere:document.querySelector(".iko-v5-atmosphere")?getComputedStyle(document.querySelector(".iko-v5-atmosphere")).display:"absent",
+      ikoPageMark:document.querySelector(".iko-v5-page-mark")?getComputedStyle(document.querySelector(".iko-v5-page-mark")).display:"absent"
+    }));
+    assert(!legacy.boot,route+" legacy boot overlay still present");
+    assert(legacy.atmosphere==="none"||legacy.atmosphere==="absent",route+" legacy FX atmosphere still visible");
+    assert(legacy.ikoAtmosphere==="none"||legacy.ikoAtmosphere==="absent",route+" legacy Iko atmosphere still visible");
+    assert(legacy.ikoPageMark==="none"||legacy.ikoPageMark==="absent",route+" legacy Iko page mark still visible");
     assert(state.width<=state.viewport+2,route+" desktop horizontal overflow: "+JSON.stringify(state.overflowers));
     assert(pageErrors.length===0,route+" page errors: "+pageErrors.join(" | "));
     assert(httpErrors.length===0,route+" HTTP errors: "+httpErrors.join(" | "));

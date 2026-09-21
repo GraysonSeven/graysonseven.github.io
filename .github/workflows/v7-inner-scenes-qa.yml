@@ -1,0 +1,53 @@
+name: iCharles V7.6 Inner Scenes QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "portfolio/index.html"
+      - "contact/index.html"
+      - "services/index.html"
+      - "about/index.html"
+      - "projects/index.html"
+      - "lab/index.html"
+      - "try/index.html"
+      - "privacy/index.html"
+      - "assets/v7/v7-inner-scenes.*"
+      - "assets/v7/v7-inner-shell.css"
+      - "assets/v7/v7-mobile-nav.js"
+      - "tools/v7-inner-scenes-qa.mjs"
+      - ".github/workflows/v7-inner-scenes-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: Full-site Edge 3D + mobile qualification
+    runs-on: windows-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse scene code
+        shell: pwsh
+        run: |
+          node --check .\assets\v7\v7-inner-scenes.js
+          node --check .\assets\v7\v7-mobile-nav.js
+          node --check .\tools\v7-inner-scenes-qa.mjs
+      - name: Install Playwright Core
+        shell: pwsh
+        run: npm install --no-save --package-lock=false playwright-core@1.55.0
+      - name: Run Microsoft Edge qualification
+        shell: pwsh
+        run: node .\tools\v7-inner-scenes-qa.mjs
+      - name: Upload V7.6 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-6-inner-scenes-evidence
+          path: artifacts/v7-6-inner-scenes
+          if-no-files-found: warn

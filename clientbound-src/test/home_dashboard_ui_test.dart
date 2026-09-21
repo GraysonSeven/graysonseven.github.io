@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../lib/home_dashboard.dart';
-import '../lib/progress_store.dart';
-import '../lib/workspace_store.dart';
+import 'package:clientbound/home_dashboard.dart';
+import 'package:clientbound/progress_store.dart';
+import 'package:clientbound/workspace_store.dart';
 
 void main() {
   setUp(() {

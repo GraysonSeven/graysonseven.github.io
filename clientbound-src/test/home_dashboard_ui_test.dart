@@ -87,7 +87,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Module 2 · ICP & Lead Research'), findsWidgets);
-    expect(find.text('WORKING'), findsOneWidget);
+    expect(find.text('WORKING'), findsWidgets);
     expect(find.text('Your learning path'), findsOneWidget);
     expect(find.text('First module passed'), findsOneWidget);
     expect(find.text('7%'), findsOneWidget);

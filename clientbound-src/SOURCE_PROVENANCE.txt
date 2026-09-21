@@ -1,9 +1,9 @@
 Clientbound public build mirror
 Canonical repository: GraysonSeven/First-Client-Sales-System
-Candidate branch: clientbound-v1.1-home-ux
-Candidate source commit: b826f765b973f0347d301ea7a7e021a6dcd539e0
+Candidate branch: clientbound-v1.1.1-module2-alignment
+Candidate source commit: 46ad5d0b3b3fa1285630d0e3bc2c1d1098c3118c
 Mirror purpose: free public CI/build/hosting only
-Qualification target: 1.1.0+11 Home UX release candidate
+Qualification target: 1.1.1+12 Module 2 human-audit alignment
 Flutter toolchain: 3.47.5
 Production URL: https://graysonseven.github.io/clientbound/
 RC publication: disabled

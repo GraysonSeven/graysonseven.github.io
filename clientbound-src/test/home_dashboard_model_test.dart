@@ -156,10 +156,14 @@ void _fillModule2Rows(
       .fields
       .firstWhere((item) => item.key == 'leadResearch');
   final columns = field.columns.map((column) => column.key).toList();
+  final requiredColumns = field.columns
+      .where((column) => column.required)
+      .map((column) => column.key)
+      .toList();
   workspace.ensureTableRows(2, field.key, columns, 10);
 
   for (var row = 0; row < completeRows; row++) {
-    for (final column in columns) {
+    for (final column in requiredColumns) {
       workspace.setTableCell(
         2,
         field.key,

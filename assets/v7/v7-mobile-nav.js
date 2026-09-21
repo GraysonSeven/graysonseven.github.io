@@ -1,7 +1,16 @@
 (() => {
   "use strict";
 
+  function retireLegacyNavigation() {
+    if (document.documentElement.dataset.v7Nav !== "shared") return;
+    document.querySelectorAll(
+      ".fx-command-trigger,.fx-command-palette,.v4-mobile-menu,.v423-menu-button,.v423-panel,.v423-panel-overlay"
+    ).forEach(node => node.remove());
+    document.body?.classList.remove("v4-mobile-nav-open","v423-panel-open","fx-command-open");
+  }
+
   function initMobileNav() {
+    retireLegacyNavigation();
     const header = document.querySelector(".v7-header, .studio-header, body > .shell > header, header");
     if (!header || header.dataset.v7MobileNav === "ready") return;
     const sourceNav = header.querySelector("nav");
@@ -59,9 +68,18 @@
       </aside>
     `;
 
-    const host = header.classList.contains("studio-header") ? header : (header.querySelector("nav") || header);
+    const host = header.classList.contains("v7-header") ? (header.querySelector("nav") || header) : header;
     host.appendChild(button);
     document.body.appendChild(layer);
+
+    if (document.documentElement.dataset.v7Nav === "shared") {
+      requestAnimationFrame(retireLegacyNavigation);
+      setTimeout(retireLegacyNavigation, 80);
+      setTimeout(retireLegacyNavigation, 240);
+      const observer = new MutationObserver(retireLegacyNavigation);
+      observer.observe(document.body,{childList:true,subtree:true});
+      setTimeout(()=>observer.disconnect(),1800);
+    }
 
     let previousFocus = null;
     const drawer = layer.querySelector(".v7-mobile-drawer");
@@ -100,6 +118,13 @@
     layer.querySelectorAll("a[href]").forEach(link => link.addEventListener("click", () => close({ restore: false })));
 
     document.addEventListener("keydown", event => {
+      const shortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k";
+      if (shortcut && document.documentElement.dataset.v7Nav === "shared") {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        layer.classList.contains("is-open") ? close() : open();
+        return;
+      }
       if (!layer.classList.contains("is-open")) return;
       if (event.key === "Escape") {
         event.preventDefault();

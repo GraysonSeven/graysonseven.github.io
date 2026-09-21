@@ -28,3 +28,16 @@ body.v7-mobile-nav-open{overflow:hidden!important;touch-action:none}
   .studio-header{display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:70px!important;height:70px!important;padding:0!important;gap:12px!important}
 }
 @media(prefers-reduced-motion:reduce){.v7-mobile-nav-backdrop,.v7-mobile-drawer,.v7-mobile-nav-toggle span,.v7-mobile-nav-toggle::before,.v7-mobile-nav-toggle::after{transition:none!important}}
+
+html[data-v7-nav="shared"] .fx-command-trigger,
+html[data-v7-nav="shared"] .fx-command-palette,
+html[data-v7-nav="shared"] .v4-mobile-menu,
+html[data-v7-nav="shared"] .v423-menu-button,
+html[data-v7-nav="shared"] .v423-panel,
+html[data-v7-nav="shared"] .v423-panel-overlay{display:none!important}
+@media(max-width:760px){
+  html[data-v7-nav="shared"] header>nav,
+  html[data-v7-nav="shared"] header>.site-nav{display:none!important}
+  html[data-v7-nav="shared"] header>.nav-toggle{display:none!important}
+  html[data-v7-nav="shared"] header>.v7-mobile-nav-toggle{display:inline-flex!important;margin-left:auto}
+}

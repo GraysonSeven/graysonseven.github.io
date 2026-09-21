@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-v7-page="try" data-v7-nav="shared" data-v7-scene="test-deck">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,8 +97,15 @@
   <link rel="stylesheet" href="/ghostops-v61-part2.css?v=1">
 <script src="/iko-prime-v5.js?v=6" defer></script>
   <script src="/ghostops-v60.js?v=1" defer></script>
+  <link rel="stylesheet" href="/assets/v7/v7-mobile-nav.css?v=751">
+  <link rel="stylesheet" href="/assets/v7/v7-inner-shell.css?v=751">
+  <script src="/assets/v7/v7-mobile-nav.js?v=751" defer></script>
+  <script type="module" src="/assets/v7/v7-page-scenes.js?v=751"></script>
 </head>
-<body class="try-body live-apps-page">
+<body class="try-body live-apps-page v7-inner-page">
+  <div class="v7-inner-world" aria-hidden="true"></div>
+  <canvas id="v7-page-canvas" aria-hidden="true"></canvas>
+  <div class="v7-inner-scan" aria-hidden="true"></div>
   <div class="shell try-shell">
     <header class="try-header">
       <a class="brand" href="../">

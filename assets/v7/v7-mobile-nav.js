@@ -10,6 +10,16 @@
     const sourceLinks = [...sourceNav.querySelectorAll("a[href]")];
     if (!sourceLinks.length) return;
 
+    const canonicalRoutes = [
+      ["HOME", "/"],
+      ["TRY APPS", "/try/"],
+      ["WORK", "/portfolio/"],
+      ["SERVICES", "/services/"],
+      ["WEBSITE STUDIO", "/website-studio/"],
+      ["ABOUT", "/about/"],
+      ["CONTACT", "/contact/"]
+    ];
+
     header.dataset.v7MobileNav = "ready";
 
     const button = document.createElement("button");
@@ -26,12 +36,13 @@
     layer.hidden = true;
     layer.setAttribute("aria-hidden", "true");
 
-    const links = sourceLinks.map(link => {
+    const links = canonicalRoutes.map(([label, href]) => {
       const copy = document.createElement("a");
-      copy.href = link.href;
-      copy.textContent = link.textContent.trim() || "OPEN";
-      const current = new URL(link.href, location.href).pathname.replace(/\/+$/, "/") ===
-        location.pathname.replace(/\/+$/, "/");
+      copy.href = href;
+      copy.textContent = label;
+      const target = new URL(href, location.href).pathname.replace(/\/+$/, "/");
+      const currentPath = location.pathname.replace(/\/+$/, "/");
+      const current = target === "/" ? currentPath === "/" : currentPath === target || currentPath.startsWith(target);
       if (current) copy.setAttribute("aria-current", "page");
       return copy.outerHTML;
     }).join("");

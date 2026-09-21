@@ -50,6 +50,8 @@ try{
   await toggle.click();
   assert(await home.locator(".v7-mobile-nav-layer.is-open").isVisible(),"home: drawer did not open");
   assert(await home.locator('.v7-mobile-drawer a[href$="/portfolio/"]').isVisible(),"home: Work link missing from drawer");
+  assert(await home.locator('.v7-mobile-drawer a[href$="/services/"]').isVisible(),"home: Services link missing from drawer");
+  assert(await home.locator('.v7-mobile-drawer a[href$="/about/"]').isVisible(),"home: About link missing from drawer");
   const homeLayer=await home.evaluate(()=>({
     canvas:getComputedStyle(document.querySelector("#v7-canvas")).pointerEvents,
     overflow:document.documentElement.scrollWidth<=innerWidth+2,
@@ -81,6 +83,7 @@ try{
   assert(state.toggleVisible,"studio: mobile menu missing");
   await studio.screenshot({path:path.join(evidence,"studio-phone-forge.png"),fullPage:false});
   await studio.locator(".v7-mobile-nav-toggle").click();
+  await studio.waitForFunction(()=>document.querySelector(".v7-mobile-nav-layer")?.classList.contains("is-open"),{timeout:3000});
   assert(await studio.locator(".v7-mobile-nav-layer.is-open").isVisible(),"studio: drawer did not open");
   await studio.screenshot({path:path.join(evidence,"studio-phone-menu.png"),fullPage:false});
   await studioCtx.close();

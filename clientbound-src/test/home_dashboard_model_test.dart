@@ -145,6 +145,7 @@ void main() {
 void _fillModule2Header(WorkspaceStore workspace) {
   workspace.setString(2, 'industry', 'Midwest manufacturing');
   workspace.setString(2, 'geography', 'US Midwest');
+  workspace.setString(2, 'companySize', 'Approximately 50-500 employees');
   workspace.setString(2, 'targetRoles', 'Operations managers');
 }
 

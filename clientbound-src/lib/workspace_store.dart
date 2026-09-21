@@ -147,6 +147,7 @@ class WorkspaceStore extends ChangeNotifier {
           final missing = field.columns
               .where(
                 (column) =>
+                    column.required &&
                     (row[column.key] ?? '').trim().isEmpty,
               )
               .map((column) => column.label)

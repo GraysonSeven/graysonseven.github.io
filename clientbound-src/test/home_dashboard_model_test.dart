@@ -145,6 +145,7 @@ void main() {
 void _fillModule2Header(WorkspaceStore workspace) {
   workspace.setString(2, 'industry', 'Midwest manufacturing');
   workspace.setString(2, 'geography', 'US Midwest');
+  workspace.setString(2, 'companySize', 'Approximately 50-500 employees');
   workspace.setString(2, 'targetRoles', 'Operations managers');
 }
 
@@ -156,10 +157,14 @@ void _fillModule2Rows(
       .fields
       .firstWhere((item) => item.key == 'leadResearch');
   final columns = field.columns.map((column) => column.key).toList();
+  final requiredColumns = field.columns
+      .where((column) => column.required)
+      .map((column) => column.key)
+      .toList();
   workspace.ensureTableRows(2, field.key, columns, 10);
 
   for (var row = 0; row < completeRows; row++) {
-    for (final column in columns) {
+    for (final column in requiredColumns) {
       workspace.setTableCell(
         2,
         field.key,

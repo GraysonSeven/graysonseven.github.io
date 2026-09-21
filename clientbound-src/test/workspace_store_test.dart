@@ -89,6 +89,9 @@ void main() {
       table.columns.map((column) => column.key),
       containsAll(<String>[
         'company',
+        'website',
+        'location',
+        'sizeEvidence',
         'contact',
         'role',
         'contactRoute',
@@ -98,8 +101,57 @@ void main() {
         'reasonProof',
         'source',
         'audit',
+        'failReason',
       ]),
     );
+  });
+
+  test('module 2 requires full human-audit evidence but not a fail reason', () async {
+    SharedPreferences.setMockInitialValues({});
+    final store = WorkspaceStore();
+    await store.load();
+
+    final definition = moduleWorkspaceDefinitions[2]!;
+    final table = definition.fields.firstWhere(
+      (field) => field.key == 'leadResearch',
+    );
+    final companySize = definition.fields.firstWhere(
+      (field) => field.key == 'companySize',
+    );
+    final failReason = table.columns.firstWhere(
+      (column) => column.key == 'failReason',
+    );
+
+    expect(companySize.required, isTrue);
+    expect(failReason.required, isFalse);
+
+    store
+      ..setString(2, 'industry', 'Manufacturing')
+      ..setString(2, 'geography', 'US Midwest')
+      ..setString(2, 'companySize', 'Approximately 50-500 employees')
+      ..setString(2, 'targetRoles', 'Operations, finance, and IT leadership');
+
+    store.ensureTableRows(
+      2,
+      table.key,
+      table.columns.map((column) => column.key),
+      table.expectedRows!,
+    );
+
+    for (var row = 0; row < table.expectedRows!; row++) {
+      for (final column in table.columns.where((column) => column.required)) {
+        store.setTableCell(
+          2,
+          table.key,
+          row,
+          column.key,
+          'evidence-$row-${column.key}',
+        );
+      }
+    }
+
+    expect(store.readinessIssues(2), isEmpty);
+    expect(store.tableValue(2, table.key).first['failReason'], isEmpty);
   });
 
   test('course-critical workspace row counts stay intact', () {

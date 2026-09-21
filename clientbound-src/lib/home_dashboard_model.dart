@@ -203,9 +203,11 @@ class HomeDashboardModel {
         final rows = workspace.tableValue(moduleId, focusTable.key);
         var complete = 0;
         for (final row in rows.take(expected)) {
-          final rowComplete = focusTable.columns.every(
-            (column) => (row[column.key] ?? '').trim().isNotEmpty,
-          );
+          final rowComplete = focusTable.columns
+              .where((column) => column.required)
+              .every(
+                (column) => (row[column.key] ?? '').trim().isNotEmpty,
+              );
           if (rowComplete) complete++;
         }
         return '$complete of $expected ${focusTable.label.toLowerCase()} rows complete';

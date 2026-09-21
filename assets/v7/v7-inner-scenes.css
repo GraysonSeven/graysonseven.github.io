@@ -26,3 +26,14 @@ html[data-ui-theme="light"] .v7-page-hud{color:#526b80}
   .v7-scene-archive .hero,.v7-scene-index .hero,.v7-scene-lab .hero{background:linear-gradient(180deg,rgba(2,7,13,.58),rgba(2,7,13,.16))}
 }
 @media(prefers-reduced-motion:reduce){.v7-inner-scan{opacity:.045!important}}
+
+/* V7.6 owns the atmosphere on upgraded pages; retire stacked legacy decoration only. */
+.v7-inner-page .fx-atmosphere,
+.v7-inner-page .fx-pointer-light,
+.v7-inner-page .fx-cursor-ring,
+.v7-inner-page .fx-cursor-dot,
+.v7-inner-page .iko-v5-atmosphere,
+.v7-inner-page .iko-v5-page-mark,
+.v7-inner-page .iko-v5-core-orbit,
+.v7-inner-page .iko-v5-core-logo,
+.v7-inner-page .iko-v5-core-rail{display:none!important}

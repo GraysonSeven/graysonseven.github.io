@@ -67,7 +67,7 @@ class HomeDashboard extends StatelessWidget {
                           );
                         }
                         return Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(child: _ReviewStatusCard(model: model)),
                             const SizedBox(width: 14),
@@ -104,7 +104,7 @@ class HomeDashboard extends StatelessWidget {
                           );
                         }
                         return Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(child: _MilestonesCard(model: model)),
                             const SizedBox(width: 14),
@@ -131,7 +131,7 @@ class HomeDashboard extends StatelessWidget {
                           );
                         }
                         return Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: _CourseProgressCard(progress: progress),
@@ -253,14 +253,14 @@ class _NextActionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 15),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _InfoPill(
                 icon: Icons.track_changes_rounded,
                 text: model.progressLabel,
               ),
+              const SizedBox(height: 8),
               _InfoPill(
                 icon: Icons.task_alt_outlined,
                 text:
@@ -730,6 +730,7 @@ class _InfoPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: .06),
@@ -740,12 +741,14 @@ class _InfoPill extends StatelessWidget {
         children: [
           Icon(icon, size: 16, color: Colors.white60),
           const SizedBox(width: 6),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontWeight: FontWeight.w700,
-              fontSize: 12,
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+              ),
             ),
           ),
         ],

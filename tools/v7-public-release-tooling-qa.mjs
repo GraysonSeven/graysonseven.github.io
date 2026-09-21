@@ -28,13 +28,16 @@ if (!fs.existsSync(scriptPath)) {
     "v7-runtime-qa.mjs",
     "v7-resilience-qa.mjs",
     "v7-theme-contract-qa.mjs",
+    "v7-inner-scenes-qa.mjs",
+    "v7-inner-scenes-production-qa.mjs",
+    "ExpectedInnerSceneVersion = '7.6.0'",
     "Invoke-NativeChecked -FilePath git -Arguments @('-C', $repoRoot, 'archive', '--format=zip', 'HEAD', '-o', $archive)",
     "wrangler@latest pages deploy",
     "--project-name $ProjectName",
     "--branch main",
     "https://icharles.pages.dev/",
     "https://icharles.pages.dev/experience/",
-    "ICHARLES V7 PUBLIC HOME PRODUCTION VERIFIED",
+    "ICHARLES V7.6 FULL SITE PRODUCTION VERIFIED",
     "$createdTemporaryNodeModules = $false",
     "Pre-existing node_modules is present without playwright-core",
     "Remove-Item -LiteralPath $nodeModulesPath -Recurse -Force"
@@ -67,6 +70,12 @@ if (!fs.existsSync(scriptPath)) {
   if (!/v7-theme-contract-qa\.mjs'[\s\S]*--origin=\$ProductionOrigin/.test(ps1)) {
     fail("Production theme QA must target the Cloudflare production origin");
   }
+  if (!/v7-inner-scenes-production-qa\.mjs'[\s\S]*--origin=\$ProductionOrigin/.test(ps1)) {
+    fail("Production inner-scene QA must target the Cloudflare production origin");
+  }
+  if (!/v7-inner-scenes-production-qa\.mjs'[\s\S]*--version=\$ExpectedInnerSceneVersion/.test(ps1)) {
+    fail("Production inner-scene QA must bind to the expected V7.6 scene version");
+  }
 }
 
 if (failures.length) {
@@ -82,4 +91,5 @@ console.log("- Hidden /experience/ noindex boundary guard");
 console.log("- Locked Iko integrity guard");
 console.log("- Exact committed-tree Cloudflare deployment");
 console.log("- Live public-root Edge runtime / resilience / theme verification");
+console.log("- Live V7.6 inner-page Edge / mobile / fallback verification");
 console.log("- Temporary Playwright cleanup");

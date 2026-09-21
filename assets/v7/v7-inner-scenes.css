@@ -1,0 +1,43 @@
+/* V7.6 full-site procedural scene layer */
+html[data-v7-page]{background:#02070d}
+body.v7-inner-page{background:transparent!important;isolation:isolate}
+body.v7-inner-page .v7-inner-world{z-index:0!important}
+body.v7-inner-page #v7-page-canvas{z-index:1!important;pointer-events:none!important}
+body.v7-inner-page .v7-inner-scan{z-index:2!important}
+body.v7-inner-page > .shell,body.v7-inner-page > main,body.v7-inner-page > footer,body.v7-inner-page .shell{position:relative;z-index:3}
+body.v7-inner-page .site-header{z-index:200}
+.v7-page-hud{position:fixed;right:22px;bottom:20px;z-index:4;display:flex;align-items:center;gap:10px;pointer-events:none;color:#71859a;font:700 7px "Space Mono",monospace;letter-spacing:.09em}
+.v7-page-hud b{color:#54ffac}.v7-page-hud i{width:36px;height:1px;background:linear-gradient(90deg,#00e7ff,#8b5cff,#ff2bd6)}
+.v7-scene-archive .hero,.v7-scene-capability .v45-services-hero,.v7-scene-operator .about-layout,.v7-scene-index .hero,.v7-scene-lab .hero,.v7-scene-liveapps .try-hero,.v7-scene-vault .privacy-wrap,.v7-scene-transmission .contact-layout{position:relative;z-index:4}
+.v7-scene-archive .hero,.v7-scene-index .hero,.v7-scene-lab .hero{background:linear-gradient(90deg,rgba(2,7,13,.72),rgba(2,7,13,.2) 68%,transparent)}
+.v7-scene-transmission .terminal,.v7-scene-vault .privacy-grid,.v7-scene-index .card,.v7-scene-lab .card{backdrop-filter:blur(10px)}
+.v7-scene-transmission .terminal{box-shadow:0 26px 80px rgba(0,0,0,.25),0 0 50px rgba(0,231,255,.035)}
+.v7-scene-vault .privacy-grid{background:rgba(4,11,20,.68)!important}
+.v7-scene-operator .identity-panel{background:rgba(4,11,20,.56)!important;backdrop-filter:blur(10px)}
+.v7-scene-liveapps .live-orbit{filter:drop-shadow(0 0 24px rgba(0,231,255,.08))}
+html[data-v7-page-render="fallback"] #v7-page-canvas{display:none!important}
+html[data-v7-page-render="fallback"] .v7-page-hud b{color:#ffb54a}
+html[data-v7-page-render="fallback"] .v7-page-hud b::after{content:" // STATIC"}
+html[data-ui-theme="light"] body.v7-inner-page{background:transparent!important}
+html[data-ui-theme="light"] .v7-page-hud{color:#526b80}
+@media(max-width:760px){
+  .v7-page-hud{display:none}
+  [data-v7-nav="shared"] .nav-toggle,[data-v7-nav="shared"] .menu-toggle,[data-v7-nav="shared"] .v4-mobile-menu{display:none!important}
+  .v7-scene-archive .hero,.v7-scene-index .hero,.v7-scene-lab .hero{background:linear-gradient(180deg,rgba(2,7,13,.58),rgba(2,7,13,.16))}
+}
+@media(prefers-reduced-motion:reduce){.v7-inner-scan{opacity:.045!important}}
+
+/* V7.6 owns the atmosphere on upgraded pages; retire stacked legacy decoration only. */
+.v7-inner-page .fx-atmosphere,
+.v7-inner-page .fx-pointer-light,
+.v7-inner-page .fx-cursor-ring,
+.v7-inner-page .fx-cursor-dot,
+.v7-inner-page .iko-v5-atmosphere,
+.v7-inner-page .iko-v5-page-mark,
+.v7-inner-page .iko-v5-core-orbit,
+.v7-inner-page .iko-v5-core-logo,
+.v7-inner-page .iko-v5-core-rail{display:none!important}
+
+/* Services no longer needs the legacy full-bleed workspace pseudo layers. */
+.v7-inner-page.v45-services-body .v45-services-section::before,
+.v7-inner-page.v45-services-body .v45-services-hero::before{display:none!important}

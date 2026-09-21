@@ -59,7 +59,7 @@
       </aside>
     `;
 
-    const host = header.classList.contains("studio-header") ? header : (header.querySelector("nav") || header);
+    const host = header.classList.contains("v7-header") ? (header.querySelector("nav") || header) : header;
     host.appendChild(button);
     document.body.appendChild(layer);
 

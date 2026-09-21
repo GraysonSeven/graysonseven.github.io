@@ -26,7 +26,7 @@
   const bootKey = "cl-immersive-boot-v5-iko";
   let showBoot = false;
   try {
-    showBoot = !sessionStorage.getItem(bootKey) && !reduceMotion && !body.classList.contains("clarity-home") && !body.classList.contains("studio-body");
+    showBoot = !sessionStorage.getItem(bootKey) && !reduceMotion && !root.dataset.v7Page && !body.classList.contains("clarity-home") && !body.classList.contains("studio-body");
     if (showBoot) sessionStorage.setItem(bootKey, "1");
   } catch (_) {}
 

@@ -76,13 +76,17 @@ try{
       debug:{...window.__V7_PAGE_DEBUG__},
       pointer:getComputedStyle(document.querySelector("#v7-page-canvas")).pointerEvents,
       width:document.documentElement.scrollWidth,
-      viewport:innerWidth
+      viewport:innerWidth,
+      overflowers:[...document.querySelectorAll("body *")].map(el=>{
+        const r=el.getBoundingClientRect();
+        return {tag:el.tagName,cls:el.className||"",id:el.id||"",left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width)};
+      }).filter(x=>x.right>innerWidth+2||x.left<-2).sort((a,b)=>Math.max(b.right-innerWidth,-b.left)-Math.max(a.right-innerWidth,-a.left)).slice(0,8)
     }));
     assert(state.debug.scene===variant,route+" wrong scene "+state.debug.scene);
     assert(state.debug.webgl===true&&!state.debug.fallback,route+" WebGL failed");
     assert(state.debug.objects>=12,route+" object count too low: "+state.debug.objects);
     assert(state.pointer==="none",route+" canvas can block interaction");
-    assert(state.width<=state.viewport+2,route+" desktop horizontal overflow");
+    assert(state.width<=state.viewport+2,route+" desktop horizontal overflow: "+JSON.stringify(state.overflowers));
     assert(pageErrors.length===0,route+" page errors: "+pageErrors.join(" | "));
     assert(httpErrors.length===0,route+" HTTP errors: "+httpErrors.join(" | "));
     await page.screenshot({path:path.join(evidence,variant+"-desktop.png"),fullPage:false});

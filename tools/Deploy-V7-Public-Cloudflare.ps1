@@ -3,7 +3,8 @@ param(
   [string]$ProductionOrigin = 'https://icharles.pages.dev',
   [string]$HiddenUrl = 'https://icharles.pages.dev/experience/',
   [string]$ProjectName = 'icharles',
-  [string]$ExpectedV7Version = '7.4.0'
+  [string]$ExpectedV7Version = '7.4.0',
+  [string]$ExpectedInnerSceneVersion = '7.6.0'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -132,6 +133,8 @@ try {
     Invoke-NativeChecked node --check '.\tools\v7-runtime-qa.mjs'
     Invoke-NativeChecked node --check '.\tools\v7-resilience-qa.mjs'
     Invoke-NativeChecked node --check '.\tools\v7-theme-contract-qa.mjs'
+    Invoke-NativeChecked node --check '.\tools\v7-inner-scenes-qa.mjs'
+    Invoke-NativeChecked node --check '.\tools\v7-inner-scenes-production-qa.mjs'
     Invoke-NativeChecked node '.\tools\v7-home-promotion-qa.mjs'
     Invoke-NativeChecked node '.\tools\v7-foundation-qa.mjs'
     Invoke-NativeChecked node '.\tools\site-qa.mjs'
@@ -150,6 +153,7 @@ try {
     Invoke-NativeChecked node '.\tools\v7-runtime-qa.mjs' '--channel=msedge' '--serve-root=.' '--base=http://127.0.0.1:4173/' ("--output=$preQa")
     Invoke-NativeChecked node '.\tools\v7-resilience-qa.mjs' '--channel=msedge' '--serve-root=.' '--base=http://127.0.0.1:4174/' ("--output=$(Join-Path $tempRoot 'predeploy-home-resilience')")
     Invoke-NativeChecked node '.\tools\v7-theme-contract-qa.mjs' '--channel=msedge' '--serve-root=.' ("--output=$(Join-Path $tempRoot 'predeploy-home-theme')")
+    Invoke-NativeChecked node '.\tools\v7-inner-scenes-qa.mjs'
   }
   finally {
     Pop-Location
@@ -235,17 +239,19 @@ try {
     Invoke-NativeChecked node '.\tools\v7-runtime-qa.mjs' '--channel=msedge' ("--base=$ProductionRootUrl") ("--output=$prodQa")
     Invoke-NativeChecked node '.\tools\v7-resilience-qa.mjs' '--channel=msedge' ("--base=$ProductionRootUrl") ("--output=$(Join-Path $tempRoot 'production-home-resilience')")
     Invoke-NativeChecked node '.\tools\v7-theme-contract-qa.mjs' '--channel=msedge' ("--origin=$ProductionOrigin") ("--output=$(Join-Path $tempRoot 'production-home-theme')")
+    Invoke-NativeChecked node '.\tools\v7-inner-scenes-production-qa.mjs' ("--origin=$ProductionOrigin") ("--version=$ExpectedInnerSceneVersion") ("--output=$(Join-Path $tempRoot 'production-inner-scenes')")
   }
   finally {
     Pop-Location
   }
 
   Write-Host ''
-  Write-Host 'ICHARLES V7 PUBLIC HOME PRODUCTION VERIFIED'
-  Write-Host "Commit:   $head"
-  Write-Host "Version:  $ExpectedV7Version"
-  Write-Host "URL:      $ProductionRootUrl"
-  Write-Host "Hidden:   $HiddenUrl (noindex preserved)"
+  Write-Host 'ICHARLES V7.6 FULL SITE PRODUCTION VERIFIED'
+  Write-Host "Commit:        $head"
+  Write-Host "Home version:  $ExpectedV7Version"
+  Write-Host "Scene version: $ExpectedInnerSceneVersion"
+  Write-Host "URL:           $ProductionRootUrl"
+  Write-Host "Hidden:        $HiddenUrl (noindex preserved)"
 }
 finally {
   if ($createdTemporaryNodeModules -and (Test-Path -LiteralPath $nodeModulesPath)) {

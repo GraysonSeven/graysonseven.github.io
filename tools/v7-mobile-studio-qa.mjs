@@ -12,7 +12,7 @@ for(const [file,markers] of Object.entries({
   "website-studio/index.html":["data-v7-page=\"studio\"","id=\"v7-page-canvas\"","/assets/v7/v7-studio-scene.js?v=750"],
   "assets/v7/v7-mobile-nav.js":["aria-expanded","v7-mobile-nav-open","Escape"],
   "assets/v7/v7-mobile-nav.css":[".v7-mobile-nav-layer","z-index:4000","@media(max-width:760px)"],
-  "assets/v7/v7-studio-scene.js":["studio-forge","__V7_PAGE_DEBUG__","pointer-events"],
+  "assets/v7/v7-studio-scene.js":["studio-forge","__V7_PAGE_DEBUG__","v7PageRender"],
   "assets/v7/v7-inner-shell.css":["#v7-page-canvas","pointer-events:none!important","v7-page-render=\"fallback\""]
 })){
   const p=path.join(root,file);

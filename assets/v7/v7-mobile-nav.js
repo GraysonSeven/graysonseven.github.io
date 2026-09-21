@@ -48,7 +48,7 @@
       </aside>
     `;
 
-    const host = header.querySelector("nav") || header;
+    const host = header.classList.contains("studio-header") ? header : (header.querySelector("nav") || header);
     host.appendChild(button);
     document.body.appendChild(layer);
 

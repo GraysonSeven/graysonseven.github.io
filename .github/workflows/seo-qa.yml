@@ -1,0 +1,58 @@
+name: iCharles SEO QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "services/index.html"
+      - "website-studio/index.html"
+      - "portfolio/**"
+      - "try/index.html"
+      - "about/index.html"
+      - "contact/index.html"
+      - "privacy/index.html"
+      - "projects/index.html"
+      - "lab/index.html"
+      - "experience/index.html"
+      - "sitemap.xml"
+      - "robots.txt"
+      - "tools/seo-qa.mjs"
+      - ".github/workflows/seo-qa.yml"
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "services/index.html"
+      - "website-studio/index.html"
+      - "portfolio/**"
+      - "try/index.html"
+      - "about/index.html"
+      - "contact/index.html"
+      - "privacy/index.html"
+      - "projects/index.html"
+      - "lab/index.html"
+      - "experience/index.html"
+      - "sitemap.xml"
+      - "robots.txt"
+      - "tools/seo-qa.mjs"
+      - ".github/workflows/seo-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  seo:
+    name: Search indexing and metadata QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse SEO QA
+        run: node --check tools/seo-qa.mjs
+      - name: Run SEO QA
+        run: node tools/seo-qa.mjs

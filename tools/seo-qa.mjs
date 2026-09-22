@@ -55,6 +55,22 @@ for(const [file,url] of pages){
   if(!robots.includes("index")||robots.includes("noindex"))fail(file+" must be indexable");
   if(/<meta\s+name=["']keywords["']/i.test(html))fail(file+" must not use obsolete meta keywords");
 
+  if(!html.includes('data-seo-discovery'))fail(file+" missing crawl-discovery footer");
+  if(!html.includes('/assets/v7/seo-discovery.css?v=1'))fail(file+" missing crawl-discovery stylesheet");
+  const discoveryBlock=html.match(/<footer class=["']seo-discovery["'][\s\S]*?<\/footer>/i)?.[0]||"";
+  const requiredDiscoveryLinks=[
+    "/","/services/","/website-studio/","/portfolio/","/try/","/about/","/contact/",
+    "/portfolio/projects/trade-core.html",
+    "/portfolio/projects/trade-core-custom-business.html",
+    "/portfolio/projects/morsebound.html",
+    "/portfolio/projects/ette-planner.html"
+  ];
+  for(const href of requiredDiscoveryLinks){
+    const doubleQuoted='href="'+href+'"';
+    const singleQuoted="href='"+href+"'";
+    if(!discoveryBlock.includes(doubleQuoted)&&!discoveryBlock.includes(singleQuoted))fail(file+" crawl-discovery footer missing "+href);
+  }
+
   if(titles.has(title))fail(file+" duplicates title used by "+titles.get(title)); else titles.set(title,file);
   if(descs.has(desc))fail(file+" duplicates description used by "+descs.get(desc)); else descs.set(desc,file);
 
@@ -105,6 +121,21 @@ else{
   if(!/Sitemap:\s*https:\/\/icharles\.pages\.dev\/sitemap\.xml/i.test(robots))fail("robots.txt missing canonical sitemap declaration");
 }
 
+const discoveryCssPath=path.join(root,"assets","v7","seo-discovery.css");
+if(!fs.existsSync(discoveryCssPath))fail("crawl-discovery stylesheet missing");
+
+const readmePath=path.join(root,"README.md");
+if(!fs.existsSync(readmePath))fail("README.md missing");
+else{
+  const readme=fs.readFileSync(readmePath,"utf8");
+  if(!readme.includes("https://icharles.pages.dev/"))fail("README.md must link to production website");
+  for(const url of [
+    "https://icharles.pages.dev/services/",
+    "https://icharles.pages.dev/website-studio/",
+    "https://icharles.pages.dev/portfolio/"
+  ]) if(!readme.includes(url))fail("README.md missing discovery link "+url);
+}
+
 const homeRaw=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const verificationMatches=matchAll(homeRaw,/<meta\s+name=["']google-site-verification["']\s+content=["']([^"']+)["'][^>]*>/gi);
 if(verificationMatches.length!==1)fail("Home must contain exactly one Google site verification tag; found "+verificationMatches.length);
@@ -126,3 +157,5 @@ console.log("- robots.txt advertises the canonical sitemap");
 console.log("- Google Search Console verification token is pinned");
 console.log("- sitemap.xml, sitemap-google.xml and robots.txt response MIME types are pinned");
 console.log("- fresh Google sitemap endpoint exactly mirrors canonical sitemap");
+console.log("- every indexable page exposes the crawl-discovery link graph");
+console.log("- GitHub README links back to the production site");

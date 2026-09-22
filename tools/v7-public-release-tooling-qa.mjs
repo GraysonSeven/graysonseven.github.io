@@ -10,7 +10,9 @@ if (!fs.existsSync(scriptPath)) {
   fail("Deploy-V7-Public-Cloudflare.ps1 is missing");
 } else {
   const ps1 = fs.readFileSync(scriptPath, "utf8");
-  const required = [
+  if (!gitignore.split(/\r?\n/).includes("/artifacts/")) fail(".gitignore must ignore /artifacts/ so local QA evidence cannot block guarded deployment");
+
+const required = [
     "status --porcelain",
     "fetch origin main",
     "branch --show-current",

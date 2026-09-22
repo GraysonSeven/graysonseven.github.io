@@ -69,7 +69,7 @@ async function testReducedMotion() {
   });
 
   try {
-    await page.goto(baseUrl, { waitUntil: "networkidle", timeout: 30000 });
+    await page.goto(baseUrl, { waitUntil: "load", timeout: 30000 });
     await page.waitForFunction(() => window.__V7_DEBUG__?.ready === true, null, { timeout: 20000 });
 
     const first = await page.evaluate(() => ({
@@ -174,7 +174,7 @@ async function testWebGLFallback() {
   });
 
   try {
-    await page.goto(baseUrl, { waitUntil: "networkidle", timeout: 30000 });
+    await page.goto(baseUrl, { waitUntil: "load", timeout: 30000 });
     await page.waitForFunction(() => window.__V7_DEBUG__?.fallback === true, null, { timeout: 20000 });
 
     const state = await page.evaluate(() => {

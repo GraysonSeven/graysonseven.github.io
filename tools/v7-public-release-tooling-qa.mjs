@@ -5,12 +5,16 @@ const root = process.cwd();
 const scriptPath = path.join(root, "tools", "Deploy-V7-Public-Cloudflare.ps1");
 const failures = [];
 const fail = message => failures.push(message);
+const gitignorePath = path.join(root, ".gitignore");
+const gitignore = fs.existsSync(gitignorePath) ? fs.readFileSync(gitignorePath, "utf8") : "";
 
 if (!fs.existsSync(scriptPath)) {
   fail("Deploy-V7-Public-Cloudflare.ps1 is missing");
 } else {
   const ps1 = fs.readFileSync(scriptPath, "utf8");
-  const required = [
+  if (!gitignore.split(/\r?\n/).includes("/artifacts/")) fail(".gitignore must ignore /artifacts/ so local QA evidence cannot block guarded deployment");
+
+const required = [
     "status --porcelain",
     "fetch origin main",
     "branch --show-current",

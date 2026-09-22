@@ -15,12 +15,12 @@ const port = Number(args.port || 4173);
 const baseUrl = String(args.base || ("http://127.0.0.1:" + port + "/experience/"));
 
 const checkpoints = [
-  ["00-boot", 0, "boot"],
-  ["20-human", 0.20, "human"],
-  ["42-projects", 0.42, "projects"],
-  ["64-process", 0.64, "process"],
-  ["82-forge", 0.82, "forge"],
-  ["100-final", 1, "contact"]
+  ["00-boot", "boot"],
+  ["20-human", "human"],
+  ["42-projects", "projects"],
+  ["64-process", "process"],
+  ["82-forge", "forge"],
+  ["100-final", "contact"]
 ];
 
 const profiles = [
@@ -158,13 +158,26 @@ async function qualifyProfile(profile) {
     assert(!layout.copy || (layout.copy.left >= -1 && layout.copy.right <= layout.viewport[0] + 1), prefix + "primary copy escapes viewport");
 
     const shots = [];
-    for (const [name, progress, expectedScene] of checkpoints) {
+    for (const [name, expectedScene] of checkpoints) {
       const beforeFrames = await page.evaluate(() => window.__V7_DEBUG__.frames);
-      await page.evaluate(value => {
+      const target = await page.evaluate(sceneName => {
+        const section = document.querySelector('.v7-scene[data-scene="' + sceneName + '"]');
+        if (!section) return null;
         const max = Math.max(0, document.documentElement.scrollHeight - innerHeight);
-        scrollTo(0, Math.round(max * value));
-      }, progress);
-      await page.waitForTimeout(profile.isMobile ? 520 : 430);
+        const center = section.offsetTop + section.offsetHeight * 0.5 - innerHeight * 0.5;
+        const y = Math.max(0, Math.min(max, Math.round(center)));
+        scrollTo({ top: y, behavior: "instant" });
+        return { y, max, top: section.offsetTop, height: section.offsetHeight };
+      }, expectedScene);
+      assert(Boolean(target), prefix + name + " missing scene section " + expectedScene);
+      if (!target) continue;
+
+      await page.waitForFunction(
+        sceneName => window.__V7_DEBUG__?.activeScene === sceneName,
+        expectedScene,
+        { timeout: profile.isMobile ? 2200 : 1800 }
+      ).catch(() => {});
+      await page.waitForTimeout(profile.isMobile ? 360 : 300);
 
       const state = await page.evaluate(() => ({ ...window.__V7_DEBUG__ }));
       assert(state.frames > beforeFrames, prefix + name + " render loop did not advance");
@@ -173,7 +186,7 @@ async function qualifyProfile(profile) {
 
       const file = path.join(profileDir, name + ".png");
       await captureCheckpoint(page, file);
-      shots.push({ name, progress, expectedScene, activeScene: state.activeScene, frames: state.frames, file: path.relative(outputDir, file) });
+      shots.push({ name, expectedScene, activeScene: state.activeScene, frames: state.frames, target, file: path.relative(outputDir, file) });
     }
 
     await page.evaluate(() => scrollTo(0, 0));

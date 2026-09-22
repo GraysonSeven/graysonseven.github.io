@@ -65,7 +65,10 @@ for(const [file,url] of pages){
 }
 
 const sitemapPath=path.join(root,"sitemap.xml");
+const googleSitemapPath=path.join(root,"sitemap-google.xml");
 if(!fs.existsSync(sitemapPath))fail("sitemap.xml missing");
+if(!fs.existsSync(googleSitemapPath))fail("sitemap-google.xml missing");
+else if(fs.existsSync(sitemapPath)&&fs.readFileSync(googleSitemapPath,"utf8")!==fs.readFileSync(sitemapPath,"utf8"))fail("sitemap-google.xml must exactly mirror sitemap.xml");
 else{
   const sitemap=fs.readFileSync(sitemapPath,"utf8");
   const locs=matchAll(sitemap,/<loc>([^<]+)<\/loc>/g).map(m=>m[1].trim());
@@ -89,6 +92,7 @@ if(!fs.existsSync(headersPath))fail("_headers missing");
 else{
   const headers=fs.readFileSync(headersPath,"utf8");
   if(!/\/sitemap\.xml\s+[\s\S]*?Content-Type:\s*application\/xml;\s*charset=utf-8/i.test(headers))fail("_headers must force sitemap.xml Content-Type to application/xml; charset=utf-8");
+  if(!/\/sitemap-google\.xml\s+[\s\S]*?Content-Type:\s*application\/xml;\s*charset=utf-8/i.test(headers))fail("_headers must force sitemap-google.xml Content-Type to application/xml; charset=utf-8");
   if(!/\/robots\.txt\s+[\s\S]*?Content-Type:\s*text\/plain;\s*charset=utf-8/i.test(headers))fail("_headers must force robots.txt Content-Type to text/plain; charset=utf-8");
 }
 
@@ -120,4 +124,5 @@ console.log("- titles and meta descriptions are unique");
 console.log("- canonicals, robots directives and JSON-LD validated");
 console.log("- robots.txt advertises the canonical sitemap");
 console.log("- Google Search Console verification token is pinned");
-console.log("- sitemap.xml and robots.txt response MIME types are pinned");
+console.log("- sitemap.xml, sitemap-google.xml and robots.txt response MIME types are pinned");
+console.log("- fresh Google sitemap endpoint exactly mirrors canonical sitemap");

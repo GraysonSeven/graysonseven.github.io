@@ -93,7 +93,11 @@ else{
   if(!/Sitemap:\s*https:\/\/icharles\.pages\.dev\/sitemap\.xml/i.test(robots))fail("robots.txt missing canonical sitemap declaration");
 }
 
-const home=fs.readFileSync(path.join(root,"index.html"),"utf8").toLowerCase();
+const homeRaw=fs.readFileSync(path.join(root,"index.html"),"utf8");
+const verificationMatches=matchAll(homeRaw,/<meta\s+name=["']google-site-verification["']\s+content=["']([^"']+)["'][^>]*>/gi);
+if(verificationMatches.length!==1)fail("Home must contain exactly one Google site verification tag; found "+verificationMatches.length);
+else if(verificationMatches[0][1]!=="MRRu1NDzlETJMlpcnAKb4S9ydIQzzzwZyILnHwpqfX4")fail("Google site verification token changed unexpectedly");
+const home=homeRaw.toLowerCase();
 for(const phrase of ["custom software","web apps","business systems"])if(!home.includes(phrase))fail("Home missing natural primary phrase: "+phrase);
 
 if(failures.length){
@@ -107,3 +111,4 @@ console.log("- noindex utility/experimental pages excluded");
 console.log("- titles and meta descriptions are unique");
 console.log("- canonicals, robots directives and JSON-LD validated");
 console.log("- robots.txt advertises the canonical sitemap");
+console.log("- Google Search Console verification token is pinned");

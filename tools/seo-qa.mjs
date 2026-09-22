@@ -84,6 +84,14 @@ for(const [file,url] of noindexPaths){
   if(!/name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(html))fail(file+" expected to remain noindex");
 }
 
+const headersPath=path.join(root,"_headers");
+if(!fs.existsSync(headersPath))fail("_headers missing");
+else{
+  const headers=fs.readFileSync(headersPath,"utf8");
+  if(!/\/sitemap\.xml\s+[\s\S]*?Content-Type:\s*application\/xml;\s*charset=utf-8/i.test(headers))fail("_headers must force sitemap.xml Content-Type to application/xml; charset=utf-8");
+  if(!/\/robots\.txt\s+[\s\S]*?Content-Type:\s*text\/plain;\s*charset=utf-8/i.test(headers))fail("_headers must force robots.txt Content-Type to text/plain; charset=utf-8");
+}
+
 const robotsPath=path.join(root,"robots.txt");
 if(!fs.existsSync(robotsPath))fail("robots.txt missing");
 else{
@@ -112,3 +120,4 @@ console.log("- titles and meta descriptions are unique");
 console.log("- canonicals, robots directives and JSON-LD validated");
 console.log("- robots.txt advertises the canonical sitemap");
 console.log("- Google Search Console verification token is pinned");
+console.log("- sitemap.xml and robots.txt response MIME types are pinned");

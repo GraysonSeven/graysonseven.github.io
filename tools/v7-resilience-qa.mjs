@@ -94,24 +94,35 @@ async function testReducedMotion() {
     assert(networkErrors.length === 0, "reduced-motion: HTTP errors: " + networkErrors.join(" | "));
 
     const checkpoints = [
-      ["00-boot", 0, "boot"],
-      ["20-human", 0.20, "human"],
-      ["42-projects", 0.42, "projects"],
-      ["64-process", 0.64, "process"],
-      ["82-forge", 0.82, "forge"],
-      ["100-final", 1, "contact"]
+      ["00-boot", "boot"],
+      ["20-human", "human"],
+      ["42-projects", "projects"],
+      ["64-process", "process"],
+      ["82-forge", "forge"],
+      ["100-final", "contact"]
     ];
 
     const states = [];
-    for (const [name, progress, expected] of checkpoints) {
-      await page.evaluate(value => {
+    for (const [name, expected] of checkpoints) {
+      const target = await page.evaluate(sceneName => {
+        const section = document.querySelector('.v7-scene[data-scene="' + sceneName + '"]');
+        if (!section) return null;
         const max = Math.max(0, document.documentElement.scrollHeight - innerHeight);
-        scrollTo(0, Math.round(max * value));
-      }, progress);
-      await page.waitForTimeout(160);
+        const center = section.offsetTop + section.offsetHeight * 0.5 - innerHeight * 0.5;
+        const y = Math.max(0, Math.min(max, Math.round(center)));
+        scrollTo({ top: y, behavior: "instant" });
+        return { y, max, top: section.offsetTop, height: section.offsetHeight };
+      }, expected);
+      assert(Boolean(target), "reduced-motion: missing scene section " + expected);
+      if (!target) continue;
+      await page.waitForFunction(
+        sceneName => window.__V7_DEBUG__?.activeScene === sceneName,
+        expected,
+        { timeout: 2000 }
+      ).catch(() => {});
       const state = await page.evaluate(() => ({ ...window.__V7_DEBUG__ }));
       assert(state.activeScene === expected, "reduced-motion: " + name + " expected " + expected + ", found " + state.activeScene);
-      states.push({ name, expected, actual: state.activeScene, frames: state.frames });
+      states.push({ name, expected, actual: state.activeScene, frames: state.frames, target });
       if (name === "00-boot" || name === "100-final") {
         await page.screenshot({ path: path.join(dir, name + ".png"), fullPage: false });
       }

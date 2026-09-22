@@ -17,6 +17,8 @@ on:
       - "experience/index.html"
       - "sitemap.xml"
       - "robots.txt"
+      - "README.md"
+      - "assets/v7/seo-discovery.css"
       - "tools/seo-qa.mjs"
       - ".github/workflows/seo-qa.yml"
   push:

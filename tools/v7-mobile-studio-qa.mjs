@@ -48,6 +48,7 @@ try{
   const toggle=home.locator(".v7-mobile-nav-toggle");
   assert(await toggle.isVisible(),"home: mobile menu toggle not visible");
   await toggle.click();
+  await home.waitForFunction(()=>document.querySelector(".v7-mobile-nav-layer")?.classList.contains("is-open"),null,{timeout:3000});
   assert(await home.locator(".v7-mobile-nav-layer.is-open").isVisible(),"home: drawer did not open");
   assert(await home.locator('.v7-mobile-drawer a[href$="/portfolio/"]').isVisible(),"home: Work link missing from drawer");
   assert(await home.locator('.v7-mobile-drawer a[href$="/services/"]').isVisible(),"home: Services link missing from drawer");
